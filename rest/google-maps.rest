@@ -1,0 +1,15 @@
+### Get Street View Image
+GET http://localhost:3001/google-maps/street-view?address=R. Sete de Setembro, 1440 - Alto Cafezal, Marília - SP, 17502-020
+Content-Type: application/json
+
+### Get Street View Image
+GET http://localhost:3001/google-maps/street-view?address=R. Embaixador Macedo Soares, 288 - Centro, Pompeia - SP, 17580-069
+Content-Type: application/json
+
+### Get Street View Image - Another Example
+GET http://localhost:3001/google-maps/street-view?address=Times Square, New York, NY
+Content-Type: application/json
+
+### Get Street View Image - Invalid Address
+GET http://localhost:3001/google-maps/street-view?address=
+Content-Type: application/json

@@ -1,0 +1,78 @@
+###Sintegra suframa
+GET https://api.infosimples.com/api/v2/consultas/sintegra/suframa?token=X06lxsSH0NkmqPW5is9wLc8ODo2jdmYAEcuGmneg&timeout=600&cnpj=&cpf=06604890660&tipo_arquivo_visualizacao=
+
+###Sintegra
+GET https://api.infosimples.com/api/v2/consultas/sintegra/unificada?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&uf=mg&cnpj=&ie=&ie_produtor=&cpf=06604890660&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo
+
+###Protestos
+GET https://api.infosimples.com/api/v2/consultas/ieptb/protestos?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&cnpj=&cpf=29511374869&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo
+
+###ProtestosSP
+GET https://api.infosimples.com/api/v2/consultas/ieptb/protestos/detalhes-sp?obter_detalhes=U2FsdGVkX1%2BZZfhHdrKypTrksj0rEv9W3%2Bt0atj2mqOhsscLJyFx3fUI7QnZs09F&token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&cnpj=&cpf=29511374869&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo
+
+###ProtestosSP
+GET https://api.infosimples.com/api/v2/consultas/cenprot-sp/protestos?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&cnpj=&cpf=29511374869&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo
+
+###PGFN
+GET https://api.infosimples.com/api/v2/consultas/receita-federal/pgfn?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&cnpj=&cpf=80884016668&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo&birthdate=1969-02-16
+
+###PGFN devedores
+GET https://api.infosimples.com/api/v2/consultas/receita-federal/pgfn/devedores?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&cnpj=&cpf=76212858691&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo
+
+###IRPF
+GET https://api.infosimples.com/api/v2/consultas/receita-federal/irpf?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&cpf=19159404604&birthdate=1949-07-16&year=2024&origin=web
+
+###Trabalhista
+GET https://api.infosimples.com/api/v2/consultas/mte/certidao-debitos?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&cnpj=&cpf=76212858691&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo
+
+###INCRA info
+GET https://api.infosimples.com/api/v2/consultas/incra/coordenadas?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&codigo_parcela=9502036549066&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo
+
+
+###INCRA imovel
+GET https://api.infosimples.com/api/v2/consultas/incra/coordenadas?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&ignore_site_receipt=0&numero_certificacao=9502036549066
+
+###INCRA imovel
+GET https://api.infosimples.com/api/v2/consultas/incra/sigef/requerimentos?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&ignore_site_receipt=0&codigo_imovel=9500174175565&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo
+
+###INCRA imovel CPF
+GET https://api.infosimples.com/api/v2/consultas/incra/sigef/requerimentos?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&ignore_site_receipt=0&cpf=19159404604&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo
+
+###INCRA imovel
+GET https://api.infosimples.com/api/v2/consultas/incra/sigef/parcelas?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&ignore_site_receipt=0&cpf=19159404604&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo
+
+###INCRA imovel
+GET https://api.infosimples.com/api/v2/consultas/incra/sigef/parcelas?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&ignore_site_receipt=0&codigo_imovel=9500174175565&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo
+
+###INCRA imovel
+GET https://api.infosimples.com/api/v2/consultas/incra/sigef/detalhes-parcela?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&ignore_site_receipt=0&codigo_parcela=21d9817a-d02b-4939-beb7-eab06ddf5bc9&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo
+
+###SNCR CCIR imovel
+GET https://api.infosimples.com/api/v2/consultas/sncr/ccir?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&ignore_site_receipt=0&codigo_imovel=9500174175565&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo&cpf_titular=19159404604&uf_sede=to&municipio_sede=miracema do tocantins
+
+###SNCR Cordenadas imovel
+GET https://api.infosimples.com/api/v2/consultas/sncr/ccir?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&ignore_site_receipt=0&codigo_imovel=9500174175565&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo&cpf_titular=19159404604&uf_sede=to&municipio_sede=miranorte
+
+###Gravame
+GET https://ws2.checkpro.com.br/servicejson.asmx/ConsultaGravameSimples?cpfUsuario=06604890660&senhaUsuario=5ok$2Rx5L&chassi=9ADB0702NPM510072
+
+###Completa
+GET https://ws2.checkpro.com.br/servicejson.asmx/ConsultaPacoteCompletoPorPlaca?cpfUsuario=06604890660&senhaUsuario=5ok$2Rx5L&placa=FPB1G16
+
+###Antecedentes Criminais
+GET https://api.infosimples.com/api/v2/consultas/antecedentes-criminais/pf/emit?birthdate=1984-09-25&nome=DANIEL%20VIANA%20DE%20ALMEIDA&token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu
+
+###Antecedentes Criminais
+GET https://api.infosimples.com/api/v2/consultas/antecedentes-criminais/pf/emit?cpf=35492222899&birthdate=1986-07-25&nome=LEONEL%20AUGUSTO%20GONCALVES%20DA%20SILVA&token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu
+
+###TJSP Civil - CPF (Pedido)
+GET https://api.infosimples.com/api/v2/consultas/tribunal/tjsp/pedido-civel?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&ignore_site_receipt=0&cpf=06604890660&nome=Daniel Viana de Almeida%20DA%20PESSOA&instancia=1&login_cpf=06604890660&login_senha=Kixqep-faxcoj-6havzo&cpf_titular=19159404604&email=vianadaniel@hotmail.com&finalidade=Análise de Crédito
+
+###TJSP Civil - CNPJ (Pedido)
+GET https://api.infosimples.com/api/v2/consultas/tribunal/tjsp/pedido-civel?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&ignore_site_receipt=0&cnpj=00000000000191&razao_social=EMPRESA%20TESTE&instancia=1
+
+###TJSP Civil - CPF (Download)
+GET https://api.infosimples.com/api/v2/consultas/tribunal/tjsp/obter-civel?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&ignore_site_receipt=0&cpf=06604890660&numero_pedido=NUMERO_DO_PEDIDO
+
+###TJSP Civil - CNPJ (Download)
+GET https://api.infosimples.com/api/v2/consultas/tribunal/tjsp/obter-civel?token=lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu&timeout=600&ignore_site_receipt=0&cnpj=00000000000191&numero_pedido=NUMERO_DO_PEDIDO

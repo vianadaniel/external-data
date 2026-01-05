@@ -1,0 +1,4 @@
+### Test Sentry Error
+
+GET http://localhost:3002/error
+Content-Type: application/json

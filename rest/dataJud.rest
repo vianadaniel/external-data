@@ -1,0 +1,27 @@
+@api = cDZHYzlZa0JadVREZDJCendQbXY6SkJlTzNjLV9TRENyQk1RdnFKZGRQdw==
+
+### GET TJGO
+GET https://api-publica.datajud.cnj.jus.br/api_publica_tjgo/_search
+Content-Type: application/json
+Authorization: APIKey {{api}}
+
+{
+    "query": {
+        "match": {
+            "numeroProcesso": "51790859320228090087"
+        }
+    }
+}
+
+### GET TJCE
+GET https://api-publica.datajud.cnj.jus.br/api_publica_tjce/_search
+Content-Type: application/json
+Authorization: APIKey {{api}}
+
+{
+    "query": {
+        "match": {
+            "numeroProcesso": "00085567420188060112"
+        }
+    }
+}

@@ -1,0 +1,154 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZpYW5hZGFuaWVsQGhvdG1haWwuY29tIiwic3ViIjoiNjY3ZDZjYjBiZmVjNjhhN2JmM2NjZmE4IiwiY29tcGFueV9pZCI6IjY2N2Q1OWFkZWIwYjIzMmNhNmNiZDE2NSIsInJvbGUiOiJhZG1pbiIsInNpZ25hdHVyZSI6dHJ1ZSwicG9zdFBhaWQiOnRydWUsImlhdCI6MTc0MTE5MjgyMiwiZXhwIjoxNzQzNzg0ODIyfQ.uZXhd_yIjBzEHVE6J3-uw0ue6amY0I-QVwKxvkXFEbQ
+
+### Find protests cpf
+
+POST http://localhost:3001/report
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "fiscal_number": "71504869168",
+    "external_service": "directd",
+    "end_point": "protestos",
+    "client_id": "668d73eede16fd4e27c99c08"
+}
+
+### Find protests cpf
+
+POST http://localhost:3001/report
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "fiscal_number": "06604890660",
+    "external_service": "directd",
+    "end_point": "protestos",
+    "client_id": "667ee7d8a3142c70becd5870"
+}
+
+### Find cpf financial risk
+
+POST http://localhost:3001/report
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "fiscal_number": "12166100619",
+    "external_service": "bigd",
+    "end_point": "financialRisk",
+    "client_id": "668d73eede16fd4e27c99c08",
+    "task_id": "6697cc4e643a92632b4172b7"
+}
+
+### Find cpf boaVista
+
+POST http://localhost:3001/report
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "fiscal_number": "06604890660",
+    "external_service": "boaVista",
+    "end_point": "basic",
+    "client_id": "66deef5cc01465bcb8334796",
+    "task_id": "66e9bf53ceaee9bedb6516b8"
+}
+
+### Find cnpj boaVista
+
+POST http://localhost:3001/report
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "fiscal_number": "66373341000110",
+    "external_service": "boaVista",
+    "end_point": "basic",
+    "client_id": "66ec60324d6409568a8c80b9",
+    "task_id": "66e9bf53ceaee9bedb6516b8"
+}
+
+### Generate IRPF Risk
+
+POST http://localhost:3001/report
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "fiscal_number": "19159404604",
+    "source_id": "src_4C2I0lMrTJel7BXPo7ZSl",
+    "external_service": "risk",
+    "end_point": "irpf",
+    "client_id": "66e022b222be046e183a78ac",
+    "task_id": "66e9bf53ceaee9bedb6516b8"
+}
+
+### Add Sintegra URL
+
+POST http://localhost:3001/report/sintegra/url
+Content-Type: application/json
+
+{
+    "url": "https://b0426383a63f.ngrok-free.app/inscricoes"
+}
+
+### Get Sintegra URLs
+
+GET http://localhost:3001/report/sintegra/url
+Content-Type: application/json
+
+### Find TJSP Civil - CPF (Pedido)
+
+POST http://localhost:3001/report
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "fiscal_number": "06604890660",
+    "external_service": "info",
+    "end_point": "tjspCivil",
+    "client_id": "667ee7d8a3142c70becd5870",
+    "task_id": "66e9bf53ceaee9bedb6516b8"
+}
+
+### Find TJSP Civil - CNPJ (Pedido)
+
+POST http://localhost:3001/report
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "fiscal_number": "00000000000191",
+    "external_service": "info",
+    "end_point": "tjspCivil",
+    "client_id": "66ec60324d6409568a8c80b9",
+    "task_id": "66e9bf53ceaee9bedb6516b8"
+}
+
+### Find TJSP Civil Download - CPF
+
+POST http://localhost:3001/report
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "fiscal_number": "06604890660",
+    "external_service": "info",
+    "end_point": "tjspCivilDownload",
+    "client_id": "667ee7d8a3142c70becd5870",
+    "task_id": "66e9bf53ceaee9bedb6516b8"
+}
+
+### Find TJSP Civil Download - CNPJ
+
+POST http://localhost:3001/report
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "fiscal_number": "00000000000191",
+    "external_service": "info",
+    "end_point": "tjspCivilDownload",
+    "client_id": "66ec60324d6409568a8c80b9",
+    "task_id": "66e9bf53ceaee9bedb6516b8"
+}

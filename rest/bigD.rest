@@ -1,0 +1,75 @@
+### POST Login
+POST https://plataforma.bigdatacorp.com.br/tokens/gerar
+Content-Type: application/json
+
+{
+  "login": "daniel@mfcheck.com.br",
+  "password": "u8VAh3V*dvgEijXq",
+  "expires": 24
+}
+
+### POST Consulta Processos
+POST https://plataforma.bigdatacorp.com.br/pessoas
+Content-Type: application/json
+AccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiREFOSUVMQE1GQ0hFQ0suQ09NLkJSIiwianRpIjoiMjcwYjNhZTgtNGIxMy00MmQ4LWIyMjItYzM1NDFjNGI5OGJhIiwibmFtZVVzZXIiOiJEYW5pZWwgVmlhbmEgZGUgQWxtZWlkYSIsInVuaXF1ZV9uYW1lIjoiREFOSUVMQE1GQ0hFQ0suQ09NLkJSIiwiZG9tYWluIjoiTUYgQ0hFQ0siLCJwcm9kdWN0cyI6WyJCSUdCT09TVCJdLCJuYmYiOjE3NjQyNDkyMDIsImV4cCI6MTc2NDMzNTYwMiwiaWF0IjoxNzY0MjQ5MjAyLCJpc3MiOiJCaWcgRGF0YSBDb3JwLiJ9.ztEARLO9431MtedfCozmP5IC0874qu-npqlhfVVLzK8
+TokenId: 69284e72d410d6b8dcec0558
+
+{
+    "Datasets": "lawsuits_distribution_data.filter(partytype=[CLAIMED, DEFENDANT])",
+  "q": "doc{46800220604}"
+}
+
+### POST Consulta Processos
+POST https://plataforma.bigdatacorp.com.br/pessoas
+Content-Type: application/json
+AccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiREFOSUVMQE1GQ0hFQ0suQ09NLkJSIiwianRpIjoiMjcwYjNhZTgtNGIxMy00MmQ4LWIyMjItYzM1NDFjNGI5OGJhIiwibmFtZVVzZXIiOiJEYW5pZWwgVmlhbmEgZGUgQWxtZWlkYSIsInVuaXF1ZV9uYW1lIjoiREFOSUVMQE1GQ0hFQ0suQ09NLkJSIiwiZG9tYWluIjoiTUYgQ0hFQ0siLCJwcm9kdWN0cyI6WyJCSUdCT09TVCJdLCJuYmYiOjE3NjQyNDkyMDIsImV4cCI6MTc2NDMzNTYwMiwiaWF0IjoxNzY0MjQ5MjAyLCJpc3MiOiJCaWcgRGF0YSBDb3JwLiJ9.ztEARLO9431MtedfCozmP5IC0874qu-npqlhfVVLzK8
+TokenId: 69284e72d410d6b8dcec0558
+
+{
+    "Datasets": "processes.filter(partytype=[CLAIMED, DEFENDANT])",
+  "q": "doc{46800220604}"
+}
+
+### POST Consulta Processos
+POST https://plataforma.bigdatacorp.com.br/pessoas
+Content-Type: application/json
+AccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiREFOSUVMQE1GQ0hFQ0suQ09NLkJSIiwianRpIjoiNjNiZDVhMjktOWIwZi00MDlmLTlkYmYtYzk0ZjMyOWM5M2IwIiwibmFtZVVzZXIiOiJEYW5pZWwgVmlhbmEgZGUgQWxtZWlkYSIsInVuaXF1ZV9uYW1lIjoiREFOSUVMQE1GQ0hFQ0suQ09NLkJSIiwiZG9tYWluIjoiTUYgQ0hFQ0siLCJwcm9kdWN0cyI6WyJCSUdCT09TVCJdLCJuYmYiOjE3NjQzNTY5NTIsImV4cCI6MTc2NDQ0MzM1MiwiaWF0IjoxNzY0MzU2OTUyLCJpc3MiOiJCaWcgRGF0YSBDb3JwLiJ9.7dMxSgj7prpOGOVN1QLTMhyL7GoEELFDJkMiFxpsu1s
+TokenId: 6929f358284b4de5cfd0ef41
+
+{
+    "Datasets": "occupation_data",
+  "q": "doc{931.681.606-87}"
+}
+
+### POST Consulta Aposta
+POST https://plataforma.bigdatacorp.com.br/pessoas
+Content-Type: application/json
+AccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVklBTkFEQU5JRUxASE9UTUFJTC5DT00iLCJqdGkiOiJjYmUzY2MzMC1mZGY4LTRkMzktYWYzOS0wMzY3Mzc5MWQ3ZjciLCJuYW1lVXNlciI6IkRhbmllbCBWaWFuYSBkZSBBbG1laWRhIiwidW5pcXVlX25hbWUiOiJWSUFOQURBTklFTEBIT1RNQUlMLkNPTSIsImRvbWFpbiI6IkRBTklFTCBWSUFOQSBERSBBTE1FSURBIiwicHJvZHVjdHMiOlsiQklHQk9PU1QiXSwibmJmIjoxNzQ5MjE3MzE5LCJleHAiOjE3NDkzMDM3MTksImlhdCI6MTc0OTIxNzMxOSwiaXNzIjoiQmlnIERhdGEgQ29ycC4ifQ.3xp7c81M9X0dt2yvYSDytvRqNz7Ssr6hScmFoep9X6Q
+TokenId: 6842f027461f4d97dbea70f6
+
+{
+    "Datasets": "online_betting_propensity",
+  "q": "doc{22099844836}"
+}
+
+### POST Consulta Aposta
+POST https://plataforma.bigdatacorp.com.br/pessoas
+Content-Type: application/json
+AccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiREFOSUVMQE1GQ0hFQ0suQ09NLkJSIiwianRpIjoiOTExYjljOTgtN2FlZC00NWVkLWI2NGItY2EwNmMxNzdkM2NkIiwibmFtZVVzZXIiOiJEYW5pZWwgVmlhbmEgZGUgQWxtZWlkYSIsInVuaXF1ZV9uYW1lIjoiREFOSUVMQE1GQ0hFQ0suQ09NLkJSIiwiZG9tYWluIjoiTUYgQ0hFQ0siLCJwcm9kdWN0cyI6WyJCSUdCT09TVCJdLCJuYmYiOjE3NjIyNjIwMzIsImV4cCI6MTc2MjM0ODQzMiwiaWF0IjoxNzYyMjYyMDMyLCJpc3MiOiJCaWcgRGF0YSBDb3JwLiJ9.cSdUZx0uHZn4RfT21nrqFLd8kEo5nwJNd5Hr_t0m_TI
+TokenId: 6909fc10687700c07cf12a12
+
+{
+    "Datasets": "online_betting_propensity",
+  "q": "doc{31291831835},uf{sp}"
+}
+
+### POST Consulta Sintegra OnDemand
+POST https://plataforma.bigdatacorp.com.br/ondemand
+Content-Type: application/json
+AccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiREFOSUVMQE1GQ0hFQ0suQ09NLkJSIiwianRpIjoiNWE0MDgzOTktNjMyYS00YjBiLWJlMjMtNGI5ZjU0N2E2YzczIiwibmFtZVVzZXIiOiJEYW5pZWwgVmlhbmEgZGUgQWxtZWlkYSIsInVuaXF1ZV9uYW1lIjoiREFOSUVMQE1GQ0hFQ0suQ09NLkJSIiwiZG9tYWluIjoiTUYgQ0hFQ0siLCJwcm9kdWN0cyI6WyJCSUdCT09TVCJdLCJuYmYiOjE3NjQwOTc4NjAsImV4cCI6MTc2NDE4NDI2MCwiaWF0IjoxNzY0MDk3ODYwLCJpc3MiOiJCaWcgRGF0YSBDb3JwLiJ9.I_k6pIp3cFFvZkyDN4D2CL7ORPE2kn9hy4G7a_Tf-qg
+TokenId: 6925ff44006d7fafe2d6f4f8
+
+{
+  "q": "doc{06604890660},uf{to}",
+  "Datasets": "ondemand_sintegra_person_v2"
+}

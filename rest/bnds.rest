@@ -1,0 +1,22 @@
+### BNDES API - Consulta por CPF/CNPJ
+GET https://gateway.apis.bndes.gov.br/operacoes/web/select?q=19159404604&defType=edismax&qf=documentoClienteIndex&rows=10000&omitHeader=true
+
+### Headers
+Content-Type: application/json
+Accept: application/json
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36
+
+### Query Parameters
+- q: 19159404604 (CPF/CNPJ to search)
+- defType: edismax (search type)
+- qf: documentoClienteIndex (query field)
+- rows: 10000 (number of results)
+- omitHeader: true (omit response header)
+
+### Alternative with different CPF/CNPJ
+GET https://gateway.apis.bndes.gov.br/operacoes/web/select?q=12345678901&defType=edismax&qf=documentoClienteIndex&rows=10000&omitHeader=true
+
+### Headers for alternative request
+Content-Type: application/json
+Accept: application/json
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36

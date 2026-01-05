@@ -1,0 +1,34 @@
+### Add Sintegra URL
+
+POST http://localhost:3001/report/sintegra/url
+Content-Type: application/json
+
+{
+    "url": "https://b0426383a63f.ngrok-free.app/inscricoes"
+}
+
+### Add Sintegra URL PROD
+
+POST http://localhost:3001/report/sintegra/url
+Content-Type: application/json
+
+{
+    "url": "https://ae8226c10b18.ngrok-free.app/inscricoes"
+}
+### Add Sintegra URL DEV
+
+POST http://52.7.108.190:3001/report/sintegra/url
+Content-Type: application/json
+
+{
+    "url": "https://b0426383a63f.ngrok-free.app/inscricoes"
+}
+
+### Add Sintegra URL PROD
+
+POST http://98.86.185.72:3001/report/sintegra/url
+Content-Type: application/json
+
+{
+    "url": "https://b0426383a63f.ngrok-free.app/inscricoes"
+}

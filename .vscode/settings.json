@@ -1,0 +1,7 @@
+{
+  "cSpell.words": ["nestjs", "pgfns"],
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  }
+}

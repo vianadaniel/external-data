@@ -1,0 +1,21 @@
+@access_token =eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNmU1NGE2ZDc2ZjgyZGMyZjRmNWUyNjg3NmRlMWRhZWM0ZTc4MGFjYzEzNDZiMzJkZWJhM2U0YTQwYTkyZjBlYmU4MzIyN2Y0ZTI4NjVkZGYiLCJpYXQiOjE3NTczMzQ0MDIuMzY3NTYyLCJuYmYiOjE3NTczMzQ0MDIuMzY3NTY1LCJleHAiOjIwNzI4NjcyMDIuMzYxNTMyLCJzdWIiOiIyNzc2MTY1Iiwic2NvcGVzIjpbImFjZXNzYXJfYXBpX3BhZ2EiXX0.trLZ4T8SkA_qflbCfHp4yQVOvGlW9Pdf2g7IsfzZ-EsK8m6tgblHaImfgS4ujtQIlU4d8yn6Ra_XGT3iS-PoI6_smNNTJR3w1va6_m9jmvofofXn-YDNtixs4mOeCa9JIvkCS-sMlHBDJAFeEhXlnK5LnDuimX5HBb0aWTtTRPG2VylHrFEQFRXlHNBKwQxcNlIT01_pmP1foYHhQOWa1YiyT8j8_yXVs-bT6A26fR2YxT-ewSzYvlmdEa_bE_FevoWC9wtYF8yJrsblImt9f_VvFhGftwSHykhJDLRPITkJh__eBlsKt8hs8DRNoM9VDLLPG_2XYfoxejO-zDX73frGO0SbegZm3AlGxbokiSmmKy89xOU0cFhvPxfkEpCRrPOot9Tp0tBI12yPQY6q_0su-EtDHDOBsJTaqjydZsKoITVIsG5pTQs6FWWhgxL7atznauDqXJPvohH_hpaE2FHLNzUOsUIK8CJHQY57mD1FnS8NYRj22xb2Mz_a8zP1ACWCL4UJmCTip1SBjDFhu9_yITkHLdGld7B6T_9bfxBG4IexsCaDVbFLziHuZG0EsJzI2qsHmCTxrf-avFsCGUglX3kuqyaqIBidavdHU3s5XBQcRGmMgr11zuifUTW8_-KLEV4TSLOqhmKAa_76vTlQv5eZEgFBXrt335031HM
+
+### Solicitar atualização de resumo IA de processo por número CNJ
+POST https://api.escavador.com/api/v2/processos/numero_cnj/0018063-19.2013.8.26.0002/ia/resumo/solicitar-atualizacao
+Authorization: Bearer {{access_token}}
+X-Requested-With: XMLHttpRequest
+
+###
+
+### Verificar status do resumo IA de processo por número CNJ
+GET https://api.escavador.com/api/v2/processos/numero_cnj/0008557-81.2016.8.06.0095/ia/resumo/status
+Authorization: Bearer {{access_token}}
+X-Requested-With: XMLHttpRequest
+
+###
+
+### Obter resumo IA de processo por número CNJ
+GET https://api.escavador.com/api/v2/processos/numero_cnj/6041160-03.2024.4.06.3800/ia/resumo
+Authorization: Bearer {{access_token}}
+X-Requested-With: XMLHttpRequest
+
