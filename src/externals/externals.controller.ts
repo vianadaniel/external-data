@@ -4,6 +4,7 @@ import {
   Get,
   Body,
   Param,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { BigDataService } from './big_data';
@@ -143,11 +144,12 @@ export class ExternalsController {
   }
 
   // ========== InfoSimples ==========
-  @Get('infosimples/:identifier')
+  @Get('infosimples/*')
   async getInfoSimplesData(
-    @Param('identifier') identifier: string,
+    @Param('0') identifier: string,
+    @Query() query: any,
   ): Promise<any> {
-    return this.infoSimplesDataService.getExternalData(identifier);
+    return this.infoSimplesDataService.getExternalData(identifier, query);
   }
 
   // ========== BoaVista ==========
