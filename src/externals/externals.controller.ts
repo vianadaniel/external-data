@@ -4,9 +4,10 @@ import {
   Get,
   Body,
   Param,
-  Query,
+  Req,
   UseInterceptors,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { BigDataService } from './big_data';
 import { DirectDataService } from './direct_data';
 import { WindService } from './wind_data';
@@ -144,12 +145,21 @@ export class ExternalsController {
   }
 
   // ========== InfoSimples ==========
-  @Get('infosimples/*')
+  @Post('infosimples/*')
   async getInfoSimplesData(
-    @Param('0') identifier: string,
-    @Query() query: any,
+    @Req() request: Request,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Body() _body: any, // body é usado apenas pelo interceptor para logging
   ): Promise<any> {
-    return this.infoSimplesDataService.getExternalData(identifier, query);
+    // Extrair o identifier completo incluindo query parameters
+    // A URL será algo como: /externals/infosimples/receita-federal/cpf?cpf=34285231808&birthdate=1984-12-04
+    // Remover /externals/infosimples/ do início da URL
+    const urlPath = request.url.replace('/externals/infosimples', '');
+    // Se começar com /, remover
+    const identifier = urlPath.startsWith('/') ? urlPath.substring(1) : urlPath;
+    console.log('[InfoSimples Controller] Full URL:', request.url);
+    console.log('[InfoSimples Controller] Identifier received:', identifier);
+    return this.infoSimplesDataService.getExternalData(identifier);
   }
 
   // ========== BoaVista ==========

@@ -12,28 +12,14 @@ export class InfoSimplesDataService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  async getExternalData(identifier: string, query?: any): Promise<any> {
+  async getExternalData(identifier: string): Promise<any> {
     try {
-      // Construir a URL com o identifier
-      let url = `https://api.infosimples.com/api/v2/consultas/${identifier}`;
-
-      // Adicionar query parameters se existirem
-      const queryParams = new URLSearchParams();
-      if (query) {
-        Object.keys(query).forEach((key) => {
-          queryParams.append(key, query[key]);
-        });
-      }
-
-      // Adicionar o token
-      queryParams.append('token', process.env.TOKEN_INFO_SIMPLES || '');
-
-      // Adicionar os query parameters à URL
-      const queryString = queryParams.toString();
-      if (queryString) {
-        url += `?${queryString}`;
-      }
-
+      // Construir a URL com o identifier e token
+      // Verificar se o identifier já contém query parameters
+      const separator = identifier.includes('?') ? '&' : '?';
+      const url = `https://api.infosimples.com/api/v2/consultas/${identifier}${separator}token=${process.env.TOKEN_INFO_SIMPLES || ''}`;
+      console.log('[InfoSimples Service] URL:', url);
+      console.log('[InfoSimples Service] Identifier:', identifier);
       const response: AxiosResponse = await firstValueFrom(
         this.httpService.get(url, {
           timeout: this.timeout,
@@ -50,7 +36,20 @@ export class InfoSimplesDataService {
       }
 
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
+      // Tratar erros HTTP (404, 500, etc.)
+      if (error.response) {
+        console.error(
+          `[InfoSimples] Error ${error.response.status}: ${error.response.statusText} for identifier: ${identifier}`,
+        );
+        // Retornar null em caso de erro para que o código possa tratar
+        return 'error';
+      }
+      // Erro de rede ou outros erros
+      console.error(
+        `[InfoSimples] Network error for identifier: ${identifier}`,
+        error.message,
+      );
       return 'error';
     }
   }
