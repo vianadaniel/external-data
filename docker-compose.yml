@@ -5,11 +5,4 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '${PORT}:3001'
-    environment:
-      - MONGODB_HOST=${MONGODB_HOST}
-      - TOKEN_DIRECTD=${TOKEN_DIRECTD}
-      - SECRET_KEY=${SECRET_KEY}
-      - BIGDATA_USER=${BIGDATA_USER}
-      - BIGDATA_PASSWORD=${BIGDATA_PASSWORD}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - '${PORT}:3002'

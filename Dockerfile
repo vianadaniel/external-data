@@ -21,7 +21,7 @@ ENV NODE_OPTIONS=--max-old-space-size=4096
 RUN npm run build
 
 # Expose the port on which the NestJS server is running
-EXPOSE 3001
+EXPOSE 3002
 
 # Command to start the application when the container is started
 CMD ["npm", "run", "start:prod"]
