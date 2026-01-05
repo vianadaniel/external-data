@@ -8,6 +8,6 @@ configDotenv.apply(process.env);
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   await app.listen(process.env.PORT);
-  console.log(`Report Server is running on port ${process.env.PORT}`);
+  console.log(`External Data Server is running on port ${process.env.PORT}`);
 }
 bootstrap();
