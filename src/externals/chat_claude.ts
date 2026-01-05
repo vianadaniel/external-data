@@ -64,7 +64,7 @@ Retorne somente um objeto JSON (sem comentários, sem blocos de código), com as
         const response = await axios.post(
           this.apiUrl,
           {
-            model: 'claude-3-opus-20240229',
+            model: 'claude-3-haiku-20240307',
             max_tokens: 1500,
             system: this.systemPrompt,
             messages: [
