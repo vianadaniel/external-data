@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   registerDecorator,
   ValidationOptions,
@@ -92,5 +93,3 @@ export function IsCpfOrCnpj(validationOptions?: ValidationOptions) {
     });
   };
 }
-
-
