@@ -30,8 +30,8 @@ export class LoggingInterceptor implements NestInterceptor {
     );
     const user_id = this.extractValue(body, query, params, headers, 'user_id');
 
-    // Determinar node_env baseado na origem da requisição
-    const node_env = this.determineNodeEnv(headers);
+    // Determinar node_env baseado no IP da requisição
+    const node_env = this.determineNodeEnv(request);
 
     const logData = {
       endpoint,
@@ -112,18 +112,23 @@ export class LoggingInterceptor implements NestInterceptor {
     );
   }
 
-  private determineNodeEnv(headers: any): string {
-    // Verificar se a requisição vem de https://api.mfcheck.com.br/
-    const origin = headers.origin || headers.referer || headers.host || '';
-    const originLower = origin.toLowerCase();
-    console.log(
-      originLower,
-      'headers',
-      headers.origin,
-      headers.referer,
-      headers.host,
-    );
-    if (originLower.includes('api.mfcheck.com.br')) {
+  private determineNodeEnv(request: Request): string {
+    // Obter o IP da requisição
+    // Pode vir de x-forwarded-for (quando há proxy), x-real-ip, ou connection.remoteAddress
+    const forwardedFor = request.headers['x-forwarded-for'];
+    const realIp = request.headers['x-real-ip'];
+    const remoteAddress =
+      request.connection?.remoteAddress || request.socket?.remoteAddress;
+
+    // x-forwarded-for pode conter múltiplos IPs separados por vírgula (o primeiro é o IP original)
+    const ip = forwardedFor
+      ? Array.isArray(forwardedFor)
+        ? forwardedFor[0]
+        : forwardedFor.split(',')[0].trim()
+      : realIp || remoteAddress;
+
+    // Verificar se o IP é 98.86.185.72 (produção)
+    if (ip === '98.86.185.72') {
       return 'prod';
     }
 
