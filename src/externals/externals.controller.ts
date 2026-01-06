@@ -157,8 +157,8 @@ export class ExternalsController {
     const urlPath = request.url.replace('/externals/infosimples', '');
     // Se começar com /, remover
     const identifier = urlPath.startsWith('/') ? urlPath.substring(1) : urlPath;
-    console.log('[InfoSimples Controller] Full URL:', request.url);
-    console.log('[InfoSimples Controller] Identifier received:', identifier);
+    // console.log('[InfoSimples Controller] Full URL:', request.url);
+    // console.log('[InfoSimples Controller] Identifier received:', identifier);
     return this.infoSimplesDataService.getExternalData(identifier);
   }
 

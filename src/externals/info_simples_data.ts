@@ -18,8 +18,8 @@ export class InfoSimplesDataService {
       // Verificar se o identifier já contém query parameters
       const separator = identifier.includes('?') ? '&' : '?';
       const url = `https://api.infosimples.com/api/v2/consultas/${identifier}${separator}token=${process.env.TOKEN_INFO_SIMPLES || ''}`;
-      console.log('[InfoSimples Service] URL:', url);
-      console.log('[InfoSimples Service] Identifier:', identifier);
+      // console.log('[InfoSimples Service] URL:', url);
+      // console.log('[InfoSimples Service] Identifier:', identifier);
       const response: AxiosResponse = await firstValueFrom(
         this.httpService.get(url, {
           timeout: this.timeout,
