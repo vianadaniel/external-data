@@ -31,7 +31,7 @@ export class LogsService {
       message,
       company_id: options?.company_id || '',
       user_id: options?.user_id || '',
-      node_env: options?.node_env || process.env.NODE_ENV || '',
+      node_env: options?.node_env || '',
     };
 
     if (options) {
@@ -53,7 +53,7 @@ export class LogsService {
     }
 
     const log = new this.logModel(logData);
-    return log.save();
+    return (await log.save()) as any;
   }
 
   async info(
@@ -160,7 +160,13 @@ export class LogsService {
       }
     }
 
-    return this.logModel.find(query).sort({ createdAt: -1 }).limit(limit).skip(skip).exec();
+    const logs = await this.logModel
+      .find(query)
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(skip)
+      .exec();
+    return logs as unknown as LogDocument[];
   }
 
   async count(filters?: {
@@ -186,4 +192,3 @@ export class LogsService {
     return this.logModel.countDocuments(query).exec();
   }
 }
-
