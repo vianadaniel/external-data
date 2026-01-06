@@ -29,9 +29,6 @@ export class BigDataService {
   async saveTokenToFile(tokenData: TokenData, filePath: string): Promise<void> {
     try {
       await fs.writeJson(filePath, tokenData, { spaces: 2 });
-      this.logsService?.info('BigDataService', 'Token saved to file', {
-        data: { tokenId: tokenData.tokenId },
-      });
     } catch (error) {
       console.error('Error saving token:', error);
       this.logsService?.error(
@@ -77,13 +74,6 @@ export class BigDataService {
         .toPromise();
 
       const { token, tokenID } = response.data;
-      const durationMs = Date.now() - startTime;
-      const duration = durationMs / 1000; // Converter para segundos
-
-      this.logsService?.info('BigDataService', 'Token fetched successfully', {
-        duration,
-        data: { tokenId: tokenID },
-      });
 
       return { accessToken: token, tokenId: tokenID };
     } catch (error) {
@@ -173,17 +163,10 @@ export class BigDataService {
         )
         .toPromise();
 
-      const durationMs = Date.now() - startTime;
-      const duration = durationMs / 1000; // Converter para segundos
-
       if (
         response.data?.Status.date_of_birth_validation?.[0].Message ===
         'THIS CPF BELONGS TO A MINOR. DATE OF BIRTH IS NEEDED TO PROCESS REQUEST.'
       ) {
-        this.logsService?.warn('BigDataService', 'CPF belongs to a minor', {
-          duration,
-          data: { identifier, fiscal_id_number, data_set },
-        });
         return 'cpf belongs to a minor';
       }
 
@@ -191,22 +174,8 @@ export class BigDataService {
         response.data?.Result[0]?.BasicData?.TaxIdStatus ===
         'CPF DOES NOT EXIST IN RECEITA FEDERAL DATABASE'
       ) {
-        this.logsService?.warn('BigDataService', 'Invalid CPF', {
-          duration,
-          data: { identifier, fiscal_id_number, data_set },
-        });
         return 'invalid cpf';
       }
-
-      this.logsService?.info('BigDataService', 'Data fetched successfully', {
-        duration,
-        data: {
-          identifier,
-          fiscal_id_number,
-          data_set,
-          hasResult: !!response.data.Result[0],
-        },
-      });
 
       return response.data.Result[0]
         ? { ...response.data?.Result[0], status: response.data?.Status }
