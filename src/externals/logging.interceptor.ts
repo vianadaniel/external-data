@@ -120,6 +120,32 @@ export class LoggingInterceptor implements NestInterceptor {
     const remoteAddress =
       request.connection?.remoteAddress || request.socket?.remoteAddress;
 
+    // Logs para debug
+    console.log('[determineNodeEnv] x-forwarded-for:', forwardedFor);
+    console.log('[determineNodeEnv] x-real-ip:', realIp);
+    console.log(
+      '[determineNodeEnv] connection.remoteAddress:',
+      request.connection?.remoteAddress,
+    );
+    console.log(
+      '[determineNodeEnv] socket.remoteAddress:',
+      request.socket?.remoteAddress,
+    );
+    console.log('[determineNodeEnv] remoteAddress (final):', remoteAddress);
+    console.log('[determineNodeEnv] request.ip:', request.ip);
+    console.log(
+      '[determineNodeEnv] request.headers:',
+      JSON.stringify(request.headers, null, 2),
+    );
+    console.log('[determineNodeEnv] request.connection:', {
+      remoteAddress: request.connection?.remoteAddress,
+      remotePort: request.connection?.remotePort,
+    });
+    console.log('[determineNodeEnv] request.socket:', {
+      remoteAddress: request.socket?.remoteAddress,
+      remotePort: request.socket?.remotePort,
+    });
+
     // x-forwarded-for pode conter múltiplos IPs separados por vírgula (o primeiro é o IP original)
     const ip = forwardedFor
       ? Array.isArray(forwardedFor)
@@ -127,12 +153,20 @@ export class LoggingInterceptor implements NestInterceptor {
         : forwardedFor.split(',')[0].trim()
       : realIp || remoteAddress;
 
+    console.log('[determineNodeEnv] IP final calculado:', ip);
+    console.log(
+      '[determineNodeEnv] IP === 98.86.185.72?',
+      ip === '98.86.185.72',
+    );
+
     // Verificar se o IP é 98.86.185.72 (produção)
     if (ip === '98.86.185.72') {
+      console.log('[determineNodeEnv] Retornando: prod');
       return 'prod';
     }
 
     // Para todos os outros casos, retornar 'dev'
+    console.log('[determineNodeEnv] Retornando: dev');
     return 'dev';
   }
 }
