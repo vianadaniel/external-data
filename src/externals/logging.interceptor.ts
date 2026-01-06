@@ -30,10 +30,14 @@ export class LoggingInterceptor implements NestInterceptor {
     );
     const user_id = this.extractValue(body, query, params, headers, 'user_id');
 
+    // Determinar node_env baseado na origem da requisição
+    const node_env = this.determineNodeEnv(headers);
+
     const logData = {
       endpoint,
       company_id: company_id || '',
       user_id: user_id || '',
+      node_env,
       request: {
         method,
         url,
@@ -106,5 +110,18 @@ export class LoggingInterceptor implements NestInterceptor {
       headers?.[`x-${key}`] ||
       headers?.[`x-${key.toLowerCase()}`]
     );
+  }
+
+  private determineNodeEnv(headers: any): string {
+    // Verificar se a requisição vem de https://api.mfcheck.com.br/
+    const origin = headers.origin || headers.referer || headers.host || '';
+    const originLower = origin.toLowerCase();
+
+    if (originLower.includes('api.mfcheck.com.br')) {
+      return 'prod';
+    }
+
+    // Para todos os outros casos, retornar 'dev'
+    return 'dev';
   }
 }
