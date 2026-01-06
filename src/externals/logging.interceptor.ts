@@ -116,7 +116,13 @@ export class LoggingInterceptor implements NestInterceptor {
     // Verificar se a requisição vem de https://api.mfcheck.com.br/
     const origin = headers.origin || headers.referer || headers.host || '';
     const originLower = origin.toLowerCase();
-
+    console.log(
+      originLower,
+      'headers',
+      headers.origin,
+      headers.referer,
+      headers.host,
+    );
     if (originLower.includes('api.mfcheck.com.br')) {
       return 'prod';
     }
