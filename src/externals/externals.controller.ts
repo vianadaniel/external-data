@@ -301,22 +301,6 @@ export class ExternalsController {
   }
 
   // ========== FarmScraper ==========
-  @Get('farm-scraper/*')
-  async getFarmScraperData(@Param('0') identifier: string): Promise<any> {
-    return this.farmScraperService.getExternalDataGet(identifier);
-  }
-
-  @Post('farm-scraper/*')
-  async postFarmScraperData(
-    @Param('0') identifier: string,
-    @Body() body: { fiscal_number: string; birthdate?: string },
-  ): Promise<any> {
-    return this.farmScraperService.getExternalDataPost(
-      identifier,
-      body.fiscal_number,
-      body.birthdate,
-    );
-  }
 
   @Post('farm-scraper/ccir/emitir')
   async getCcirEmission(
@@ -366,6 +350,23 @@ export class ExternalsController {
   @Post('farm-scraper/tjsp/consulta')
   async getTjspConsulta(@Body() body: { fiscal_number: string }): Promise<any> {
     return this.farmScraperService.getTjspEsaj(body.fiscal_number);
+  }
+
+  @Get('farm-scraper/*')
+  async getFarmScraperData(@Param('0') identifier: string): Promise<any> {
+    return this.farmScraperService.getExternalDataGet(identifier);
+  }
+
+  @Post('farm-scraper/*')
+  async postFarmScraperData(
+    @Param('0') identifier: string,
+    @Body() body: { fiscal_number: string; birthdate?: string },
+  ): Promise<any> {
+    return this.farmScraperService.getExternalDataPost(
+      identifier,
+      body.fiscal_number,
+      body.birthdate,
+    );
   }
 
   // ========== SintegraTotal ==========

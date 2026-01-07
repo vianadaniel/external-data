@@ -60,6 +60,7 @@ export class FarmScraperService {
           },
         ),
       );
+      console.log(response.data);
 
       if (!response || !response.data) {
         return 'error';
