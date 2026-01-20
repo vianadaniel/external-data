@@ -108,13 +108,13 @@ export class FarmScraperService {
     }
   }
 
-  async getSintegraGoias(cpf: string): Promise<any> {
+  async getSintegraGoias(fiscal_number: string): Promise<any> {
     try {
       const response: AxiosResponse = await firstValueFrom(
         this.httpService.post(
           `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/sintegra/goias`,
           {
-            fiscal_number: cpf,
+            fiscal_number,
           },
           {
             timeout: this.timeout,
@@ -136,14 +136,20 @@ export class FarmScraperService {
     }
   }
 
-  async getSintegraBahia(cpf: string): Promise<any> {
+  async getSintegraBahia(
+    fiscal_number: string,
+    company_id?: string,
+    user_id?: string,
+  ): Promise<any> {
     try {
+      const body: any = { fiscal_number };
+      if (company_id) body.company_id = company_id;
+      if (user_id) body.user_id = user_id;
+
       const response: AxiosResponse = await firstValueFrom(
         this.httpService.post(
           `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/sintegra/bahia`,
-          {
-            fiscal_number: cpf,
-          },
+          body,
           {
             timeout: this.timeout,
             headers: {
@@ -164,13 +170,13 @@ export class FarmScraperService {
     }
   }
 
-  async getSintegraPara(cpf: string): Promise<any> {
+  async getSintegraPara(fiscal_number: string): Promise<any> {
     try {
       const response: AxiosResponse = await firstValueFrom(
         this.httpService.post(
           `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/sintegra/para`,
           {
-            fiscal_number: cpf,
+            fiscal_number,
           },
           {
             timeout: this.timeout,
@@ -192,13 +198,13 @@ export class FarmScraperService {
     }
   }
 
-  async getSintegraParana(cpf: string): Promise<any> {
+  async getSintegraParana(fiscal_number: string): Promise<any> {
     try {
       const response: AxiosResponse = await firstValueFrom(
         this.httpService.post(
           `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/sintegra/parana`,
           {
-            fiscal_number: cpf,
+            fiscal_number,
           },
           {
             timeout: this.timeout,

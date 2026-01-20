@@ -321,23 +321,38 @@ export class ExternalsController {
   }
 
   @Post('farm-scraper/sintegra/goias')
-  async getSintegraGoias(@Body() body: { cpf: string }): Promise<any> {
-    return this.farmScraperService.getSintegraGoias(body.cpf);
+  async getSintegraGoias(
+    @Body() body: { fiscal_number: string },
+  ): Promise<any> {
+    return this.farmScraperService.getSintegraGoias(body.fiscal_number);
   }
 
   @Post('farm-scraper/sintegra/bahia')
-  async getSintegraBahia(@Body() body: { cpf: string }): Promise<any> {
-    return this.farmScraperService.getSintegraBahia(body.cpf);
+  async getSintegraBahia(
+    @Body()
+    body: {
+      fiscal_number: string;
+      company_id?: string;
+      user_id?: string;
+    },
+  ): Promise<any> {
+    return this.farmScraperService.getSintegraBahia(
+      body.fiscal_number,
+      body.company_id,
+      body.user_id,
+    );
   }
 
   @Post('farm-scraper/sintegra/para')
-  async getSintegraPara(@Body() body: { cpf: string }): Promise<any> {
-    return this.farmScraperService.getSintegraPara(body.cpf);
+  async getSintegraPara(@Body() body: { fiscal_number: string }): Promise<any> {
+    return this.farmScraperService.getSintegraPara(body.fiscal_number);
   }
 
   @Post('farm-scraper/sintegra/parana')
-  async getSintegraParana(@Body() body: { cpf: string }): Promise<any> {
-    return this.farmScraperService.getSintegraParana(body.cpf);
+  async getSintegraParana(
+    @Body() body: { fiscal_number: string },
+  ): Promise<any> {
+    return this.farmScraperService.getSintegraParana(body.fiscal_number);
   }
 
   @Post('farm-scraper/pgesp/consulta')
