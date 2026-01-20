@@ -104,7 +104,7 @@ export class SintegraTotalDataService {
 
   async getInscricoesData(cpf: string, uf: string): Promise<any> {
     const urlsData = await this.readUrlsFromFile();
-
+    console.log(urlsData);
     if (urlsData.length === 0) {
       console.error('SINTEGRA Total: Nenhuma URL disponível');
       return 'error';
@@ -114,7 +114,7 @@ export class SintegraTotalDataService {
     for (const urlData of urlsData) {
       const { url } = urlData;
       let errorCount = urlData.errorCount; // Variável local que será atualizada
-
+      console.log('urlData', urlData);
       for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
         try {
           console.log(
