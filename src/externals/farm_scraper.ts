@@ -136,20 +136,12 @@ export class FarmScraperService {
     }
   }
 
-  async getSintegraBahia(
-    fiscal_number: string,
-    company_id?: string,
-    user_id?: string,
-  ): Promise<any> {
+  async getSintegraBahia(fiscal_number: string): Promise<any> {
     try {
-      const body: any = { fiscal_number };
-      if (company_id) body.company_id = company_id;
-      if (user_id) body.user_id = user_id;
-
       const response: AxiosResponse = await firstValueFrom(
         this.httpService.post(
           `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/sintegra/bahia`,
-          body,
+          { fiscal_number },
           {
             timeout: this.timeout,
             headers: {

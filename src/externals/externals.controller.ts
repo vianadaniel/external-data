@@ -336,11 +336,7 @@ export class ExternalsController {
       user_id?: string;
     },
   ): Promise<any> {
-    return this.farmScraperService.getSintegraBahia(
-      body.fiscal_number,
-      body.company_id,
-      body.user_id,
-    );
+    return this.farmScraperService.getSintegraBahia(body.fiscal_number);
   }
 
   @Post('farm-scraper/sintegra/para')
