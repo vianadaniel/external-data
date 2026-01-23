@@ -281,7 +281,8 @@ export class FarmScraperService {
         this.httpService.post(
           `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/tjgo/consulta`,
           {
-            fiscal_number,
+            tipo: 'documento',
+            valor: fiscal_number,
           },
           {
             timeout: this.timeout,
