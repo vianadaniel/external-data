@@ -13,15 +13,54 @@ Authorization: APIKey {{api}}
     }
 }
 
-### GET TJCE
-GET https://api-publica.datajud.cnj.jus.br/api_publica_tjce/_search
+### GET TJMG
+GET https://api-publica.datajud.cnj.jus.br/api_publica_tjmg/_search
 Content-Type: application/json
 Authorization: APIKey {{api}}
 
 {
     "query": {
         "match": {
-            "numeroProcesso": "00085567420188060112"
+            "numeroProcesso": "50007094120198130035"
+        }
+    }
+}
+
+### GET TJTO
+GET https://api-publica.datajud.cnj.jus.br/api_publica_tjto/_search
+Content-Type: application/json
+Authorization: APIKey {{api}}
+
+{
+    "query": {
+        "match": {
+            "numeroProcesso": "00007141420258272731"
+        }
+    }
+}
+
+### GET TJMG - Busca por número sem zeros à esquerda
+GET https://api-publica.datajud.cnj.jus.br/api_publica_tjmg/_search
+Content-Type: application/json
+Authorization: APIKey {{api}}
+
+{
+    "query": {
+        "match": {
+            "numeroProcesso": "5000709-41.2019.8.13.0035"
+        }
+    }
+}
+
+### GET TJMG - Busca por partes (polo ativo)
+GET https://api-publica.datajud.cnj.jus.br/api_publica_tjmg/_search
+Content-Type: application/json
+Authorization: APIKey {{api}}
+
+{
+    "query": {
+        "match": {
+            "partes.nome": "Adir Floriano Lemos"
         }
     }
 }
