@@ -338,7 +338,10 @@ export class FarmScraperService {
       const response: AxiosResponse = await firstValueFrom(
         this.httpService.post(
           `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/tjsc/consulta`,
-          { fiscal_number },
+          {
+            tipo: 'documento',
+            valor: fiscal_number,
+          },
         ),
       );
 
