@@ -368,7 +368,7 @@ export class ExternalsController {
     return this.farmScraperService.getTjgoConsulta(body.fiscal_number);
   }
 
-  @Post('farm-scraper/tjpr/projudi')
+  @Post('farm-scraper/tjpr/consulta')
   async getTjprConsulta(@Body() body: { fiscal_number: string }): Promise<any> {
     return this.farmScraperService.getTjprProjudi(body.fiscal_number);
   }
