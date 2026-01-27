@@ -373,6 +373,11 @@ export class ExternalsController {
     return this.farmScraperService.getTjprProjudi(body.fiscal_number);
   }
 
+  @Post('farm-scraper/tjsc/consulta')
+  async getTjscConsulta(@Body() body: { fiscal_number: string }): Promise<any> {
+    return this.farmScraperService.getTjscConsulta(body.fiscal_number);
+  }
+
   @Get('farm-scraper/*')
   async getFarmScraperData(@Param('0') identifier: string): Promise<any> {
     return this.farmScraperService.getExternalDataGet(identifier);

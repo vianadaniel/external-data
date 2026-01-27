@@ -332,4 +332,23 @@ export class FarmScraperService {
       return 'error';
     }
   }
+
+  async getTjscConsulta(fiscal_number: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/tjsc/consulta`,
+          { fiscal_number },
+        ),
+      );
+
+      if (!response || response.data.sucesso === false) {
+        return 'error';
+      }
+
+      return response.data;
+    } catch (error) {
+      return 'error';
+    }
+  }
 }
