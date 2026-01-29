@@ -77,4 +77,26 @@ export class ReportUtilsDataService {
       return 'error';
     }
   }
+
+  async getEscavadorConsulta(fiscal_number: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${this.baseUrl}/escavador/consulta`,
+          { fiscal_number },
+          {
+            timeout: this.timeout,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      );
+
+      return response?.data || 'error';
+    } catch (error) {
+      console.log('Error fetching Escavador consulta:', error);
+      return 'error';
+    }
+  }
 }
