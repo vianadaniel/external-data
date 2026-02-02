@@ -383,6 +383,16 @@ export class ExternalsController {
     return this.farmScraperService.getTjscConsulta(body.fiscal_number);
   }
 
+  @Post('farm-scraper/tjmg/consulta')
+  async getTjmgConsulta(@Body() body: { fiscal_number: string }): Promise<any> {
+    return this.farmScraperService.getTjmgConsulta(body.fiscal_number);
+  }
+
+  @Post('farm-scraper/tjpa/consulta')
+  async getTjpaConsulta(@Body() body: { fiscal_number: string }): Promise<any> {
+    return this.farmScraperService.getTjpaConsulta(body.fiscal_number);
+  }
+
   @Get('farm-scraper/*')
   async getFarmScraperData(@Param('0') identifier: string): Promise<any> {
     return this.farmScraperService.getExternalDataGet(identifier);
