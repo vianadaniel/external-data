@@ -454,6 +454,11 @@ export class ExternalsController {
     return this.reportUtilsDataService.getEscavadorConsulta(body.fiscal_number);
   }
 
+  @Post('report-utils/tjmt/consulta')
+  async getTjmtConsulta(@Body() body: { fiscal_number: string }): Promise<any> {
+    return this.reportUtilsDataService.getTjmtConsulta(body.fiscal_number);
+  }
+
   // ========== Claude ==========
   @Post('claude/completion-lawsuits')
   async getClaudeCompletionLawsuits(

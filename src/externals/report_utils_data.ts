@@ -99,4 +99,26 @@ export class ReportUtilsDataService {
       return 'error';
     }
   }
+
+  async getTjmtConsulta(documento: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${this.baseUrl}/tjmt/consulta`,
+          { documento: documento },
+          {
+            timeout: this.timeout,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      );
+
+      return response?.data || 'error';
+    } catch (error) {
+      console.log('Error fetching TJMT consulta:', error);
+      return 'error';
+    }
+  }
 }
