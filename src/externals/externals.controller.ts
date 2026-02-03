@@ -403,6 +403,13 @@ export class ExternalsController {
     return this.farmScraperService.getTjrjConsulta(body.fiscal_number);
   }
 
+  @Post('farm-scraper/tst/cndt/emitir')
+  async getTstCndtEmitir(
+    @Body() body: { fiscal_number: string },
+  ): Promise<any> {
+    return this.farmScraperService.getTstCndtEmitir(body.fiscal_number);
+  }
+
   @Get('farm-scraper/*')
   async getFarmScraperData(@Param('0') identifier: string): Promise<any> {
     return this.farmScraperService.getExternalDataGet(identifier);

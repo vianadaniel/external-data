@@ -467,4 +467,26 @@ export class FarmScraperService {
       return 'error';
     }
   }
+
+  async getTstCndtEmitir(cpfCnpj: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/tst/cndt/emitir`,
+          { cpfCnpj },
+          {
+            headers: { 'Content-Type': 'application/json' },
+          },
+        ),
+      );
+
+      if (!response || response.data?.sucesso === false) {
+        return 'error';
+      }
+
+      return response.data;
+    } catch (error) {
+      return 'error';
+    }
+  }
 }
