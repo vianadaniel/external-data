@@ -12,8 +12,8 @@ interface UrlData {
 
 @Injectable()
 export class SintegraTotalDataService {
-  private readonly timeout = 190000; // 190 segundos
-  private readonly retryAttempts = 3;
+  private readonly timeout = 120000; // 120 segundos
+  private readonly retryAttempts = 30;
   private readonly urlsFilePath: string;
 
   constructor(private readonly httpService: HttpService) {
