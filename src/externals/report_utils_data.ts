@@ -9,7 +9,7 @@ configDotenv.apply(process.env);
 
 @Injectable()
 export class ReportUtilsDataService {
-  private readonly timeout = 200000; // 200 segundos
+  private readonly timeout = 400000; // 400 segundos
   private readonly baseUrl = 'https://report-utils-light.mfcheck.com.br/api';
 
   constructor(private readonly httpService: HttpService) {}
