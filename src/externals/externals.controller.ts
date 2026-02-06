@@ -410,6 +410,21 @@ export class ExternalsController {
     return this.farmScraperService.getTstCndtEmitir(body.fiscal_number);
   }
 
+  @Post('farm-scraper/tjac/consulta')
+  async getTjacConsulta(@Body() body: { fiscal_number: string }): Promise<any> {
+    return this.farmScraperService.getTjacConsulta(body.fiscal_number);
+  }
+
+  @Post('farm-scraper/tjam/consulta')
+  async getTjamConsulta(@Body() body: { fiscal_number: string }): Promise<any> {
+    return this.farmScraperService.getTjamConsulta(body.fiscal_number);
+  }
+
+  @Post('farm-scraper/tjro/consulta')
+  async getTjroConsulta(@Body() body: { fiscal_number: string }): Promise<any> {
+    return this.farmScraperService.getTjroConsulta(body.fiscal_number);
+  }
+
   @Get('farm-scraper/*')
   async getFarmScraperData(@Param('0') identifier: string): Promise<any> {
     return this.farmScraperService.getExternalDataGet(identifier);
