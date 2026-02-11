@@ -503,6 +503,16 @@ export class ExternalsController {
     return this.reportUtilsDataService.getTjmtConsulta(body.fiscal_number);
   }
 
+  @Post('report-utils/tjrs/consulta')
+  async getTjrsConsulta(
+    @Body() body: { fiscal_number: string; name: string },
+  ): Promise<any> {
+    return this.reportUtilsDataService.getTjrsConsulta(
+      body.fiscal_number,
+      body.name,
+    );
+  }
+
   // ========== Claude ==========
   @Post('claude/completion-lawsuits')
   async getClaudeCompletionLawsuits(

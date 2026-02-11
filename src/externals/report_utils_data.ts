@@ -121,4 +121,29 @@ export class ReportUtilsDataService {
       return 'error';
     }
   }
+
+  async getTjrsConsulta(fiscal_number: string, name: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${this.baseUrl}/tjrs/search`,
+          {
+            fiscal_number,
+            name,
+          },
+          {
+            timeout: this.timeout,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      );
+
+      return response?.data || 'error';
+    } catch (error) {
+      console.log('Error fetching TJRS search:', error);
+      return 'error';
+    }
+  }
 }
