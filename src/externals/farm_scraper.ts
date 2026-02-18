@@ -688,4 +688,67 @@ export class FarmScraperService {
       return 'error';
     }
   }
+
+  async getTjalConsulta(fiscal_number: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/tjal/consulta`,
+          {
+            tipo: 'documento',
+            valor: fiscal_number,
+          },
+        ),
+      );
+
+      if (!response || response.data?.sucesso === false) {
+        return 'error';
+      }
+
+      return response.data;
+    } catch (error) {
+      return 'error';
+    }
+  }
+
+  async getTjpeConsulta(documento: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/tjpe/consulta`,
+          { documento },
+        ),
+      );
+
+      if (!response || response.data.sucesso === false) {
+        return 'error';
+      }
+
+      return response.data;
+    } catch (error) {
+      return 'error';
+    }
+  }
+
+  async getTjrrConsulta(fiscal_number: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/tjrr/consulta`,
+          {
+            tipo: 'documento',
+            valor: fiscal_number,
+          },
+        ),
+      );
+
+      if (!response || response.data?.sucesso === false) {
+        return 'error';
+      }
+
+      return response.data;
+    } catch (error) {
+      return 'error';
+    }
+  }
 }
