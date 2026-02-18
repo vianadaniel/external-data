@@ -146,4 +146,26 @@ export class ReportUtilsDataService {
       return 'error';
     }
   }
+
+  async getTjpbConsulta(documento: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${this.baseUrl}/tjpb/consulta`,
+          { documento },
+          {
+            timeout: this.timeout,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      );
+
+      return response?.data || 'error';
+    } catch (error) {
+      console.log('Error fetching TJPB consulta:', error);
+      return 'error';
+    }
+  }
 }

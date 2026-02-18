@@ -533,6 +533,11 @@ export class ExternalsController {
     );
   }
 
+  @Post('report-utils/tjpb/consulta')
+  async getTjpbConsulta(@Body() body: { fiscal_number: string }): Promise<any> {
+    return this.reportUtilsDataService.getTjpbConsulta(body.fiscal_number);
+  }
+
   // ========== Claude ==========
   @Post('claude/completion-lawsuits')
   async getClaudeCompletionLawsuits(
