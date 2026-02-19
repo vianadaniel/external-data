@@ -168,4 +168,26 @@ export class ReportUtilsDataService {
       return 'error';
     }
   }
+
+  async getReclameAquiConsulta(documento: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${this.baseUrl}/reclameaqui/consulta`,
+          { documento },
+          {
+            timeout: this.timeout,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      );
+
+      return response?.data || 'error';
+    } catch (error) {
+      console.log('Error fetching Reclame Aqui consulta:', error);
+      return 'error';
+    }
+  }
 }
