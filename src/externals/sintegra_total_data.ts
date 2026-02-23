@@ -120,7 +120,7 @@ export class SintegraTotalDataService {
             url,
             { fiscal_number },
             {
-              timeout: this.timeout,
+              timeout: 320000,
               headers: {
                 'Content-Type': 'application/json',
                 'User-Agent': 'Report/1.0',
