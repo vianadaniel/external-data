@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Get,
+  Delete,
   Body,
   Param,
   Req,
@@ -497,6 +498,11 @@ export class ExternalsController {
     return this.sintegraTotalDataService.getInscricoesData(body.cpf, body.uf);
   }
 
+  @Post('sintegra-total/protesto')
+  async getProtestoData(@Body() body: { fiscal_number: string }): Promise<any> {
+    return this.sintegraTotalDataService.getProtestoData(body.fiscal_number);
+  }
+
   // ========== ReportUtils ==========
   @Post('report-utils/mpsp/civel')
   async getMpspCertidaoCivel(
@@ -603,10 +609,14 @@ export class ExternalsController {
   }
 
   @Get('sintegra/url')
-  async getSintegraUrls(): Promise<{
-    urls: Array<{ url: string; errorCount: number }>;
-  }> {
+  async getSintegraUrls(): Promise<{ urls: string[] }> {
     const urls = await this.sintegraTotalDataService.getUrls();
     return { urls };
+  }
+
+  @Delete('sintegra/url')
+  async deleteSintegraUrls(): Promise<{ message: string }> {
+    await this.sintegraTotalDataService.deleteAllUrls();
+    return { message: 'Links zerados com sucesso' };
   }
 }

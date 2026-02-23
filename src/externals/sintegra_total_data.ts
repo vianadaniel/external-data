@@ -5,11 +5,6 @@ import { firstValueFrom } from 'rxjs';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
-interface UrlData {
-  url: string;
-  errorCount: number;
-}
-
 @Injectable()
 export class SintegraTotalDataService {
   private readonly timeout = 120000; // 120 segundos
@@ -20,36 +15,33 @@ export class SintegraTotalDataService {
     this.urlsFilePath = path.resolve(process.cwd(), 'sintegra_urls.json');
   }
 
-  private async readUrlsFromFile(): Promise<UrlData[]> {
+  private async readUrlsFromFile(): Promise<string[]> {
     try {
       const exists = await fs.pathExists(this.urlsFilePath);
       if (!exists) {
-        // Se o arquivo não existe, cria vazio
         await this.saveUrlsToFile([]);
         return [];
       }
-      const urls: any = await fs.readJson(this.urlsFilePath);
-      // Migração: se for array de strings, converte para UrlData[]
-      if (
-        Array.isArray(urls) &&
-        urls.length > 0 &&
-        typeof urls[0] === 'string'
-      ) {
-        const migratedUrls: UrlData[] = urls.map((url: string) => ({
-          url,
-          errorCount: 0,
-        }));
-        await this.saveUrlsToFile(migratedUrls);
-        return migratedUrls;
+      const data: unknown = await fs.readJson(this.urlsFilePath);
+      if (Array.isArray(data)) {
+        const list = data
+          .map((u) =>
+            typeof u === 'string' ? u : (u as { url?: string })?.url,
+          )
+          .filter((u): u is string => typeof u === 'string');
+        if (list.length > 0 && data.length > 0 && typeof data[0] !== 'string') {
+          await this.saveUrlsToFile(list); // migra para novo formato
+        }
+        return list;
       }
-      return Array.isArray(urls) ? urls : [];
+      return [];
     } catch (error) {
       console.error('Error reading URLs from file:', error);
       return [];
     }
   }
 
-  private async saveUrlsToFile(urls: UrlData[]): Promise<void> {
+  private async saveUrlsToFile(urls: string[]): Promise<void> {
     try {
       await fs.writeJson(this.urlsFilePath, urls, { spaces: 2 });
     } catch (error) {
@@ -57,130 +49,93 @@ export class SintegraTotalDataService {
     }
   }
 
-  private async updateUrlErrorCount(
-    url: string,
-    errorCount: number,
-  ): Promise<void> {
-    try {
-      const urls = await this.readUrlsFromFile();
-      const urlIndex = urls.findIndex((u) => u.url === url);
-      if (urlIndex !== -1) {
-        urls[urlIndex].errorCount = errorCount;
-        await this.saveUrlsToFile(urls);
-      }
-    } catch (error) {
-      console.error('Error updating URL error count:', error);
-    }
-  }
-
-  private async removeUrlFromFile(urlToRemove: string): Promise<void> {
-    try {
-      const urls = await this.readUrlsFromFile();
-      const filteredUrls = urls.filter((u) => u.url !== urlToRemove);
-      await this.saveUrlsToFile(filteredUrls);
-    } catch (error) {
-      console.error('Error removing URL from file:', error);
-    }
-  }
-
   async addUrl(url: string): Promise<void> {
     try {
       const urls = await this.readUrlsFromFile();
-      if (!urls.some((u) => u.url === url)) {
-        urls.push({ url, errorCount: 0 });
-        await this.saveUrlsToFile(urls);
-      }
+      const filtered = urls.filter((u) => u !== url);
+      filtered.unshift(url); // nova URL vai para [0]
+      await this.saveUrlsToFile(filtered);
     } catch (error) {
       console.error('Error adding URL:', error);
       throw error;
     }
   }
 
-  async getUrls(): Promise<UrlData[]> {
-    return await this.readUrlsFromFile();
+  async getUrls(): Promise<string[]> {
+    return this.readUrlsFromFile();
+  }
+
+  async deleteAllUrls(): Promise<void> {
+    await this.saveUrlsToFile([]);
   }
 
   async getInscricoesData(cpf: string, uf: string): Promise<any> {
-    const urlsData = await this.readUrlsFromFile();
-    if (urlsData.length === 0) {
+    const urls = await this.readUrlsFromFile();
+    if (urls.length === 0) {
       console.error('SINTEGRA Total: Nenhuma URL disponível');
       return 'error';
     }
 
-    // Tenta cada URL disponível
-    for (const urlData of urlsData) {
-      const { url } = urlData;
-      let errorCount = urlData.errorCount; // Variável local que será atualizada
-
-      for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
-        try {
-          const response: AxiosResponse = await firstValueFrom(
-            this.httpService.post(
-              url,
-              {
-                cpf,
-                uf,
+    const baseUrl = urls[0];
+    const url = `${baseUrl.replace(/\/$/, '')}/inscricoes`;
+    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
+      try {
+        const response: AxiosResponse = await firstValueFrom(
+          this.httpService.post(
+            url,
+            { cpf, uf },
+            {
+              timeout: this.timeout,
+              headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Report/1.0',
               },
-              {
-                timeout: this.timeout,
-                headers: {
-                  'Content-Type': 'application/json',
-                  'User-Agent': 'Report/1.0',
-                },
-              },
-            ),
-          );
-
-          // Validação da resposta
-          if (!response || !response.data) {
-            console.error(
-              `SINTEGRA Total Attempt ${attempt}: Resposta vazia ou inválida`,
-            );
-            errorCount++;
-            await this.updateUrlErrorCount(url, errorCount);
-
-            if (errorCount >= this.retryAttempts) {
-              await this.removeUrlFromFile(url);
-              break; // Remove e tenta próxima URL
-            }
-
-            if (attempt === this.retryAttempts) {
-              break; // Tenta próxima URL
-            }
-            continue;
-          }
-
-          // Sucesso: zera o contador de erros
-          if (errorCount > 0) {
-            errorCount = 0;
-            await this.updateUrlErrorCount(url, 0);
-          }
-
-          return response.data;
-        } catch (error) {
-          errorCount++;
-          await this.updateUrlErrorCount(url, errorCount);
-
-          console.error(`SINTEGRA Total Attempt ${attempt} failed:`, {
-            message: error?.message,
-            code: error?.code,
-            cause: error?.cause?.code,
-          });
-
-          if (errorCount >= this.retryAttempts) {
-            await this.removeUrlFromFile(url);
-            break; // Remove e tenta próxima URL
-          }
-
-          if (attempt === this.retryAttempts) {
-            break; // Tenta próxima URL se houver
-          }
-        }
+            },
+          ),
+        );
+        if (response?.data) return response.data;
+      } catch (error) {
+        console.error(`SINTEGRA Total Attempt ${attempt} failed:`, {
+          url,
+          message: error?.message,
+        });
       }
     }
+    return 'error';
+  }
 
-    // Se chegou aqui, todas as URLs falharam
-    console.error('SINTEGRA Total: Todas as URLs falharam');
+  async getProtestoData(fiscal_number: string): Promise<any> {
+    const urls = await this.readUrlsFromFile();
+    if (urls.length === 0) {
+      console.error('SINTEGRA Total: Nenhuma URL disponível');
+      return 'error';
+    }
+
+    const baseUrl = urls[0];
+    const url = `${baseUrl.replace(/\/$/, '')}/protestos`;
+    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
+      try {
+        const response: AxiosResponse = await firstValueFrom(
+          this.httpService.post(
+            url,
+            { fiscal_number },
+            {
+              timeout: this.timeout,
+              headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Report/1.0',
+              },
+            },
+          ),
+        );
+        if (response?.data) return response.data;
+      } catch (error) {
+        console.error(`SINTEGRA Total Protesto Attempt ${attempt} failed:`, {
+          url,
+          message: error?.message,
+        });
+      }
+    }
     return 'error';
   }
 }
