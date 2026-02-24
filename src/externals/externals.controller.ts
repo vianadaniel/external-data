@@ -503,6 +503,11 @@ export class ExternalsController {
     return this.sintegraTotalDataService.getProtestoData(body.fiscal_number);
   }
 
+  @Post('sintegra-total/tjto')
+  async getTjtoData(@Body() body: { fiscal_number: string }): Promise<any> {
+    return this.sintegraTotalDataService.getTjtoData(body.fiscal_number);
+  }
+
   // ========== ReportUtils ==========
   @Post('report-utils/mpsp/civel')
   async getMpspCertidaoCivel(

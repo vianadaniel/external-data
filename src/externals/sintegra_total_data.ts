@@ -138,4 +138,39 @@ export class SintegraTotalDataService {
     }
     return 'error';
   }
+
+  async getTjtoData(fiscal_number: string): Promise<any> {
+    const urls = await this.readUrlsFromFile();
+    if (urls.length === 0) {
+      console.error('SINTEGRA Total: Nenhuma URL disponível');
+      return 'error';
+    }
+
+    const baseUrl = urls[0];
+    const url = `${baseUrl.replace(/\/$/, '')}/sintegra-total/tjto`;
+    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
+      try {
+        const response: AxiosResponse = await firstValueFrom(
+          this.httpService.post(
+            url,
+            { fiscal_number },
+            {
+              timeout: this.timeout,
+              headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Report/1.0',
+              },
+            },
+          ),
+        );
+        if (response?.data) return response.data;
+      } catch (error) {
+        console.error(`SINTEGRA Total TJTO Attempt ${attempt} failed:`, {
+          url,
+          message: error?.message,
+        });
+      }
+    }
+    return 'error';
+  }
 }
