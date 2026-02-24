@@ -147,7 +147,7 @@ export class SintegraTotalDataService {
     }
 
     const baseUrl = urls[0];
-    const url = `${baseUrl.replace(/\/$/, '')}/sintegra-total/tjto`;
+    const url = `${baseUrl.replace(/\/$/, '')}/tjto`;
     for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
       try {
         const response: AxiosResponse = await firstValueFrom(
