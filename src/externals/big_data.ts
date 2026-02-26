@@ -163,23 +163,26 @@ export class BigDataService {
         )
         .toPromise();
 
+      const minorMsg =
+        response.data?.Status?.date_of_birth_validation?.[0]?.Message;
       if (
-        response.data?.Status.date_of_birth_validation?.[0].Message ===
+        minorMsg ===
         'THIS CPF BELONGS TO A MINOR. DATE OF BIRTH IS NEEDED TO PROCESS REQUEST.'
       ) {
         return 'cpf belongs to a minor';
       }
 
+      const result = response.data?.Result;
+      const first = Array.isArray(result) ? result[0] : undefined;
+
       if (
-        response.data?.Result[0]?.BasicData?.TaxIdStatus ===
+        first?.BasicData?.TaxIdStatus ===
         'CPF DOES NOT EXIST IN RECEITA FEDERAL DATABASE'
       ) {
         return 'invalid cpf';
       }
 
-      return response.data.Result[0]
-        ? { ...response.data?.Result[0], status: response.data?.Status }
-        : 'error';
+      return first ? { ...first, status: response.data?.Status } : 'error';
     } catch (error) {
       const durationMs = Date.now() - startTime;
       const duration = durationMs / 1000; // Converter para segundos
