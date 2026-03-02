@@ -619,6 +619,11 @@ export class ExternalsController {
     return { urls };
   }
 
+  @Get('sintegra/health')
+  async getSintegraHealth(): Promise<string> {
+    return this.sintegraTotalDataService.getHealth();
+  }
+
   @Delete('sintegra/url')
   async deleteSintegraUrls(): Promise<{ message: string }> {
     await this.sintegraTotalDataService.deleteAllUrls();

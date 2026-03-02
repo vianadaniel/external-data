@@ -69,6 +69,26 @@ export class SintegraTotalDataService {
     await this.saveUrlsToFile([]);
   }
 
+  async getHealth(): Promise<string> {
+    const urls = await this.readUrlsFromFile();
+    if (urls.length === 0) return 'nenhuma url configurada';
+    const baseUrl = urls[0].replace(/\/$/, '');
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.get(`${baseUrl}/health`, {
+          timeout: 5000,
+          headers: { 'User-Agent': 'Report/1.0' },
+          validateStatus: () => true,
+        }),
+      );
+      return response.status >= 200 && response.status < 300
+        ? response.data
+        : response.status.toString();
+    } catch (error) {
+      return error?.response?.status?.toString() || error?.message || error;
+    }
+  }
+
   async getInscricoesData(cpf: string, uf: string): Promise<any> {
     const urls = await this.readUrlsFromFile();
     if (urls.length === 0) {
