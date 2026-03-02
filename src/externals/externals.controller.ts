@@ -573,6 +573,15 @@ export class ExternalsController {
     );
   }
 
+  @Post('report-utils/garantia-safra/consulta')
+  async getGarantiaSafraConsulta(
+    @Body() body: { fiscal_number: string },
+  ): Promise<any> {
+    return this.reportUtilsDataService.getGarantiaSafraConsulta(
+      body.fiscal_number,
+    );
+  }
+
   // ========== Claude ==========
   @Post('claude/completion-lawsuits')
   async getClaudeCompletionLawsuits(

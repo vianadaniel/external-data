@@ -190,4 +190,26 @@ export class ReportUtilsDataService {
       return 'error';
     }
   }
+
+  async getGarantiaSafraConsulta(fiscal_number: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${this.baseUrl}/garantia-safra/consulta`,
+          { fiscal_number },
+          {
+            timeout: this.timeout,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      );
+
+      return response?.data || 'error';
+    } catch (error) {
+      console.log('Error fetching Garantia Safra consulta:', error);
+      return 'error';
+    }
+  }
 }
