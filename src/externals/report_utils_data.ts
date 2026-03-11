@@ -169,6 +169,50 @@ export class ReportUtilsDataService {
     }
   }
 
+  async getTjesConsulta(documento: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${this.baseUrl}/tjes/consulta`,
+          { documento },
+          {
+            timeout: this.timeout,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      );
+
+      return response?.data || 'error';
+    } catch (error) {
+      console.log('Error fetching TJES consulta:', error);
+      return 'error';
+    }
+  }
+
+  async getTjamConsulta(documento: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${this.baseUrl}/tjam/consulta`,
+          { documento },
+          {
+            timeout: this.timeout,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      );
+
+      return response?.data || 'error';
+    } catch (error) {
+      console.log('Error fetching TJAM consulta:', error);
+      return 'error';
+    }
+  }
+
   async getReclameAquiConsulta(documento: string): Promise<any> {
     try {
       const response: AxiosResponse = await firstValueFrom(

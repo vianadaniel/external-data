@@ -564,6 +564,22 @@ export class ExternalsController {
     return this.reportUtilsDataService.getTjpbConsulta(body.fiscal_number);
   }
 
+  @Post('report-utils/tjes/consulta')
+  async getTjesConsulta(
+    @Body() body: { documento?: string; fiscal_number?: string },
+  ): Promise<any> {
+    const doc = body.documento ?? body.fiscal_number;
+    return this.reportUtilsDataService.getTjesConsulta(doc);
+  }
+
+  @Post('report-utils/tjam/consulta')
+  async getTjamReportUtilsConsulta(
+    @Body() body: { documento?: string; fiscal_number?: string },
+  ): Promise<any> {
+    const doc = body.documento ?? body.fiscal_number;
+    return this.reportUtilsDataService.getTjamConsulta(doc);
+  }
+
   @Post('report-utils/reclameaqui/consulta')
   async getReclameAquiConsulta(
     @Body() body: { fiscal_number: string },
