@@ -359,6 +359,16 @@ export class ExternalsController {
     return this.farmScraperService.getPgespConsulta(body.fiscal_number);
   }
 
+  @Post('farm-scraper/fgts/consulta')
+  async getFgtsConsulta(
+    @Body() body: { fiscal_number: string; birthdate?: string },
+  ): Promise<any> {
+    return this.farmScraperService.getFgtsConsulta(
+      body.fiscal_number,
+      body.birthdate,
+    );
+  }
+
   @Post('farm-scraper/tjsp/consulta')
   async getTjspConsulta(@Body() body: { fiscal_number: string }): Promise<any> {
     return this.farmScraperService.getTjspEsaj(body.fiscal_number);

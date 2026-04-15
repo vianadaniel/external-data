@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, isAxiosError } from 'axios';
 import { configDotenv } from 'dotenv';
 
 configDotenv.apply(process.env);
@@ -35,6 +35,30 @@ interface GravameData {
 export class CheckProService {
   constructor(private readonly httpService: HttpService) {}
   public TIMEOUT = 180000; // 3 minutos
+
+  private buildErrorLog(error: unknown): Record<string, unknown> {
+    if (isAxiosError(error)) {
+      return {
+        name: error.name,
+        message: error.message,
+        code: error.code,
+        responseData: error.response?.data,
+        statusCode: error.response?.status,
+        headers: error.response?.headers,
+        stack: error.stack,
+      };
+    }
+
+    if (error instanceof Error) {
+      return {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      };
+    }
+
+    return { message: String(error) };
+  }
 
   async getGravameData(
     placa: string,
@@ -71,13 +95,9 @@ export class CheckProService {
         return response.data;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao chamar CheckPro:', {
-        message: error.message,
-        responseData: error.response?.data,
-        statusCode: error.response?.status,
-        headers: error.response?.headers,
-        stack: error.stack,
+        ...this.buildErrorLog(error),
         placa,
       });
       return null;
@@ -119,13 +139,9 @@ export class CheckProService {
         return response.data;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao chamar CheckPro:', {
-        message: error.message,
-        responseData: error.response?.data,
-        statusCode: error.response?.status,
-        headers: error.response?.headers,
-        stack: error.stack,
+        ...this.buildErrorLog(error),
         placa,
       });
       return null;
@@ -167,7 +183,7 @@ export class CheckProService {
         return response.data;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao chamar CheckPro:', {
         message: error.message,
         responseData: error.response?.data,
@@ -206,7 +222,7 @@ export class CheckProService {
         return response.data;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao chamar CheckPro:', {
         message: error.message,
         responseData: error.response?.data,
@@ -244,7 +260,7 @@ export class CheckProService {
         return response.data;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao chamar CheckPro:', {
         message: error.message,
         responseData: error.response?.data,
@@ -292,7 +308,7 @@ export class CheckProService {
         return response.data;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao chamar CheckPro:', {
         message: error.message,
         responseData: error.response?.data,
@@ -340,7 +356,7 @@ export class CheckProService {
         return response.data;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao chamar CheckPro:', {
         message: error.message,
         responseData: error.response?.data,
@@ -388,7 +404,7 @@ export class CheckProService {
         return response.data;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao chamar CheckPro:', {
         message: error.message,
         responseData: error.response?.data,
@@ -436,7 +452,7 @@ export class CheckProService {
         return response.data;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao chamar CheckPro:', {
         message: error.message,
         responseData: error.response?.data,
@@ -484,7 +500,7 @@ export class CheckProService {
         return response.data;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao chamar CheckPro:', {
         message: error.message,
         responseData: error.response?.data,
@@ -532,7 +548,7 @@ export class CheckProService {
         return response.data;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao chamar CheckPro:', {
         message: error.message,
         responseData: error.response?.data,
