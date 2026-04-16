@@ -465,6 +465,45 @@ export class CheckProService {
     }
   }
 
+  async getRenajudData(placa: string): Promise<GravameData | null> {
+    try {
+      const url =
+        'https://ws2.checkpro.com.br/servicejson.asmx/ConsultaRenajudPorPlaca';
+
+      const params = {
+        cpfUsuario: process.env.CHECKPRO_USER,
+        senhaUsuario: process.env.CHECKPRO_PASSWORD,
+        placa: placa,
+      };
+
+      const response: AxiosResponse = await this.httpService
+        .get(url, { params, timeout: this.TIMEOUT })
+        .toPromise();
+
+      if (response?.data) {
+        if (!response.data.StatusRetorno) {
+          console.error(
+            'StatusRetorno não encontrado na resposta:',
+            response.data,
+          );
+          return null;
+        }
+        return response.data;
+      }
+      return null;
+    } catch (error: any) {
+      console.error('Erro ao chamar CheckPro:', {
+        message: error.message,
+        responseData: error.response?.data,
+        statusCode: error.response?.status,
+        headers: error.response?.headers,
+        stack: error.stack,
+        placa,
+      });
+      return null;
+    }
+  }
+
   async getHistoricoProprietariosData(
     placa: string,
     chassi: string,

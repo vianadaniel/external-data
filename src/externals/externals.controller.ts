@@ -240,6 +240,11 @@ export class ExternalsController {
     return this.checkProService.getRenainfData(body.placa, body.chassi);
   }
 
+  @Post('checkpro/renajud')
+  async getRenajud(@Body() body: { placa: string }): Promise<any> {
+    return this.checkProService.getRenajudData(body.placa);
+  }
+
   @Post('checkpro/historico-proprietarios')
   async getHistoricoProprietarios(
     @Body() body: { placa?: string; chassi?: string },
