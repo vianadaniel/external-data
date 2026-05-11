@@ -1,44 +1,12 @@
-### SPC - Configuração de Credenciais
-# Configure suas credenciais do SPC:
-@username = 131244831
-@password = Mf19842025*
+### SPC via API externals (usa SPC_USERNAME e SPC_PASSWORD do .env)
+# Suba o servidor: npm run start:dev (porta em PORT, ex.: 3002)
+@baseUrl = http://localhost:3002
 @cnpj = 04639628000192
 @cpf = 06604890660
 
-### IMPORTANTE: Problema com Homologação
-# O servidor de homologação (homologacao1.spc.org.br) está inacessível
-# Use o endpoint de teste para verificar a conectividade:
-# GET /report/spc/test
-
-### SPC - Consulta Padrão (Homologação)
-POST https://homologacao1.spc.org.br:443/spcconsulta/recurso/consulta/padrao
+### Consulta produção (body igual ao da API SPC)
+POST {{baseUrl}}/externals/spc/consulta-producao
 Content-Type: application/json
-Authorization: Basic {{username}}:{{password}}
-
-{
-  "codigoProduto": "1172",
-  "tipoConsumidor": "J",
-  "documentoConsumidor": "02178451000149",
-  "codigoInsumoOpcional": []
-}
-
-### SPC - Consulta Padrão (Produção)
-POST https://servicos.spc.org.br/spcconsulta/recurso/consulta/padrao
-Content-Type: application/json
-Authorization: Basic {{username}}:{{password}}
-
-{
-  "codigoProduto": "325",
-  "tipoConsumidor": "J",
-  "documentoConsumidor": "04639628000192",
-  "codigoInsumoOpcional": [78]
-}
-
-
-### SPC - Consulta com CNPJ diferente
-POST https://servicos.spc.org.br/spcconsulta/recurso/consulta/padrao
-Content-Type: application/json
-Authorization: Basic {{username}}:{{password}}
 
 {
   "codigoProduto": "325",
@@ -47,14 +15,22 @@ Authorization: Basic {{username}}:{{password}}
   "codigoInsumoOpcional": [78]
 }
 
-### SPC - Consulta Pessoa Física
-POST https://servicos.spc.org.br/spcconsulta/recurso/consulta/padrao
+### Pessoa jurídica (atalho — default codigoProduto 695)
+POST {{baseUrl}}/externals/spc/pessoa-juridica
 Content-Type: application/json
-Authorization: Basic {{username}}:{{password}}
 
 {
+  "cnpj": "{{cnpj}}",
+  "codigoProduto": "325",
+  "insumos": [78]
+}
+
+### Pessoa física (atalho — default codigoProduto 695)
+POST {{baseUrl}}/externals/spc/pessoa-fisica
+Content-Type: application/json
+
+{
+  "cpf": "{{cpf}}",
   "codigoProduto": "695",
-  "tipoConsumidor": "F",
-  "documentoConsumidor": "{{cpf}}",
-  "codigoInsumoOpcional": []
+  "insumos": []
 }
