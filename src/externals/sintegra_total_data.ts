@@ -159,6 +159,41 @@ export class SintegraTotalDataService {
     return 'error';
   }
 
+  async getEscavadorConsulta(fiscal_number: string): Promise<any> {
+    const urls = await this.readUrlsFromFile();
+    if (urls.length === 0) {
+      console.error('SINTEGRA Total: Nenhuma URL disponível');
+      return 'error';
+    }
+
+    const baseUrl = urls[0];
+    const url = `${baseUrl.replace(/\/$/, '')}/escavador/consulta`;
+    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
+      try {
+        const response: AxiosResponse = await firstValueFrom(
+          this.httpService.post(
+            url,
+            { fiscal_number },
+            {
+              timeout: 400000,
+              headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Report/1.0',
+              },
+            },
+          ),
+        );
+        if (response?.data) return response.data;
+      } catch (error) {
+        console.error(`SINTEGRA Total Escavador consulta attempt ${attempt}:`, {
+          url,
+          message: error?.message,
+        });
+      }
+    }
+    return 'error';
+  }
+
   async getTjtoData(fiscal_number: string): Promise<any> {
     const urls = await this.readUrlsFromFile();
     if (urls.length === 0) {
