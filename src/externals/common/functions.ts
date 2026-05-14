@@ -31,5 +31,3 @@ export function removeMask(string?: string): string {
   if (!string) return '';
   return string.replace(/[^A-Z0-9]/g, '');
 }
-
-

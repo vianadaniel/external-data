@@ -28,6 +28,8 @@ COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/sintegra_urls.json ./sintegra_urls.json
+RUN chown node:node /app/sintegra_urls.json
 
 USER node
 

@@ -151,7 +151,7 @@ export class ExternalsController {
   @Post('infosimples/*')
   async getInfoSimplesData(
     @Req() request: Request,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     @Body() _body: any, // body é usado apenas pelo interceptor para logging
   ): Promise<any> {
     // Extrair o identifier completo incluindo query parameters

@@ -30,6 +30,3 @@ logs-blue:
 
 build-bg:
 	docker compose $(COMPOSE_BG) build app-blue
-
-test:
-	npm run test
