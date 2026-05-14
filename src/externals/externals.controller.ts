@@ -26,6 +26,7 @@ import { ReportUtilsDataService } from './report_utils_data';
 import { ClaudeService } from './chat_claude';
 import { OpenAIService } from './chat_ia';
 import { ChatPDFExtractor } from './chatpdf';
+import { DdpositivoService } from './ddpositivo_data';
 import { LoggingInterceptor } from './logging.interceptor';
 
 @Controller('externals')
@@ -49,6 +50,7 @@ export class ExternalsController {
     private readonly claudeService: ClaudeService,
     private readonly openAIService: OpenAIService,
     private readonly chatPDFExtractor: ChatPDFExtractor,
+    private readonly ddpositivoService: DdpositivoService,
   ) {}
 
   // ========== BigData ==========
@@ -260,6 +262,14 @@ export class ExternalsController {
     @Body() body: { placa?: string; chassi?: string },
   ): Promise<any> {
     return this.checkProService.getRemarketingData(body.placa, body.chassi);
+  }
+
+  // ========== DD Positivo ==========
+  @Post('ddpositivo/search')
+  async ddpositivoSearch(
+    @Body() body: { document: string; consultation: string },
+  ): Promise<any> {
+    return this.ddpositivoService.search(body.document, body.consultation);
   }
 
   // ========== BNDES ==========

@@ -1,28 +1,39 @@
-# Use the official Node.js image as a base
-FROM node:22-alpine
+# syntax=docker/dockerfile:1
 
-# Set the working directory inside the container
+# Build (inclui devDependencies para nest build)
+FROM node:22-alpine AS builder
+
+ARG NODE_OPTIONS=--max-old-space-size=512
+
 WORKDIR /app
 
-# Copy package.json and package-lock.json
 COPY package*.json ./
-
-# Install project dependencies
 RUN npm ci
 
-# Install NestJS CLI globally
-RUN npm install -g @nestjs/cli
-
-# Copy the rest of the files to the working directory
 COPY . .
 
-# Compile the TypeScript code with increased memory limit
-ENV NODE_OPTIONS=--max-old-space-size=4096
+ENV NODE_OPTIONS=${NODE_OPTIONS}
 RUN npm run build
 
-# Expose the port on which the NestJS server is running
-EXPOSE 3002
+# Runtime: só produção; escuta na 3000 (compose mapeia *:3000)
+FROM node:22-alpine AS runner
 
-# Command to start the application when the container is started
-CMD ["npm", "run", "start:prod"]
+WORKDIR /app
 
+ENV NODE_ENV=production
+ENV NODE_OPTIONS=--max-old-space-size=384
+ENV PORT=3000
+
+COPY package*.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+
+COPY --from=builder /app/dist ./dist
+
+USER node
+
+EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://127.0.0.1:3000/',(r)=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"
+
+CMD ["node", "dist/main"]

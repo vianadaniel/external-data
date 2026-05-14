@@ -18,6 +18,7 @@ import { ReportUtilsDataService } from './report_utils_data';
 import { ClaudeService } from './chat_claude';
 import { OpenAIService } from './chat_ia';
 import { ChatPDFExtractor } from './chatpdf';
+import { DdpositivoService } from './ddpositivo_data';
 import { LogsService } from './logs.service';
 import { Log, LogSchema } from './schemas/logs.schema';
 import { LoggingInterceptor } from './logging.interceptor';
@@ -47,6 +48,7 @@ import { LoggingInterceptor } from './logging.interceptor';
     ClaudeService,
     OpenAIService,
     ChatPDFExtractor,
+    DdpositivoService,
   ],
   exports: [
     LogsService,
@@ -66,6 +68,7 @@ import { LoggingInterceptor } from './logging.interceptor';
     ClaudeService,
     OpenAIService,
     ChatPDFExtractor,
+    DdpositivoService,
   ],
 })
 export class ExternalsModule {}

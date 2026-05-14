@@ -1,8 +1,22 @@
+# Compose local: host:${DOCKER_APP_PORT:-3002} -> container:3000 (igual blue/green).
+# Produção: docker-compose.bluegreen.yml
 services:
   app:
-    restart: always
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile
+    image: external-data:latest
+    env_file:
+      - .env
+    environment:
+      PORT: "3000"
     ports:
-      - '${PORT}:3002'
+      - "${DOCKER_APP_PORT:-3002}:3000"
+    mem_limit: 512m
+    memswap_limit: 1536m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

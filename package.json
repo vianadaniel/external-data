@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "NODE_OPTIONS='--max-old-space-size=4096' nest build",
-    "build:prod": "NODE_OPTIONS='--max-old-space-size=4096' nest build --prod",
+    "build": "NODE_OPTIONS='--max-old-space-size=512' nest build",
+    "build:prod": "NODE_OPTIONS='--max-old-space-size=512' nest build --prod",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

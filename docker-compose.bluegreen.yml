@@ -1,0 +1,51 @@
+# Blue/green usado com Lightsail + Nginx no host (tráfego público só via Nginx).
+#
+# - app-blue (host 127.0.0.1:3001 -> container 3000) primário no upstream nginx
+# - app-green (host 127.0.0.1:3002 -> container 3000) backup (failover)
+# - imagem compartilhada `external-data:latest` produzida pelo build do app-blue
+# - ports só em 127.0.0.1: tráfego público só via Nginx
+#
+# Uso (ex.: no servidor):
+#   docker compose -f docker-compose.bluegreen.yml build app-blue
+#   docker compose -f docker-compose.bluegreen.yml up -d
+services:
+  app-blue:
+    container_name: external-data-blue
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: external-data:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PORT: "3000"
+    ports:
+      - "127.0.0.1:3001:3000"
+    mem_limit: 512m
+    memswap_limit: 1536m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  app-green:
+    container_name: external-data-green
+    image: external-data:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PORT: "3000"
+    ports:
+      - "127.0.0.1:3002:3000"
+    mem_limit: 512m
+    memswap_limit: 1536m
+    depends_on:
+      - app-blue
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
