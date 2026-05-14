@@ -1,0 +1,12 @@
+# Substitua pelo Bearer token da API DD Positivo.
+@ddpositivo_token = 3241ab9c9f2ce9c50171b8b2b985fe884b29c460ca345d9f42156ac65917af50
+
+### Pesquisa (search)
+POST https://sistemas.ddpositivo.com/api/search
+Authorization: Bearer {{ddpositivo_token}}
+Content-Type: application/json
+
+{
+  "document": "03058766866",
+  "consultation": "scr-pf"
+}

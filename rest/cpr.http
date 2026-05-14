@@ -1,0 +1,907 @@
+HTTP/1.1 200 OK
+Date: Thu, 14 May 2026 11:41:36 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: close
+Server: nginx
+X-Powered-By: PHP/8.2.26
+Cache-Control: no-cache, private
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 59
+Access-Control-Allow-Origin: *
+
+{
+  "data": {
+    "partialQueryResultIndicator": "N",
+    "instrumentsCountNumber": "17",
+    "financialAmount": "80407685.96",
+    "instruments": [
+      {
+        "tickerSymbol": "275975348",
+        "cprTypeName": "PRODUTO",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "03\/03\/2026",
+        "registerDate": "03\/03\/2026",
+        "maturityDate": "30\/08\/2026",
+        "paymentStartDate": "30\/08\/2026",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias \u00fateis",
+        "financialValue": "5650000",
+        "deliveryPlace": {
+          "documentDeadlineDaysNumber": "180",
+          "deliveryPlaceName": "CHAPADAO DO CEU-GO",
+          "stateAcronym": "GO",
+          "cityIbgeTypeCode": "5205471"
+        },
+        "events": [
+          {
+            "eventPaymentDate": "30\/08\/2026"
+          }
+        ],
+        "collaterals": [],
+        "products": [
+          {
+            "cprProductName": "MILHO",
+            "cprProductHarvest": "2026\/2026",
+            "cprProductDescription": "MILHO",
+            "cprProductQuantity": "6000000",
+            "measureUnitName": "SACA (60KG)",
+            "packagingWayName": "GRANEL"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "24D03122046",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento anterior \u00e0 data de consulta ou baixado",
+        "issueDate": "17\/04\/2024",
+        "registerDate": "18\/04\/2024",
+        "maturityDate": "07\/04\/2026",
+        "paymentMethodTypeName": "Pagamento de juros e amortiza\u00e7\u00e3o peri\u00f3dicos",
+        "indexTypeCode": "Prefixada",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias corridos comercial",
+        "financialValue": "5800000",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "30\/10\/2024",
+            "eventPaymentTypeName": "Amortiza\u00e7\u00e3o"
+          },
+          {
+            "eventPaymentDate": "30\/10\/2024",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "30\/04\/2025",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "30\/04\/2025",
+            "eventPaymentTypeName": "Amortiza\u00e7\u00e3o"
+          },
+          {
+            "eventPaymentDate": "30\/10\/2025",
+            "eventPaymentTypeName": "Amortiza\u00e7\u00e3o"
+          },
+          {
+            "eventPaymentDate": "30\/10\/2025",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "07\/04\/2026",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "07\/04\/2026",
+            "eventPaymentTypeName": "Vencimento"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aliena\u00e7\u00e3o Fiduci\u00e1ria"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "SOJA",
+            "cprProductClassName": "PADR\u00c3O B\u00c1SICO",
+            "cprProductHarvest": "2024\/2025",
+            "cprProductDescription": "SOJA",
+            "cprProductQuantity": "58000",
+            "measureUnitName": "SACA (60KG)",
+            "packagingWayName": "GRANEL",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "24F02252818",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "18\/06\/2024",
+        "registerDate": "26\/06\/2024",
+        "maturityDate": "03\/09\/2029",
+        "paymentMethodTypeName": "Liquida\u00e7\u00e3o Fora da Registradora",
+        "paymentStartDate": "03\/09\/2029",
+        "indexTypeCode": "DI",
+        "financialValue": "10100000",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "03\/09\/2029",
+            "eventPaymentTypeName": "Vencimento"
+          },
+          {
+            "eventPaymentDate": "03\/09\/2029",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aliena\u00e7\u00e3o Fiduci\u00e1ria"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "SOJA EM GR\u00c3O",
+            "cprProductClassName": "SOJA EM GRAO PADRAO BASICO",
+            "cprProductHarvest": "2024\/2029",
+            "cprProductDescription": "SOJA EM GR\u00c3O",
+            "cprProductQuantity": "84237",
+            "measureUnitName": "60 KG",
+            "packagingWayName": "NAO SE APLICA",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "24I02488025",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "24\/09\/2024",
+        "registerDate": "27\/09\/2024",
+        "maturityDate": "20\/09\/2027",
+        "paymentMethodTypeName": "Pagamento de juros e amortiza\u00e7\u00e3o peri\u00f3dicos",
+        "indexTypeCode": "Prefixada",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias corridos civil",
+        "financialValue": "14000002.9",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "22\/09\/2025",
+            "eventPaymentTypeName": "Amortiza\u00e7\u00e3o"
+          },
+          {
+            "eventPaymentDate": "22\/09\/2025",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "21\/09\/2026",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "21\/09\/2026",
+            "eventPaymentTypeName": "Amortiza\u00e7\u00e3o"
+          },
+          {
+            "eventPaymentDate": "20\/09\/2027",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "20\/09\/2027",
+            "eventPaymentTypeName": "Vencimento"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Hipoteca"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "SOJA",
+            "cprProductClassName": "SOJA EM GRAO PADRAO BASICO",
+            "cprProductHarvest": "2024\/2025",
+            "cprProductDescription": "CONFORME INFORMA\u00c7\u00d5ES ADICIONAIS",
+            "cprProductQuantity": "115037",
+            "measureUnitName": "QUILO",
+            "packagingWayName": "SACA(60 KG)",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "25E02489908",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento anterior \u00e0 data de consulta ou baixado",
+        "issueDate": "07\/05\/2025",
+        "registerDate": "12\/05\/2025",
+        "maturityDate": "30\/04\/2026",
+        "paymentMethodTypeName": "Pagamento de juros e principal no vencimento",
+        "paymentStartDate": "30\/04\/2026",
+        "indexTypeCode": "DI",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias \u00fateis",
+        "financialValue": "2549842.31",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "30\/04\/2026",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "30\/04\/2026",
+            "eventPaymentTypeName": "Vencimento"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aliena\u00e7\u00e3o Fiduci\u00e1ria"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "SOJA",
+            "cprProductClassName": "PADR\u00c3O B\u00c1SICO",
+            "cprProductHarvest": "2025\/2026",
+            "cprProductDescription": "SOJA SC",
+            "cprProductQuantity": "22369",
+            "measureUnitName": "SACA (60KG)",
+            "packagingWayName": "GRANEL",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "25E03349240",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento anterior \u00e0 data de consulta ou baixado",
+        "issueDate": "20\/05\/2025",
+        "registerDate": "21\/05\/2025",
+        "maturityDate": "15\/04\/2026",
+        "paymentMethodTypeName": "Pagamento de juros e principal no vencimento",
+        "paymentStartDate": "15\/04\/2026",
+        "indexTypeCode": "DI",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias \u00fateis",
+        "financialValue": "799940",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "15\/04\/2026",
+            "eventPaymentTypeName": "Vencimento"
+          },
+          {
+            "eventPaymentDate": "15\/04\/2026",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aliena\u00e7\u00e3o Fiduci\u00e1ria"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "SOJA",
+            "cprProductClassName": "PADR\u00c3O B\u00c1SICO",
+            "cprProductHarvest": "2025\/2026",
+            "cprProductDescription": "SOJA (SACA 60 KG)",
+            "cprProductQuantity": "6956",
+            "measureUnitName": "SACA (60KG)",
+            "packagingWayName": "GRANEL",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "25G00542926",
+        "cprTypeName": "PRODUTO",
+        "cprStatusName": "Vencimento anterior \u00e0 data de consulta ou baixado",
+        "issueDate": "01\/07\/2025",
+        "registerDate": "02\/07\/2025",
+        "maturityDate": "25\/02\/2026",
+        "financialValue": "12988785",
+        "deliveryPlace": {
+          "documentDeadlineDaysNumber": "1",
+          "deliveryPlaceName": "ARMAZENS GERAIS MOUR\u00c3O LTDA",
+          "stateAcronym": "GO",
+          "cityIbgeTypeCode": "5205471"
+        },
+        "events": [
+          {
+            "eventPaymentDate": "25\/02\/2026",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "25\/02\/2026",
+            "eventPaymentTypeName": "Vencimento"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Penhor"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "SOJA",
+            "cprProductClassName": "Soja",
+            "cprProductHarvest": "2025\/2026",
+            "cprProductDescription": "soja em gr\u00e3os a granel",
+            "cprProductQuantity": "6896700",
+            "measureUnitName": "QUILOS",
+            "packagingWayName": "GRANEL",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "25I04252254",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "26\/09\/2025",
+        "registerDate": "29\/09\/2025",
+        "maturityDate": "15\/09\/2026",
+        "paymentMethodTypeName": "Pagamento de juros e principal no vencimento",
+        "paymentStartDate": "15\/09\/2026",
+        "indexTypeCode": "DI",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias \u00fateis",
+        "financialValue": "1500000",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "15\/09\/2026",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "15\/09\/2026",
+            "eventPaymentTypeName": "Vencimento"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aliena\u00e7\u00e3o Fiduci\u00e1ria"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "MILHO",
+            "cprProductClassName": "PADR\u00c3O B\u00c1SICO",
+            "cprProductHarvest": "2026\/2026",
+            "cprProductDescription": "MILHO (SACA 60 KG)",
+            "cprProductQuantity": "31250",
+            "measureUnitName": "SACA (60KG)",
+            "packagingWayName": "SACA",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "25I04856861",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "22\/09\/2025",
+        "registerDate": "07\/10\/2025",
+        "maturityDate": "29\/11\/2030",
+        "paymentMethodTypeName": "Liquida\u00e7\u00e3o Fora da Registradora",
+        "paymentStartDate": "29\/11\/2030",
+        "indexTypeCode": "DI",
+        "financialValue": "6020000",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "29\/11\/2030",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "29\/11\/2030",
+            "eventPaymentTypeName": "Vencimento"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aliena\u00e7\u00e3o Fiduci\u00e1ria"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "SOJA EM GR\u00c3O",
+            "cprProductClassName": "SOJA EM GR\u00c3O PADRAO BASICO",
+            "cprProductHarvest": "2025\/2030",
+            "cprProductDescription": "Soja em gr\u00e3o",
+            "cprProductQuantity": "48315",
+            "measureUnitName": "SACA (60 KG)",
+            "packagingWayName": "N\u00c3O SE APLICA",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "25J03982041",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "16\/10\/2025",
+        "registerDate": "22\/10\/2025",
+        "maturityDate": "18\/10\/2027",
+        "paymentMethodTypeName": "Pagamento de juros e amortiza\u00e7\u00e3o peri\u00f3dicos",
+        "indexTypeCode": "Prefixada",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias corridos civil",
+        "financialValue": "6100257.75",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "16\/10\/2026",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "16\/10\/2026",
+            "eventPaymentTypeName": "Amortiza\u00e7\u00e3o"
+          },
+          {
+            "eventPaymentDate": "18\/10\/2027",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "18\/10\/2027",
+            "eventPaymentTypeName": "Vencimento"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Hipoteca"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "SOJA",
+            "cprProductClassName": "Soja",
+            "cprProductHarvest": "2025\/2026",
+            "cprProductDescription": "CONFORME INFORMA\u00c7\u00d5ES ADICIONAIS",
+            "cprProductQuantity": "53115",
+            "measureUnitName": "SACA (60KG)",
+            "packagingWayName": "NAO SE APLICA",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "25J04808563",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "28\/10\/2025",
+        "registerDate": "29\/10\/2025",
+        "maturityDate": "23\/10\/2026",
+        "paymentMethodTypeName": "Pagamento de juros e principal no vencimento",
+        "paymentStartDate": "23\/10\/2026",
+        "indexTypeCode": "DI",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias \u00fateis",
+        "financialValue": "1798600",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "23\/10\/2026",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "23\/10\/2026",
+            "eventPaymentTypeName": "Vencimento"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aliena\u00e7\u00e3o Fiduci\u00e1ria"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "MILHO",
+            "cprProductClassName": "PADR\u00c3O B\u00c1SICO",
+            "cprProductHarvest": "2026\/2026",
+            "cprProductDescription": "MILHO (SACA 60 KG)",
+            "cprProductQuantity": "34000",
+            "measureUnitName": "SACA (60KG)",
+            "packagingWayName": "SACA",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "25K01900342",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "07\/11\/2025",
+        "registerDate": "10\/11\/2025",
+        "maturityDate": "30\/10\/2026",
+        "paymentMethodTypeName": "Pagamento de juros e principal no vencimento",
+        "paymentStartDate": "30\/10\/2026",
+        "indexTypeCode": "DI",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias \u00fateis",
+        "financialValue": "2799992",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "30\/10\/2026",
+            "eventPaymentTypeName": "Vencimento"
+          },
+          {
+            "eventPaymentDate": "30\/10\/2026",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aliena\u00e7\u00e3o Fiduci\u00e1ria"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "MILHO",
+            "cprProductClassName": "PADR\u00c3O B\u00c1SICO",
+            "cprProductHarvest": "2025\/2026",
+            "cprProductDescription": "MILHO (SACA 60 KG)",
+            "cprProductQuantity": "53846",
+            "measureUnitName": "SACA (60KG)",
+            "packagingWayName": "SACA",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "26B03580493",
+        "cprTypeName": "PRODUTO",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "09\/02\/2026",
+        "registerDate": "18\/02\/2026",
+        "maturityDate": "30\/07\/2026",
+        "financialValue": "1150611",
+        "deliveryPlace": {
+          "documentDeadlineDaysNumber": "29",
+          "deliveryPlaceName": "RODOVIA GO 050",
+          "stateAcronym": "GO",
+          "cityIbgeTypeCode": "5205471"
+        },
+        "events": [
+          {
+            "eventPaymentDate": "30\/07\/2026",
+            "eventPaymentTypeName": "Vencimento"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aval de Terceiros"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "MILHO",
+            "cprProductClassName": "GRAOS",
+            "cprProductHarvest": "2026\/2026",
+            "cprProductDescription": "Ate 13% de teor de unidade do prod",
+            "cprProductQuantity": "1353660",
+            "measureUnitName": "QUILO",
+            "packagingWayName": "SACA(60 KG)",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERERIRA MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "26C05039549",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "24\/03\/2026",
+        "registerDate": "25\/03\/2026",
+        "maturityDate": "17\/03\/2031",
+        "paymentMethodTypeName": "Pagamento de juros e amortiza\u00e7\u00e3o peri\u00f3dicos",
+        "indexTypeCode": "Prefixada",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias corridos civil",
+        "financialValue": "4000032",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "15\/03\/2027",
+            "eventPaymentTypeName": "Amortiza\u00e7\u00e3o"
+          },
+          {
+            "eventPaymentDate": "15\/03\/2027",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "15\/03\/2028",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "15\/03\/2028",
+            "eventPaymentTypeName": "Amortiza\u00e7\u00e3o"
+          },
+          {
+            "eventPaymentDate": "15\/03\/2029",
+            "eventPaymentTypeName": "Amortiza\u00e7\u00e3o"
+          },
+          {
+            "eventPaymentDate": "15\/03\/2029",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "15\/03\/2030",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "15\/03\/2030",
+            "eventPaymentTypeName": "Amortiza\u00e7\u00e3o"
+          },
+          {
+            "eventPaymentDate": "17\/03\/2031",
+            "eventPaymentTypeName": "Vencimento"
+          },
+          {
+            "eventPaymentDate": "17\/03\/2031",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aliena\u00e7\u00e3o Fiduci\u00e1ria"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "MILHO (EM GRAOS)",
+            "cprProductClassName": "MILHO EM GRAOS PADRAO BASICO UNICO",
+            "cprProductHarvest": "2026\/2027",
+            "cprProductDescription": "CUSTEIO SAFRA 2026\/2027",
+            "cprProductQuantity": "78432",
+            "measureUnitName": "QUILO",
+            "packagingWayName": "SACA(60 KG)",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "26D04337574",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "07\/04\/2026",
+        "registerDate": "08\/04\/2026",
+        "maturityDate": "28\/05\/2027",
+        "paymentMethodTypeName": "Pagamento de juros e principal no vencimento",
+        "paymentStartDate": "28\/05\/2027",
+        "indexTypeCode": "DI",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias \u00fateis",
+        "financialValue": "1799976",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "28\/05\/2027",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          },
+          {
+            "eventPaymentDate": "28\/05\/2027",
+            "eventPaymentTypeName": "Vencimento"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aliena\u00e7\u00e3o Fiduci\u00e1ria"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "SOJA",
+            "cprProductClassName": "PADR\u00c3O B\u00c1SICO",
+            "cprProductHarvest": "2026\/2027",
+            "cprProductDescription": "SOJA",
+            "cprProductQuantity": "162.16",
+            "measureUnitName": "SACA (60KG)",
+            "packagingWayName": "GRANEL",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "26D04680201",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "09\/04\/2026",
+        "registerDate": "10\/04\/2026",
+        "maturityDate": "31\/05\/2027",
+        "paymentMethodTypeName": "Pagamento de juros e principal no vencimento",
+        "paymentStartDate": "31\/05\/2027",
+        "indexTypeCode": "DI",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias \u00fateis",
+        "financialValue": "2549781",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "31\/05\/2027",
+            "eventPaymentTypeName": "Vencimento"
+          },
+          {
+            "eventPaymentDate": "31\/05\/2027",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aliena\u00e7\u00e3o Fiduci\u00e1ria"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "SOJA",
+            "cprProductClassName": "PADR\u00c3O B\u00c1SICO",
+            "cprProductHarvest": "2026\/2027",
+            "cprProductDescription": "SOJA SACA 60 KG",
+            "cprProductQuantity": "229.71",
+            "measureUnitName": "SACA (60KG)",
+            "packagingWayName": "GRANEL",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      },
+      {
+        "tickerSymbol": "26D05082275",
+        "cprTypeName": "FINANCEIRA",
+        "cprStatusName": "Vencimento posterior \u00e0 data de consulta e n\u00e3o baixado",
+        "issueDate": "13\/04\/2026",
+        "registerDate": "14\/04\/2026",
+        "maturityDate": "30\/04\/2027",
+        "paymentMethodTypeName": "Pagamento de juros e principal no vencimento",
+        "paymentStartDate": "15\/04\/2026",
+        "indexTypeCode": "DI",
+        "interestRateCriteriaTypeName": "di\u00e1rio dias \u00fateis",
+        "financialValue": "799866",
+        "deliveryPlace": [],
+        "events": [
+          {
+            "eventPaymentDate": "30\/04\/2027",
+            "eventPaymentTypeName": "Vencimento"
+          },
+          {
+            "eventPaymentDate": "30\/04\/2027",
+            "eventPaymentTypeName": "Pagamento de Juros"
+          }
+        ],
+        "collaterals": [
+          {
+            "collateralTypeName": "Aliena\u00e7\u00e3o Fiduci\u00e1ria"
+          }
+        ],
+        "products": [
+          {
+            "cprProductName": "SOJA",
+            "cprProductClassName": "PADR\u00c3O B\u00c1SICO",
+            "cprProductHarvest": "2026\/2027",
+            "cprProductDescription": "SOJA SACA 60 KG",
+            "cprProductQuantity": "72.06",
+            "measureUnitName": "SACA (60KG)",
+            "packagingWayName": "GRANEL",
+            "cprProductStatusName": "PROPRIA",
+            "productionTypeName": "A PRODUZIR"
+          }
+        ],
+        "issuers": [
+          {
+            "cprIssuerName": "SAUL FERREIRA DE MOURA FILHO",
+            "documentNumber": "030.587.668-66"
+          }
+        ]
+      }
+    ]
+  },
+  "links": {
+    "self": "https:\/\/api-balcao.b3.com.br\/api\/pipeline\/b3\/v2\/cpr-publicity\/issuers\/03058766866?cprStatus="
+  },
+  "meta": {
+    "totalRecords": 17,
+    "totalPages": 1
+  }
+}

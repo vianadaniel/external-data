@@ -1,0 +1,75 @@
+HTTP/1.1 200 OK
+Date: Thu, 14 May 2026 11:34:53 GMT
+Content-Type: text/html; charset=UTF-8
+Transfer-Encoding: chunked
+Connection: close
+Server: nginx
+X-Powered-By: PHP/8.2.26
+Cache-Control: no-cache, private
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 59
+Access-Control-Allow-Origin: *
+
+{
+  "documento": "19159404604",
+  "tipo_documento": "FISICA",
+  "nome": "",
+  "data_inicio_relacionamento": null,
+  "quantidade_operacoes": 3,
+  "quantidade_instituicoes": 3,
+  "scores": [
+    {
+      "score": 500,
+      "faixa_score": "Regular",
+      "nome": "Score do SCR"
+    }
+  ],
+  "score": 500,
+  "faixa_score": "Regular",
+  "carteira_vencer": 2402292.49,
+  "carteira_vencido": 0,
+  "limite_credito": 55072.12,
+  "prejuizo": 0,
+  "operacoes": [
+    {
+      "modalidade": "08",
+      "sub_modalidade": "01",
+      "vencimentos": [
+        {
+          "valor": 2385064.61,
+          "codigo": "V140"
+        }
+      ]
+    },
+    {
+      "modalidade": "13",
+      "sub_modalidade": "04",
+      "vencimentos": [
+        {
+          "valor": 17227.88,
+          "codigo": "V150"
+        }
+      ]
+    },
+    {
+      "modalidade": "19",
+      "sub_modalidade": "02",
+      "vencimentos": [
+        {
+          "valor": 22300,
+          "codigo": "V20"
+        }
+      ]
+    },
+    {
+      "modalidade": "19",
+      "sub_modalidade": "04",
+      "vencimentos": [
+        {
+          "valor": 32772.12,
+          "codigo": "V40"
+        }
+      ]
+    }
+  ]
+}
