@@ -1,4 +1,4 @@
-import { Injectable, Optional, Inject } from '@nestjs/common';
+import { Injectable, OnModuleInit, Optional, Inject } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 import * as fs from 'fs-extra';
@@ -15,19 +15,56 @@ interface TokenData {
 }
 
 @Injectable()
-export class BigDataService {
-  private readonly tokenFilePath = path.join(__dirname, 'token.json');
+export class BigDataService implements OnModuleInit {
+  private readonly tokenFilePath: string;
   private readonly tokenExpiryHours = 24;
 
   constructor(
     private readonly httpService: HttpService,
     @Optional() @Inject(LogsService) private readonly logsService?: LogsService,
   ) {
-    this.tokenFilePath = path.resolve(process.cwd(), 'token.json');
+    this.tokenFilePath = this.resolveTokenFilePath();
+  }
+
+  async onModuleInit(): Promise<void> {
+    await this.ensureTokenStorage();
+  }
+
+  private resolveTokenFilePath(): string {
+    if (process.env.BIGDATA_TOKEN_PATH) {
+      return path.resolve(process.env.BIGDATA_TOKEN_PATH);
+    }
+    // Em Docker (/app) o processo roda como `node` sem permissão de escrita no cwd
+    if (process.env.NODE_ENV === 'production' || process.cwd() === '/app') {
+      return path.join(process.cwd(), 'data', 'bigdata-token.json');
+    }
+    return path.resolve(process.cwd(), 'data', 'bigdata-token.json');
+  }
+
+  private async ensureTokenStorage(): Promise<void> {
+    await fs.ensureDir(path.dirname(this.tokenFilePath));
+  }
+
+  private async ensureTokenFile(): Promise<TokenData> {
+    await this.ensureTokenStorage();
+
+    let tokenData = await this.readTokenFromFile();
+    if (!tokenData || this.isTokenExpired(tokenData)) {
+      const { accessToken, tokenId } = await this.getToken();
+      tokenData = {
+        accessToken,
+        tokenId,
+        createdAt: new Date(),
+      };
+      await this.saveTokenToFile(tokenData, this.tokenFilePath);
+    }
+
+    return tokenData;
   }
 
   async saveTokenToFile(tokenData: TokenData, filePath: string): Promise<void> {
     try {
+      await this.ensureTokenStorage();
       await fs.writeJson(filePath, tokenData, { spaces: 2 });
     } catch (error) {
       console.error('Error saving token:', error);
@@ -41,6 +78,7 @@ export class BigDataService {
 
   async readTokenFromFile(): Promise<TokenData | null> {
     try {
+      await this.ensureTokenStorage();
       const exists = await fs.pathExists(this.tokenFilePath);
       if (!exists) {
         return null;
@@ -130,17 +168,7 @@ export class BigDataService {
   ): Promise<any> {
     const startTime = Date.now();
     try {
-      let tokenData = await this.readTokenFromFile();
-
-      if (!tokenData || this.isTokenExpired(tokenData)) {
-        const { accessToken, tokenId } = await this.getToken();
-        tokenData = {
-          accessToken,
-          tokenId,
-          createdAt: new Date(),
-        };
-        await this.saveTokenToFile(tokenData, this.tokenFilePath);
-      }
+      const tokenData = await this.ensureTokenFile();
 
       const response: AxiosResponse = await this.httpService
         .post(
