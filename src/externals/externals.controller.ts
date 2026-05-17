@@ -516,6 +516,11 @@ export class ExternalsController {
   }
 
   // ========== SintegraTotal ==========
+  @Get('sintegra-total/health')
+  async getSintegraTotalHealth(): Promise<string> {
+    return this.sintegraTotalDataService.getHealth();
+  }
+
   @Post('sintegra-total/inscricoes')
   async getInscricoesData(
     @Body() body: { cpf: string; uf: string },
