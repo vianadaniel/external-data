@@ -49,9 +49,37 @@ export class SPCService {
     return { username, password };
   }
 
-  private isAuthFailure(error: any): boolean {
+  private getSpcErrorMessage(errorOrData: any): string {
+    const data = errorOrData?.response?.data ?? errorOrData;
+    const message =
+      data?.result?.message ??
+      data?.mensagemRetorno ??
+      data?.message ??
+      '';
+    return String(message);
+  }
+
+  private shouldRetryWithBackup(error: any): boolean {
     const status = error?.response?.status;
-    return status === 401 || status === 403;
+    if (status === 401 || status === 403) {
+      return true;
+    }
+
+    const message = this.getSpcErrorMessage(error).toLowerCase();
+    if (
+      message.includes('670') ||
+      message.includes('acesso suspenso') ||
+      message.includes('suspenso temporariamente')
+    ) {
+      return true;
+    }
+
+    const data = error?.response?.data;
+    if (data?.result?.error === 'true' || data?.result?.error === true) {
+      return true;
+    }
+
+    return false;
   }
 
   private async callProducao(
@@ -100,9 +128,9 @@ export class SPCService {
       return await this.callProducao(request, primary);
     } catch (error) {
       const backup = this.getBackupCredentials();
-      if (this.isAuthFailure(error) && backup) {
+      if (this.shouldRetryWithBackup(error) && backup) {
         console.warn(
-          'SPC: falha de autenticação com usuário principal, tentando backup.',
+          'SPC: falha com usuário principal, tentando credenciais de backup.',
         );
         try {
           return await this.callProducao(request, backup);
