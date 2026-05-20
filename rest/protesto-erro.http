@@ -1,0 +1,11 @@
+HTTP/1.1 201 Created
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 107
+ETag: W/"6b-deJO9ShoRQHx7CyKWvZ0kJBIMUQ"
+Date: Wed, 20 May 2026 10:46:36 GMT
+Connection: close
+
+{
+  "message": "Não foi possível finalizar a consulta. Se o erro persistir, entre em contato com o suporte."
+}
