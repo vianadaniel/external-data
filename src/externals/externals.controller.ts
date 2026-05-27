@@ -547,6 +547,13 @@ export class ExternalsController {
     );
   }
 
+  @Post('sintegra-total/ibama/consulta')
+  async getSintegraTotalIbamaConsulta(
+    @Body() body: { fiscal_number: string },
+  ): Promise<any> {
+    return this.sintegraTotalDataService.getIbamaData(body.fiscal_number);
+  }
+
   // ========== ReportUtils ==========
   @Post('report-utils/mpsp/civel')
   async getMpspCertidaoCivel(

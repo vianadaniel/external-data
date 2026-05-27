@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, isAxiosError } from 'axios';
 import { firstValueFrom } from 'rxjs';
 import * as fs from 'fs-extra';
 import * as path from 'path';
@@ -13,6 +13,11 @@ export class SintegraTotalDataService {
 
   constructor(private readonly httpService: HttpService) {
     this.urlsFilePath = path.resolve(process.cwd(), 'sintegra_urls.json');
+  }
+
+  private getErrorMessage(error: unknown): string {
+    if (error instanceof Error) return error.message;
+    return String(error);
   }
 
   private async readUrlsFromFile(): Promise<string[]> {
@@ -85,7 +90,10 @@ export class SintegraTotalDataService {
         ? response.data
         : response.status.toString();
     } catch (error) {
-      return error?.response?.status?.toString() || error?.message || error;
+      if (isAxiosError(error) && error.response?.status !== undefined) {
+        return error.response.status.toString();
+      }
+      return this.getErrorMessage(error);
     }
   }
 
@@ -117,7 +125,7 @@ export class SintegraTotalDataService {
       } catch (error) {
         console.error(`SINTEGRA Total Attempt ${attempt} failed:`, {
           url,
-          message: error?.message,
+          message: this.getErrorMessage(error),
         });
       }
     }
@@ -152,7 +160,7 @@ export class SintegraTotalDataService {
       } catch (error) {
         console.error(`SINTEGRA Total Protesto Attempt ${attempt} failed:`, {
           url,
-          message: error?.message,
+          message: this.getErrorMessage(error),
         });
       }
     }
@@ -187,7 +195,7 @@ export class SintegraTotalDataService {
       } catch (error) {
         console.error(`SINTEGRA Total Escavador consulta attempt ${attempt}:`, {
           url,
-          message: error?.message,
+          message: this.getErrorMessage(error),
         });
       }
     }
@@ -222,7 +230,42 @@ export class SintegraTotalDataService {
       } catch (error) {
         console.error(`SINTEGRA Total TJTO Attempt ${attempt} failed:`, {
           url,
-          message: error?.message,
+          message: this.getErrorMessage(error),
+        });
+      }
+    }
+    return 'error';
+  }
+
+  async getIbamaData(fiscal_number: string): Promise<any> {
+    const urls = await this.readUrlsFromFile();
+    if (urls.length === 0) {
+      console.error('SINTEGRA Total: Nenhuma URL disponível');
+      return 'error';
+    }
+
+    const baseUrl = urls[0];
+    const url = `${baseUrl.replace(/\/$/, '')}/ibama/consulta`;
+    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
+      try {
+        const response: AxiosResponse = await firstValueFrom(
+          this.httpService.post(
+            url,
+            { fiscal_number },
+            {
+              timeout: this.timeout,
+              headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Report/1.0',
+              },
+            },
+          ),
+        );
+        if (response?.data) return response.data;
+      } catch (error) {
+        console.error(`SINTEGRA Total IBAMA Attempt ${attempt} failed:`, {
+          url,
+          message: this.getErrorMessage(error),
         });
       }
     }
