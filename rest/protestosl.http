@@ -1,0 +1,64 @@
+HTTP/1.1 201 Created
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 1002
+ETag: W/"3ea-0nurR2J3qv3cKm5X981rgJMhepc"
+Date: Wed, 20 May 2026 11:36:10 GMT
+Connection: close
+
+{
+  "status": "completed",
+  "id": 39,
+  "name": "Protesto Nacional Provedor 01 PF",
+  "data_execucao": "20/05/2026, 08:36:09",
+  "query_execution": 72149,
+  "resultados": {
+    "protestoresumo": {
+      "totalocorrencias": 2,
+      "valortotal": "3.782,77",
+      "dataocorrenciarecente": "",
+      "dataocorrenciaantiga": ""
+    },
+    "protesto": [
+      {
+        "nome": "TABELIONATO DE PROTESTO DE JATAí",
+        "endereco": "AVENIDA PRESIDENTE TANCREDO NEVES, 100 LUC 06",
+        "bairro": "SETOR EPAMINONDAS II",
+        "cidade": "JATAí",
+        "uf": "GO",
+        "telefone": "6435130332",
+        "codigo_cartorio": "01",
+        "codigo_cidade": "5211909",
+        "protesto": [
+          {
+            "cpfCnpj": "03058766866",
+            "data": "NAO DIVULGADO",
+            "dataProtesto": "NAO DIVULGADO",
+            "valor": "1.500,00",
+            "valorProtestado": "1.500,00",
+            "temAnuencia": "false",
+            "nomeApresentante": "",
+            "nomeCedente": "",
+            "nm_chave": "",
+            "vl_custas": "",
+            "_type": ""
+          },
+          {
+            "cpfCnpj": "03058766866",
+            "data": "NAO DIVULGADO",
+            "dataProtesto": "NAO DIVULGADO",
+            "valor": "2.282,77",
+            "valorProtestado": "2.282,77",
+            "temAnuencia": "false",
+            "nomeApresentante": "",
+            "nomeCedente": "",
+            "nm_chave": "",
+            "vl_custas": "",
+            "_type": ""
+          }
+        ],
+        "protestos": 2
+      }
+    ]
+  }
+}
