@@ -1,0 +1,26 @@
+### Registro Rural via API externals (API_KEY_RR no .env)
+# Suba o servidor: npm run start:dev (porta em PORT, ex.: 3003)
+@baseUrl = http://localhost:3003
+@cpfcnpj = 06604890660
+
+### INCRA — busca por CPF/CNPJ
+POST {{baseUrl}}/externals/rr/incra
+Content-Type: application/json
+
+{
+  "cpfcnpj": "{{cpfcnpj}}"
+}
+
+### CAR — busca por CPF/CNPJ
+POST {{baseUrl}}/externals/rr/car
+Content-Type: application/json
+
+{
+  "cpfcnpj": "{{cpfcnpj}}"
+}
+
+### Saldo — wallet balance
+POST {{baseUrl}}/externals/rr/saldo
+Content-Type: application/json
+
+{}

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
+import { firstValueFrom } from 'rxjs';
 
 import { configDotenv } from 'dotenv';
 
@@ -12,8 +13,8 @@ export class RRService {
 
   async getExternalDataIncra(cpfcnpj: string): Promise<any> {
     try {
-      const response: AxiosResponse = await this.httpService
-        .get(
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.get(
           `https://api-gateway-v2.registrorural.com.br/incra/busca/cpfcnpj?cpfcnpj=${cpfcnpj}`,
           {
             headers: {
@@ -21,8 +22,8 @@ export class RRService {
               accept: 'application/json',
             },
           },
-        )
-        .toPromise();
+        ),
+      );
       return response.data;
     } catch (error) {
       console.error('Error fetching data from Incra:', error);
@@ -31,20 +32,39 @@ export class RRService {
 
   async getExternalDataCar(cpfcnpj: string): Promise<any> {
     try {
-      const response: AxiosResponse = await this.httpService
-        .get(
-          `https://api-gateway-v2.registrorural.com.br/car/busca/cpfcnpj?cpfcnpj=${cpfcnpj}`,
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.get(
+          `https://api-gateway-v2.registrorural.com.br/car/busca/cpfcnpj?cpfcnpj=${cpfcnpj}&size=100`,
           {
             headers: {
               'X-API-KEY': process.env.API_KEY_RR,
               accept: 'application/json',
             },
           },
-        )
-        .toPromise();
+        ),
+      );
       return response.data;
     } catch (error) {
       console.error('Error fetching data from Incra:', error);
+    }
+  }
+
+  async getExternalDataSaldo(): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.get(
+          `https://api-gateway-v2.registrorural.com.br/wallet/balance`,
+          {
+            headers: {
+              'X-API-KEY': process.env.API_KEY_RR,
+              accept: 'application/json',
+            },
+          },
+        ),
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data from Saldo:', error);
     }
   }
 }

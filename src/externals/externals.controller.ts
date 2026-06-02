@@ -182,6 +182,11 @@ export class ExternalsController {
     return this.rrService.getExternalDataCar(body.cpfcnpj);
   }
 
+  @Post('rr/saldo')
+  async getRRSaldo(): Promise<any> {
+    return this.rrService.getExternalDataSaldo();
+  }
+
   // ========== CheckPro ==========
   @Post('checkpro/gravame')
   async getGravame(
