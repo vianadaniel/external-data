@@ -559,6 +559,27 @@ export class ExternalsController {
     return this.sintegraTotalDataService.getIbamaData(body.fiscal_number);
   }
 
+  @Post('sintegra-total/sefaz-mg')
+  async getSintegraTotalSefazMg(
+    @Body() body: { fiscal_number: string },
+  ): Promise<any> {
+    return this.sintegraTotalDataService.getSefazMgData(body.fiscal_number);
+  }
+
+  @Post('sintegra-total/sefaz-mt')
+  async getSintegraTotalSefazMt(
+    @Body() body: { fiscal_number: string },
+  ): Promise<any> {
+    return this.sintegraTotalDataService.getSefazMtData(body.fiscal_number);
+  }
+
+  @Post('sintegra-total/sefaz-pr')
+  async getSintegraTotalSefazPr(
+    @Body() body: { fiscal_number: string },
+  ): Promise<any> {
+    return this.sintegraTotalDataService.getSefazPrData(body.fiscal_number);
+  }
+
   // ========== ReportUtils ==========
   @Post('report-utils/mpsp/civel')
   async getMpspCertidaoCivel(

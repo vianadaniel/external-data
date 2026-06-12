@@ -271,4 +271,109 @@ export class SintegraTotalDataService {
     }
     return 'error';
   }
+
+  async getSefazMgData(fiscal_number: string): Promise<any> {
+    const urls = await this.readUrlsFromFile();
+    if (urls.length === 0) {
+      console.error('SINTEGRA Total: Nenhuma URL disponível');
+      return 'error';
+    }
+
+    const baseUrl = urls[0];
+    const url = `${baseUrl.replace(/\/$/, '')}/sefaz-mg`;
+    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
+      try {
+        const response: AxiosResponse = await firstValueFrom(
+          this.httpService.post(
+            url,
+            { fiscal_number },
+            {
+              timeout: this.timeout,
+              headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Report/1.0',
+              },
+            },
+          ),
+        );
+        if (response?.data) return response.data;
+      } catch (error) {
+        console.error(`SINTEGRA Total SEFAZ MG Attempt ${attempt} failed:`, {
+          url,
+          message: this.getErrorMessage(error),
+        });
+      }
+    }
+    return 'error';
+  }
+
+  async getSefazMtData(fiscal_number: string): Promise<any> {
+    const urls = await this.readUrlsFromFile();
+    if (urls.length === 0) {
+      console.error('SINTEGRA Total: Nenhuma URL disponível');
+      return 'error';
+    }
+
+    const baseUrl = urls[0];
+    const url = `${baseUrl.replace(/\/$/, '')}/sefaz-mt`;
+    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
+      try {
+        const response: AxiosResponse = await firstValueFrom(
+          this.httpService.post(
+            url,
+            { fiscal_number },
+            {
+              timeout: this.timeout,
+              headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Report/1.0',
+              },
+            },
+          ),
+        );
+        if (response?.data) return response.data;
+      } catch (error) {
+        console.error(`SINTEGRA Total SEFAZ MT Attempt ${attempt} failed:`, {
+          url,
+          message: this.getErrorMessage(error),
+        });
+      }
+    }
+    return 'error';
+  }
+
+  async getSefazPrData(fiscal_number: string): Promise<any> {
+    const urls = await this.readUrlsFromFile();
+    if (urls.length === 0) {
+      console.error('SINTEGRA Total: Nenhuma URL disponível');
+      return 'error';
+    }
+
+    const baseUrl = urls[0];
+    const url = `${baseUrl.replace(/\/$/, '')}/sefaz-pr`;
+    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
+      try {
+        const response: AxiosResponse = await firstValueFrom(
+          this.httpService.post(
+            url,
+            { fiscal_number },
+            {
+              timeout: this.timeout,
+              headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Report/1.0',
+              },
+            },
+          ),
+        );
+        if (response?.data) return response.data;
+      } catch (error) {
+        console.error(`SINTEGRA Total SEFAZ PR Attempt ${attempt} failed:`, {
+          url,
+          message: this.getErrorMessage(error),
+        });
+      }
+    }
+    return 'error';
+  }
 }
