@@ -20,6 +20,21 @@ export class SintegraTotalDataService {
     return String(error);
   }
 
+  /** Base do sintegra-total (ex.: http://host:3003), ignorando sufixos como /inscricoes. */
+  private resolveSintegraOrigin(rawUrl: string): string {
+    try {
+      return new URL(rawUrl).origin;
+    } catch {
+      return rawUrl.replace(/\/$/, '');
+    }
+  }
+
+  private resolveInscricoesUrl(rawUrl: string): string {
+    const trimmed = rawUrl.replace(/\/$/, '');
+    if (/\/inscricoes$/i.test(trimmed)) return trimmed;
+    return `${this.resolveSintegraOrigin(rawUrl)}/inscricoes`;
+  }
+
   private async readUrlsFromFile(): Promise<string[]> {
     try {
       const exists = await fs.pathExists(this.urlsFilePath);
@@ -54,11 +69,57 @@ export class SintegraTotalDataService {
     }
   }
 
+  private async postSintegraTotal(
+    path: string,
+    body: Record<string, string>,
+    label: string,
+    timeout = this.timeout,
+  ): Promise<any> {
+    const urls = await this.readUrlsFromFile();
+    if (urls.length === 0) {
+      console.error('SINTEGRA Total: Nenhuma URL disponível');
+      return 'error';
+    }
+
+    const normalizedPath = path.replace(/^\//, '');
+    const url =
+      normalizedPath === 'inscricoes'
+        ? this.resolveInscricoesUrl(urls[0])
+        : `${this.resolveSintegraOrigin(urls[0])}/${normalizedPath}`;
+
+    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
+      try {
+        const response: AxiosResponse = await firstValueFrom(
+          this.httpService.post(url, body, {
+            timeout,
+            headers: {
+              'Content-Type': 'application/json',
+              'User-Agent': 'Report/1.0',
+            },
+            validateStatus: () => true,
+          }),
+        );
+        if (response?.data !== undefined && response?.data !== null) {
+          return response.data;
+        }
+      } catch (error) {
+        console.error(`SINTEGRA Total ${label} attempt ${attempt} failed:`, {
+          url,
+          message: this.getErrorMessage(error),
+        });
+      }
+    }
+    return 'error';
+  }
+
   async addUrl(url: string): Promise<void> {
     try {
       const urls = await this.readUrlsFromFile();
-      const filtered = urls.filter((u) => u !== url);
-      filtered.unshift(url); // nova URL vai para [0]
+      const normalized = this.resolveSintegraOrigin(url);
+      const filtered = urls.filter(
+        (u) => this.resolveSintegraOrigin(u) !== normalized,
+      );
+      filtered.unshift(normalized);
       await this.saveUrlsToFile(filtered);
     } catch (error) {
       console.error('Error adding URL:', error);
@@ -77,10 +138,10 @@ export class SintegraTotalDataService {
   async getHealth(): Promise<string> {
     const urls = await this.readUrlsFromFile();
     if (urls.length === 0) return 'nenhuma url configurada';
-    const baseUrl = urls[0].replace(/\/$/, '');
+    const url = `${this.resolveSintegraOrigin(urls[0])}/health`;
     try {
       const response: AxiosResponse = await firstValueFrom(
-        this.httpService.get(`${baseUrl}/health`, {
+        this.httpService.get(url, {
           timeout: 5000,
           headers: { 'User-Agent': 'Report/1.0' },
           validateStatus: () => true,
@@ -98,282 +159,48 @@ export class SintegraTotalDataService {
   }
 
   async getInscricoesData(cpf: string, uf: string): Promise<any> {
-    const urls = await this.readUrlsFromFile();
-    if (urls.length === 0) {
-      console.error('SINTEGRA Total: Nenhuma URL disponível');
-      return 'error';
-    }
-
-    const baseUrl = urls[0];
-    const url = `${baseUrl.replace(/\/$/, '')}/inscricoes`;
-    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
-      try {
-        const response: AxiosResponse = await firstValueFrom(
-          this.httpService.post(
-            url,
-            { cpf, uf },
-            {
-              timeout: this.timeout,
-              headers: {
-                'Content-Type': 'application/json',
-                'User-Agent': 'Report/1.0',
-              },
-            },
-          ),
-        );
-        if (response?.data) return response.data;
-      } catch (error) {
-        console.error(`SINTEGRA Total Attempt ${attempt} failed:`, {
-          url,
-          message: this.getErrorMessage(error),
-        });
-      }
-    }
-    return 'error';
+    return this.postSintegraTotal('inscricoes', { cpf, uf }, 'Inscrições');
   }
 
   async getProtestoData(fiscal_number: string): Promise<any> {
-    const urls = await this.readUrlsFromFile();
-    if (urls.length === 0) {
-      console.error('SINTEGRA Total: Nenhuma URL disponível');
-      return 'error';
-    }
-
-    const baseUrl = urls[0];
-    const url = `${baseUrl.replace(/\/$/, '')}/protestos`;
-    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
-      try {
-        const response: AxiosResponse = await firstValueFrom(
-          this.httpService.post(
-            url,
-            { fiscal_number },
-            {
-              timeout: 320000,
-              headers: {
-                'Content-Type': 'application/json',
-                'User-Agent': 'Report/1.0',
-              },
-            },
-          ),
-        );
-        if (response?.data) return response.data;
-      } catch (error) {
-        console.error(`SINTEGRA Total Protesto Attempt ${attempt} failed:`, {
-          url,
-          message: this.getErrorMessage(error),
-        });
-      }
-    }
-    return 'error';
+    return this.postSintegraTotal(
+      'protestos',
+      { fiscal_number },
+      'Protesto',
+      320000,
+    );
   }
 
   async getEscavadorConsulta(fiscal_number: string): Promise<any> {
-    const urls = await this.readUrlsFromFile();
-    if (urls.length === 0) {
-      console.error('SINTEGRA Total: Nenhuma URL disponível');
-      return 'error';
-    }
-
-    const baseUrl = urls[0];
-    const url = `${baseUrl.replace(/\/$/, '')}/escavador/consulta`;
-    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
-      try {
-        const response: AxiosResponse = await firstValueFrom(
-          this.httpService.post(
-            url,
-            { fiscal_number },
-            {
-              timeout: 400000,
-              headers: {
-                'Content-Type': 'application/json',
-                'User-Agent': 'Report/1.0',
-              },
-            },
-          ),
-        );
-        if (response?.data) return response.data;
-      } catch (error) {
-        console.error(`SINTEGRA Total Escavador consulta attempt ${attempt}:`, {
-          url,
-          message: this.getErrorMessage(error),
-        });
-      }
-    }
-    return 'error';
+    return this.postSintegraTotal(
+      'escavador/consulta',
+      { fiscal_number },
+      'Escavador consulta',
+      400000,
+    );
   }
 
   async getTjtoData(fiscal_number: string): Promise<any> {
-    const urls = await this.readUrlsFromFile();
-    if (urls.length === 0) {
-      console.error('SINTEGRA Total: Nenhuma URL disponível');
-      return 'error';
-    }
-
-    const baseUrl = urls[0];
-    const url = `${baseUrl.replace(/\/$/, '')}/tjto`;
-    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
-      try {
-        const response: AxiosResponse = await firstValueFrom(
-          this.httpService.post(
-            url,
-            { fiscal_number },
-            {
-              timeout: this.timeout,
-              headers: {
-                'Content-Type': 'application/json',
-                'User-Agent': 'Report/1.0',
-              },
-            },
-          ),
-        );
-        if (response?.data) return response.data;
-      } catch (error) {
-        console.error(`SINTEGRA Total TJTO Attempt ${attempt} failed:`, {
-          url,
-          message: this.getErrorMessage(error),
-        });
-      }
-    }
-    return 'error';
+    return this.postSintegraTotal('tjto', { fiscal_number }, 'TJTO');
   }
 
   async getIbamaData(fiscal_number: string): Promise<any> {
-    const urls = await this.readUrlsFromFile();
-    if (urls.length === 0) {
-      console.error('SINTEGRA Total: Nenhuma URL disponível');
-      return 'error';
-    }
-
-    const baseUrl = urls[0];
-    const url = `${baseUrl.replace(/\/$/, '')}/ibama/consulta`;
-    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
-      try {
-        const response: AxiosResponse = await firstValueFrom(
-          this.httpService.post(
-            url,
-            { fiscal_number },
-            {
-              timeout: this.timeout,
-              headers: {
-                'Content-Type': 'application/json',
-                'User-Agent': 'Report/1.0',
-              },
-            },
-          ),
-        );
-        if (response?.data) return response.data;
-      } catch (error) {
-        console.error(`SINTEGRA Total IBAMA Attempt ${attempt} failed:`, {
-          url,
-          message: this.getErrorMessage(error),
-        });
-      }
-    }
-    return 'error';
+    return this.postSintegraTotal(
+      'ibama/consulta',
+      { fiscal_number },
+      'IBAMA',
+    );
   }
 
   async getSefazMgData(fiscal_number: string): Promise<any> {
-    const urls = await this.readUrlsFromFile();
-    if (urls.length === 0) {
-      console.error('SINTEGRA Total: Nenhuma URL disponível');
-      return 'error';
-    }
-
-    const baseUrl = urls[0];
-    const url = `${baseUrl.replace(/\/$/, '')}/sefaz-mg`;
-    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
-      try {
-        const response: AxiosResponse = await firstValueFrom(
-          this.httpService.post(
-            url,
-            { fiscal_number },
-            {
-              timeout: this.timeout,
-              headers: {
-                'Content-Type': 'application/json',
-                'User-Agent': 'Report/1.0',
-              },
-            },
-          ),
-        );
-        if (response?.data) return response.data;
-      } catch (error) {
-        console.error(`SINTEGRA Total SEFAZ MG Attempt ${attempt} failed:`, {
-          url,
-          message: this.getErrorMessage(error),
-        });
-      }
-    }
-    return 'error';
+    return this.postSintegraTotal('sefaz-mg', { fiscal_number }, 'SEFAZ MG');
   }
 
   async getSefazMtData(fiscal_number: string): Promise<any> {
-    const urls = await this.readUrlsFromFile();
-    if (urls.length === 0) {
-      console.error('SINTEGRA Total: Nenhuma URL disponível');
-      return 'error';
-    }
-
-    const baseUrl = urls[0];
-    const url = `${baseUrl.replace(/\/$/, '')}/sefaz-mt`;
-    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
-      try {
-        const response: AxiosResponse = await firstValueFrom(
-          this.httpService.post(
-            url,
-            { fiscal_number },
-            {
-              timeout: this.timeout,
-              headers: {
-                'Content-Type': 'application/json',
-                'User-Agent': 'Report/1.0',
-              },
-            },
-          ),
-        );
-        if (response?.data) return response.data;
-      } catch (error) {
-        console.error(`SINTEGRA Total SEFAZ MT Attempt ${attempt} failed:`, {
-          url,
-          message: this.getErrorMessage(error),
-        });
-      }
-    }
-    return 'error';
+    return this.postSintegraTotal('sefaz-mt', { fiscal_number }, 'SEFAZ MT');
   }
 
   async getSefazPrData(fiscal_number: string): Promise<any> {
-    const urls = await this.readUrlsFromFile();
-    if (urls.length === 0) {
-      console.error('SINTEGRA Total: Nenhuma URL disponível');
-      return 'error';
-    }
-
-    const baseUrl = urls[0];
-    const url = `${baseUrl.replace(/\/$/, '')}/sefaz-pr`;
-    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
-      try {
-        const response: AxiosResponse = await firstValueFrom(
-          this.httpService.post(
-            url,
-            { fiscal_number },
-            {
-              timeout: this.timeout,
-              headers: {
-                'Content-Type': 'application/json',
-                'User-Agent': 'Report/1.0',
-              },
-            },
-          ),
-        );
-        if (response?.data) return response.data;
-      } catch (error) {
-        console.error(`SINTEGRA Total SEFAZ PR Attempt ${attempt} failed:`, {
-          url,
-          message: this.getErrorMessage(error),
-        });
-      }
-    }
-    return 'error';
+    return this.postSintegraTotal('sefaz-pr', { fiscal_number }, 'SEFAZ PR');
   }
 }

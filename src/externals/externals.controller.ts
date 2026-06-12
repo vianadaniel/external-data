@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Post,
   Get,
@@ -561,23 +562,44 @@ export class ExternalsController {
 
   @Post('sintegra-total/sefaz-mg')
   async getSintegraTotalSefazMg(
-    @Body() body: { fiscal_number: string },
+    @Body() body: { fiscal_number?: string },
   ): Promise<any> {
-    return this.sintegraTotalDataService.getSefazMgData(body.fiscal_number);
+    const fiscal_number = body?.fiscal_number?.trim();
+    if (!fiscal_number) {
+      throw new BadRequestException({
+        success: false,
+        error: 'fiscal_number é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.getSefazMgData(fiscal_number);
   }
 
   @Post('sintegra-total/sefaz-mt')
   async getSintegraTotalSefazMt(
-    @Body() body: { fiscal_number: string },
+    @Body() body: { fiscal_number?: string },
   ): Promise<any> {
-    return this.sintegraTotalDataService.getSefazMtData(body.fiscal_number);
+    const fiscal_number = body?.fiscal_number?.trim();
+    if (!fiscal_number) {
+      throw new BadRequestException({
+        success: false,
+        error: 'fiscal_number é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.getSefazMtData(fiscal_number);
   }
 
   @Post('sintegra-total/sefaz-pr')
   async getSintegraTotalSefazPr(
-    @Body() body: { fiscal_number: string },
+    @Body() body: { fiscal_number?: string },
   ): Promise<any> {
-    return this.sintegraTotalDataService.getSefazPrData(body.fiscal_number);
+    const fiscal_number = body?.fiscal_number?.trim();
+    if (!fiscal_number) {
+      throw new BadRequestException({
+        success: false,
+        error: 'fiscal_number é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.getSefazPrData(fiscal_number);
   }
 
   // ========== ReportUtils ==========
