@@ -35,20 +35,40 @@ Content-Type: application/json
 
 @sintegraHost = 100.100.105.72:3003
 @externalPort = 3002
-@fiscalNumber = 06604890660
+@fiscalNumberCpf = 21456398881
+@birthDate = 15/12/1977
+@fiscalNumberCnpj = 81584278000155
 
-### SEFAZ - MG direto no sintegra-total (Consulta CPF)
-POST http://{{sintegraHost}}/sefaz-mg
+### Consulta CPF - direto no sintegra-total
+POST http://{{sintegraHost}}/regularidade-fiscal
 Content-Type: application/json
 
 {
-  "fiscal_number": "{{fiscalNumber}}"
+  "fiscal_number": "{{fiscalNumberCpf}}",
+  "birth_date": "{{birthDate}}"
 }
 
-### SEFAZ - MG via external-data (proxy)
-POST http://localhost:{{externalPort}}/externals/sintegra-total/sefaz-mg
+### Consulta CNPJ - direto no sintegra-total
+POST http://{{sintegraHost}}/regularidade-fiscal
 Content-Type: application/json
 
 {
-  "fiscal_number": "{{fiscalNumber}}"
+  "fiscal_number": "{{fiscalNumberCnpj}}"
+}
+
+### Consulta CPF - via external-data (proxy)
+POST http://localhost:{{externalPort}}/externals/sintegra-total/regularidade-fiscal
+Content-Type: application/json
+
+{
+  "fiscal_number": "{{fiscalNumberCpf}}",
+  "birth_date": "{{birthDate}}"
+}
+
+### Consulta CNPJ - via external-data (proxy)
+POST http://localhost:{{externalPort}}/externals/sintegra-total/regularidade-fiscal
+Content-Type: application/json
+
+{
+  "fiscal_number": "{{fiscalNumberCnpj}}"
 }

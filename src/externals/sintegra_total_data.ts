@@ -203,4 +203,19 @@ export class SintegraTotalDataService {
   async getSefazPrData(fiscal_number: string): Promise<any> {
     return this.postSintegraTotal('sefaz-pr', { fiscal_number }, 'SEFAZ PR');
   }
+
+  async getRegularidadeFiscalData(
+    fiscal_number: string,
+    birth_date?: string,
+  ): Promise<any> {
+    const body: Record<string, string> = { fiscal_number };
+    if (birth_date) {
+      body.birth_date = birth_date;
+    }
+    return this.postSintegraTotal(
+      'regularidade-fiscal',
+      body,
+      'Regularidade Fiscal',
+    );
+  }
 }

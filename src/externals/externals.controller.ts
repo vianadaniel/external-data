@@ -602,6 +602,23 @@ export class ExternalsController {
     return this.sintegraTotalDataService.getSefazPrData(fiscal_number);
   }
 
+  @Post('sintegra-total/regularidade-fiscal')
+  async getSintegraTotalRegularidadeFiscal(
+    @Body() body: { fiscal_number?: string; birth_date?: string },
+  ): Promise<any> {
+    const fiscal_number = body?.fiscal_number?.trim();
+    if (!fiscal_number) {
+      throw new BadRequestException({
+        success: false,
+        error: 'fiscal_number é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.getRegularidadeFiscalData(
+      fiscal_number,
+      body.birth_date?.trim(),
+    );
+  }
+
   // ========== ReportUtils ==========
   @Post('report-utils/mpsp/civel')
   async getMpspCertidaoCivel(
