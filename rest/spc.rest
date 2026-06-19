@@ -1,6 +1,6 @@
 ### SPC via API externals (SPC_USERNAME/SPC_PASSWORD; em 401/403 tenta SPC_*_BACKUP)
 # Suba o servidor: npm run start:dev (porta em PORT, ex.: 3002)
-@baseUrl = http://localhost:3003
+@baseUrl = http://localhost:3002
 @cnpj = 04639628000192
 @cpf = 06604890660
 
