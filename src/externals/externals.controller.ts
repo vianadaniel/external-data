@@ -504,6 +504,11 @@ export class ExternalsController {
     return this.farmScraperService.getTjrrConsulta(body.fiscal_number);
   }
 
+  @Post('farm-scraper/jurimais/consulta')
+  async getJurimaisConsulta(@Body() body: { documento: string }): Promise<any> {
+    return this.farmScraperService.getJurimaisConsulta(body.documento);
+  }
+
   @Get('farm-scraper/*')
   async getFarmScraperData(@Param('0') identifier: string): Promise<any> {
     return this.farmScraperService.getExternalDataGet(identifier);
