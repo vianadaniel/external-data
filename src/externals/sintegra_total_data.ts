@@ -196,6 +196,10 @@ export class SintegraTotalDataService {
     return this.postSintegraTotal('sefaz-mg', { fiscal_number }, 'SEFAZ MG');
   }
 
+  async getSefazToData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal('sefaz-to', { fiscal_number }, 'SEFAZ TO');
+  }
+
   async getSefazMtData(fiscal_number: string): Promise<any> {
     return this.postSintegraTotal('sefaz-mt', { fiscal_number }, 'SEFAZ MT');
   }

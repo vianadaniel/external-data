@@ -579,6 +579,20 @@ export class ExternalsController {
     return this.sintegraTotalDataService.getSefazMgData(fiscal_number);
   }
 
+  @Post('sintegra-total/sefaz-to')
+  async getSintegraTotalSefazTo(
+    @Body() body: { fiscal_number?: string },
+  ): Promise<any> {
+    const fiscal_number = body?.fiscal_number?.trim();
+    if (!fiscal_number) {
+      throw new BadRequestException({
+        success: false,
+        error: 'fiscal_number é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.getSefazToData(fiscal_number);
+  }
+
   @Post('sintegra-total/sefaz-mt')
   async getSintegraTotalSefazMt(
     @Body() body: { fiscal_number?: string },
