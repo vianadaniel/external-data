@@ -208,6 +208,18 @@ export class SintegraTotalDataService {
     return this.postSintegraTotal('sefaz-pr', { fiscal_number }, 'SEFAZ PR');
   }
 
+  async getSefazCeData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal('sefaz-ce', { fiscal_number }, 'SEFAZ CE');
+  }
+
+  async getSefazDfData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal('sefaz-df', { fiscal_number }, 'SEFAZ DF');
+  }
+
+  async getSefazGoData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal('sefaz-go', { fiscal_number }, 'SEFAZ GO');
+  }
+
   async getRegularidadeFiscalData(
     fiscal_number: string,
     birth_date?: string,

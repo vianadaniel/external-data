@@ -621,6 +621,48 @@ export class ExternalsController {
     return this.sintegraTotalDataService.getSefazPrData(fiscal_number);
   }
 
+  @Post('sintegra-total/sefaz-ce')
+  async getSintegraTotalSefazCe(
+    @Body() body: { fiscal_number?: string },
+  ): Promise<any> {
+    const fiscal_number = body?.fiscal_number?.trim();
+    if (!fiscal_number) {
+      throw new BadRequestException({
+        success: false,
+        error: 'fiscal_number é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.getSefazCeData(fiscal_number);
+  }
+
+  @Post('sintegra-total/sefaz-df')
+  async getSintegraTotalSefazDf(
+    @Body() body: { fiscal_number?: string },
+  ): Promise<any> {
+    const fiscal_number = body?.fiscal_number?.trim();
+    if (!fiscal_number) {
+      throw new BadRequestException({
+        success: false,
+        error: 'fiscal_number é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.getSefazDfData(fiscal_number);
+  }
+
+  @Post('sintegra-total/sefaz-go')
+  async getSintegraTotalSefazGo(
+    @Body() body: { fiscal_number?: string },
+  ): Promise<any> {
+    const fiscal_number = body?.fiscal_number?.trim();
+    if (!fiscal_number) {
+      throw new BadRequestException({
+        success: false,
+        error: 'fiscal_number é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.getSefazGoData(fiscal_number);
+  }
+
   @Post('sintegra-total/regularidade-fiscal')
   async getSintegraTotalRegularidadeFiscal(
     @Body() body: { fiscal_number?: string; birth_date?: string },
