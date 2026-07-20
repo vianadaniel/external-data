@@ -224,6 +224,38 @@ export class SintegraTotalDataService {
     return this.postSintegraTotal('sefaz-es', { fiscal_number }, 'SEFAZ ES');
   }
 
+  async getSefazMaData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal('sefaz-ma', { fiscal_number }, 'SEFAZ MA');
+  }
+
+  async getSefazRnData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal('sefaz-rn', { fiscal_number }, 'SEFAZ RN');
+  }
+
+  async getSefazRoData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal('sefaz-ro', { fiscal_number }, 'SEFAZ RO');
+  }
+
+  async getSefazRrData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal('sefaz-rr', { fiscal_number }, 'SEFAZ RR');
+  }
+
+  async getSefazRjData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal('sefaz-rj', { fiscal_number }, 'SEFAZ RJ');
+  }
+
+  async getSefazRsData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal('sefaz-rs', { fiscal_number }, 'SEFAZ RS');
+  }
+
+  async getSefazScData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal('sefaz-sc', { fiscal_number }, 'SEFAZ SC');
+  }
+
+  async getSefazSeData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal('sefaz-se', { fiscal_number }, 'SEFAZ SE');
+  }
+
   async getRegularidadeFiscalData(
     fiscal_number: string,
     birth_date?: string,
