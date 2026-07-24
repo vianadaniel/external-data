@@ -1,10 +1,11 @@
-### Farm Scraper — Jurimais (FARM_SCRAPER no .env, ex.: http://localhost:3006)
+### Farm Scraper — Jurimais / TJSP eproc (FARM_SCRAPER no .env, ex.: http://localhost:3006)
 # Suba external-data: npm run start:dev (porta em PORT, ex.: 3003)
 @baseUrl = http://localhost:3003
 @farmScraperUrl = http://localhost:3006
 @documento = 19159404604
+@fiscal_number = 19159404604
 
-### Consulta por CPF — via external-data
+### Jurimais — via external-data
 POST {{baseUrl}}/externals/farm-scraper/jurimais/consulta
 Content-Type: application/json
 
@@ -12,10 +13,27 @@ Content-Type: application/json
   "documento": "{{documento}}"
 }
 
-### Consulta por CPF — direto no farm scraper
+### Jurimais — direto no farm scraper
 POST {{farmScraperUrl}}/jurimais/consulta
 Content-Type: application/json
 
 {
   "documento": "{{documento}}"
+}
+
+### TJSP eproc — via external-data
+POST {{baseUrl}}/externals/farm-scraper/tjsp-eproc/consulta
+Content-Type: application/json
+
+{
+  "fiscal_number": "{{fiscal_number}}"
+}
+
+### TJSP eproc — direto no farm scraper
+POST {{farmScraperUrl}}/tjsp-eproc/consulta
+Content-Type: application/json
+
+{
+  "tipo": "documento",
+  "valor": "{{fiscal_number}}"
 }
