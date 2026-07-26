@@ -1,0 +1,32 @@
+### SICOR via API externals (URL em sicor_urls.json; default http://100.121.86.36:3000)
+# Suba o servidor: npm run start:dev (porta em PORT, ex.: 3003)
+@baseUrl = http://localhost:3003
+@cpfCnpj = 06604890660
+
+### Health
+GET {{baseUrl}}/externals/sicor/health
+
+### Listar URLs
+GET {{baseUrl}}/externals/sicor/url
+
+### Adicionar / trocar URL (vai para o topo)
+POST {{baseUrl}}/externals/sicor/url
+Content-Type: application/json
+
+{
+  "url": "http://100.121.86.36:3000"
+}
+
+### Zerar URLs
+DELETE {{baseUrl}}/externals/sicor/url
+
+### Consulta por CPF/CNPJ — via external-data
+POST {{baseUrl}}/externals/sicor/consulta
+Content-Type: application/json
+
+{
+  "cpfCnpj": "{{cpfCnpj}}"
+}
+
+### Consulta — direto no SICOR
+GET http://100.121.86.36:3000/v1/consulta?cpfCnpj={{cpfCnpj}}

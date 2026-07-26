@@ -23,6 +23,7 @@ import { BndesService } from './bndes_data';
 import { SPCService } from './spc_data';
 import { FarmScraperService } from './farm_scraper';
 import { SintegraTotalDataService } from './sintegra_total_data';
+import { SicorDataService } from './sicor_data';
 import { ReportUtilsDataService } from './report_utils_data';
 import { ClaudeService } from './chat_claude';
 import { OpenAIService } from './chat_ia';
@@ -47,6 +48,7 @@ export class ExternalsController {
     private readonly spcService: SPCService,
     private readonly farmScraperService: FarmScraperService,
     private readonly sintegraTotalDataService: SintegraTotalDataService,
+    private readonly sicorDataService: SicorDataService,
     private readonly reportUtilsDataService: ReportUtilsDataService,
     private readonly claudeService: ClaudeService,
     private readonly openAIService: OpenAIService,
@@ -960,6 +962,46 @@ export class ExternalsController {
     @Body() body: { sourceId: string; query: string },
   ): Promise<string> {
     return this.chatPDFExtractor.extract(body.sourceId, body.query);
+  }
+
+  // ========== SICOR ==========
+  @Get('sicor/health')
+  async getSicorHealth(): Promise<string> {
+    return this.sicorDataService.getHealth();
+  }
+
+  @Post('sicor/consulta')
+  async getSicorConsulta(
+    @Body() body: { cpfCnpj?: string },
+  ): Promise<any> {
+    const cpfCnpj = body?.cpfCnpj?.trim();
+    if (!cpfCnpj) {
+      throw new BadRequestException({
+        success: false,
+        error: 'cpfCnpj é obrigatório',
+      });
+    }
+    return this.sicorDataService.getConsulta(cpfCnpj);
+  }
+
+  @Post('sicor/url')
+  async addSicorUrl(
+    @Body() body: { url: string },
+  ): Promise<{ message: string }> {
+    await this.sicorDataService.addUrl(body.url);
+    return { message: 'URL adicionada com sucesso' };
+  }
+
+  @Get('sicor/url')
+  async getSicorUrls(): Promise<{ urls: string[] }> {
+    const urls = await this.sicorDataService.getUrls();
+    return { urls };
+  }
+
+  @Delete('sicor/url')
+  async deleteSicorUrls(): Promise<{ message: string }> {
+    await this.sicorDataService.deleteAllUrls();
+    return { message: 'Links zerados com sucesso' };
   }
 
   // ========== Sintegra URLs ==========

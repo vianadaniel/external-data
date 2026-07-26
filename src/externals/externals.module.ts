@@ -14,6 +14,7 @@ import { BndesService } from './bndes_data';
 import { SPCService } from './spc_data';
 import { FarmScraperService } from './farm_scraper';
 import { SintegraTotalDataService } from './sintegra_total_data';
+import { SicorDataService } from './sicor_data';
 import { ReportUtilsDataService } from './report_utils_data';
 import { ClaudeService } from './chat_claude';
 import { OpenAIService } from './chat_ia';
@@ -44,6 +45,7 @@ import { LoggingInterceptor } from './logging.interceptor';
     SPCService,
     FarmScraperService,
     SintegraTotalDataService,
+    SicorDataService,
     ReportUtilsDataService,
     ClaudeService,
     OpenAIService,
@@ -64,6 +66,7 @@ import { LoggingInterceptor } from './logging.interceptor';
     SPCService,
     FarmScraperService,
     SintegraTotalDataService,
+    SicorDataService,
     ReportUtilsDataService,
     ClaudeService,
     OpenAIService,
