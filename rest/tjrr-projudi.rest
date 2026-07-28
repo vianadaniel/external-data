@@ -1,0 +1,23 @@
+### TJRR Projudi — sintegra-total (SINTEGRA URL em sintegra_urls.json)
+@sintegraHost = localhost:3003
+@externalPort = 3002
+@fiscalNumber = 61670014304
+@page = 1
+
+### Consulta por CNPJ/CPF — direto no sintegra-total
+POST http://{{sintegraHost}}/tjrr-projudi/consulta
+Content-Type: application/json
+
+{
+  "fiscal_number": "{{fiscalNumber}}",
+  "page": {{page}}
+}
+
+### Consulta — via external-data (proxy)
+POST http://localhost:{{externalPort}}/externals/sintegra-total/tjrr-projudi/consulta
+Content-Type: application/json
+
+{
+  "fiscal_number": "{{fiscalNumber}}",
+  "page": {{page}}
+}

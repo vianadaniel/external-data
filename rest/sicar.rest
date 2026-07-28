@@ -1,0 +1,20 @@
+### SICAR (CAR) — FarmScraper (FARM_SCRAPER no .env, ex.: http://localhost:3006)
+@baseUrl = http://localhost:3003
+@farmScraperUrl = http://localhost:3006
+@codigo = TO170230726CBA0CF95194D6C8C95AFAA76B68BDA
+
+### Consulta por código CAR — direto no FarmScraper
+POST {{farmScraperUrl}}/sicar/consulta
+Content-Type: application/json
+
+{
+  "codigo": "{{codigo}}"
+}
+
+### Consulta por código CAR — via external-data (proxy)
+POST {{baseUrl}}/externals/farm-scraper/sicar/consulta
+Content-Type: application/json
+
+{
+  "codigo": "{{codigo}}"
+}
