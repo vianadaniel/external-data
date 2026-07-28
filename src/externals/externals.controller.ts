@@ -382,6 +382,11 @@ export class ExternalsController {
     return this.farmScraperService.getPgespConsulta(body.fiscal_number);
   }
 
+  @Post('farm-scraper/sicar/consulta')
+  async getSicarConsulta(@Body() body: { codigo: string }): Promise<any> {
+    return this.farmScraperService.getSicarConsulta(body.codigo);
+  }
+
   @Post('farm-scraper/fgts/consulta')
   async getFgtsConsulta(
     @Body() body: { fiscal_number: string; birthdate?: string },
@@ -572,6 +577,37 @@ export class ExternalsController {
     @Body() body: { fiscal_number: string },
   ): Promise<any> {
     return this.sintegraTotalDataService.getIbamaData(body.fiscal_number);
+  }
+
+  @Post('sintegra-total/car-gov/consulta')
+  async getSintegraTotalCarGovConsulta(
+    @Body() body: { codigo?: string },
+  ): Promise<any> {
+    const codigo = body?.codigo?.trim();
+    if (!codigo) {
+      throw new BadRequestException({
+        success: false,
+        error: 'codigo é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.getCarGovConsultaData(codigo);
+  }
+
+  @Post('sintegra-total/tjrr-projudi/consulta')
+  async getSintegraTotalTjrrProjudiConsulta(
+    @Body() body: { fiscal_number?: string; page?: number },
+  ): Promise<any> {
+    const fiscal_number = body?.fiscal_number?.trim();
+    if (!fiscal_number) {
+      throw new BadRequestException({
+        success: false,
+        error: 'fiscal_number é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.getTjrrProjudiConsultaData(
+      fiscal_number,
+      body?.page ?? 1,
+    );
   }
 
   @Post('sintegra-total/sefaz-mg')

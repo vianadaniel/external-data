@@ -71,7 +71,7 @@ export class SintegraTotalDataService {
 
   private async postSintegraTotal(
     path: string,
-    body: Record<string, string>,
+    body: Record<string, string | number>,
     label: string,
     timeout = this.timeout,
   ): Promise<any> {
@@ -189,6 +189,25 @@ export class SintegraTotalDataService {
       'ibama/consulta',
       { fiscal_number },
       'IBAMA',
+    );
+  }
+
+  async getCarGovConsultaData(codigo: string): Promise<any> {
+    return this.postSintegraTotal(
+      'car-gov/consulta',
+      { codigo },
+      'CAR Gov consulta',
+    );
+  }
+
+  async getTjrrProjudiConsultaData(
+    fiscal_number: string,
+    page: number,
+  ): Promise<any> {
+    return this.postSintegraTotal(
+      'tjrr-projudi/consulta',
+      { fiscal_number, page },
+      'TJRR Projudi consulta',
     );
   }
 

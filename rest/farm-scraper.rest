@@ -4,6 +4,23 @@
 @farmScraperUrl = http://localhost:3006
 @documento = 19159404604
 @fiscal_number = 19159404604
+@codigoCar = TO170230726CBA0CF95194D6C8C95AFAA76B68BDA
+
+### SICAR — via external-data
+POST {{baseUrl}}/externals/farm-scraper/sicar/consulta
+Content-Type: application/json
+
+{
+  "codigo": "{{codigoCar}}"
+}
+
+### SICAR — direto no farm scraper
+POST {{farmScraperUrl}}/sicar/consulta
+Content-Type: application/json
+
+{
+  "codigo": "{{codigoCar}}"
+}
 
 ### Jurimais — via external-data
 POST {{baseUrl}}/externals/farm-scraper/jurimais/consulta
