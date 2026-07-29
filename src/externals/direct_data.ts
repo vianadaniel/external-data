@@ -10,7 +10,7 @@ configDotenv.apply(process.env);
 @Injectable()
 export class DirectDataService {
   private readonly timeout = 120000; // 2 minutos
-  private readonly veiculosTimeout = 600000; // 10 minutos
+  private readonly veiculosTimeout = 300000; // 5 minutos
 
   constructor(private readonly httpService: HttpService) {}
 
