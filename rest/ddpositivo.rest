@@ -8,7 +8,7 @@ Content-Type: application/json
 
 {
   "document": "03058766866",
-  "consultation": "scr-plus-pf"
+  "consultation": "ic-protestos-pf"
 }
 
 ### Mesma consulta via nest (token em DDPOSITIVO_TOKEN no .env; Docker local default DOCKER_APP_PORT=3002)
