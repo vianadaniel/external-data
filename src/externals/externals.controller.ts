@@ -154,17 +154,42 @@ export class ExternalsController {
   @Post('infosimples/*')
   async getInfoSimplesData(
     @Req() request: Request,
-
-    @Body() _body: any, // body é usado apenas pelo interceptor para logging
+    @Body() body: any, // body é usado pelo interceptor e para query extras (ex.: nome_mae)
   ): Promise<any> {
-    // Extrair o identifier completo incluindo query parameters
-    // A URL será algo como: /externals/infosimples/receita-federal/cpf?cpf=34285231808&birthdate=1984-12-04
-    // Remover /externals/infosimples/ do início da URL
-    const urlPath = request.url.replace('/externals/infosimples', '');
-    // Se começar com /, remover
-    const identifier = urlPath.startsWith('/') ? urlPath.substring(1) : urlPath;
-    // console.log('[InfoSimples Controller] Full URL:', request.url);
-    // console.log('[InfoSimples Controller] Identifier received:', identifier);
+    // Path sem query: /externals/infosimples/antecedentes-criminais/pf/emit
+    const rawPath = (request.path || request.url.split('?')[0])
+      .replace(/^\/externals\/infosimples\/?/, '')
+      .replace(/^\//, '');
+
+    const query = new URLSearchParams();
+    for (const [key, value] of Object.entries(request.query || {})) {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          if (item != null && item !== '') query.append(key, String(item));
+        }
+      } else if (value != null && value !== '') {
+        query.append(key, String(value));
+      }
+    }
+
+    // Campos que o report pode mandar no body se a query da URL for truncada/perdida
+    const bodyQueryKeys = [
+      'nome_mae',
+      'nome',
+      'birthdate',
+      'cpf',
+      'cnpj',
+      'login_cpf',
+      'login_senha',
+    ];
+    for (const key of bodyQueryKeys) {
+      if (body?.[key] != null && body[key] !== '' && !query.has(key)) {
+        query.append(key, String(body[key]));
+      }
+    }
+
+    const qs = query.toString();
+    const identifier = qs ? `${rawPath}?${qs}` : rawPath;
     return this.infoSimplesDataService.getExternalData(identifier);
   }
 
