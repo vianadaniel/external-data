@@ -604,6 +604,22 @@ export class ExternalsController {
     return this.sintegraTotalDataService.getIbamaData(body.fiscal_number);
   }
 
+  @Post('sintegra-total/ibama/embargos')
+  async getSintegraTotalIbamaEmbargos(
+    @Body() body: { fiscal_number: string },
+  ): Promise<any> {
+    return this.sintegraTotalDataService.getIbamaEmbargosData(
+      body.fiscal_number,
+    );
+  }
+
+  @Post('sintegra-total/ibama/cnd')
+  async getSintegraTotalIbamaCnd(
+    @Body() body: { fiscal_number: string },
+  ): Promise<any> {
+    return this.sintegraTotalDataService.getIbamaCndData(body.fiscal_number);
+  }
+
   @Post('sintegra-total/car-gov/consulta')
   async getSintegraTotalCarGovConsulta(
     @Body() body: { codigo?: string },

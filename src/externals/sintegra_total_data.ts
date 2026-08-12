@@ -192,6 +192,22 @@ export class SintegraTotalDataService {
     );
   }
 
+  async getIbamaEmbargosData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal(
+      'ibama/embargos',
+      { fiscal_number },
+      'IBAMA embargos',
+    );
+  }
+
+  async getIbamaCndData(fiscal_number: string): Promise<any> {
+    return this.postSintegraTotal(
+      'ibama/cnd',
+      { fiscal_number },
+      'IBAMA CND',
+    );
+  }
+
   async getCarGovConsultaData(codigo: string): Promise<any> {
     return this.postSintegraTotal(
       'car-gov/consulta',
