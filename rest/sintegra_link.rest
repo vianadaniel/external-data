@@ -72,3 +72,23 @@ Content-Type: application/json
 {
   "fiscal_number": "{{fiscalNumberCnpj}}"
 }
+
+### Biografia - direto no sintegra-total
+POST http://{{sintegraHost}}/api/biografia
+Content-Type: application/json
+
+{
+  "nome": "Daniel Viana de Almeida",
+  "ocupacao": "MFCHECK SOLUCOES EM TECNOLOGIA LTDA",
+  "lugares": ["Marília - SP"]
+}
+
+### Biografia - via external-data (proxy)
+POST http://localhost:{{externalPort}}/externals/sintegra-total/biografia
+Content-Type: application/json
+
+{
+  "nome": "Daniel Viana de Almeida",
+  "ocupacao": "MFCHECK SOLUCOES EM TECNOLOGIA LTDA",
+  "lugares": ["Marília - SP"]
+}

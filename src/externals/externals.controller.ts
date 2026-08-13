@@ -920,6 +920,34 @@ export class ExternalsController {
     );
   }
 
+  @Post('sintegra-total/biografia')
+  async getSintegraTotalBiografia(
+    @Body()
+    body: {
+      nome?: string;
+      ocupacao?: string;
+      lugares?: string[] | string;
+    },
+  ): Promise<any> {
+    const nome = body?.nome?.trim();
+    if (!nome) {
+      throw new BadRequestException({
+        success: false,
+        error: 'nome é obrigatório',
+      });
+    }
+    const lugares = Array.isArray(body?.lugares)
+      ? body.lugares.map((l) => l.trim()).filter(Boolean)
+      : body?.lugares?.trim()
+        ? [body.lugares.trim()]
+        : undefined;
+    return this.sintegraTotalDataService.getBiografiaData(
+      nome,
+      body.ocupacao?.trim(),
+      lugares,
+    );
+  }
+
   // ========== ReportUtils ==========
   @Post('report-utils/mpsp/civel')
   async getMpspCertidaoCivel(

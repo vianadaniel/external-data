@@ -71,7 +71,7 @@ export class SintegraTotalDataService {
 
   private async postSintegraTotal(
     path: string,
-    body: Record<string, string | number>,
+    body: Record<string, string | number | string[]>,
     label: string,
     timeout = this.timeout,
   ): Promise<any> {
@@ -312,5 +312,20 @@ export class SintegraTotalDataService {
       body,
       'Regularidade Fiscal',
     );
+  }
+
+  async getBiografiaData(
+    nome: string,
+    ocupacao?: string,
+    lugares?: string[],
+  ): Promise<any> {
+    const body: Record<string, string | string[]> = { nome };
+    if (ocupacao) {
+      body.ocupacao = ocupacao;
+    }
+    if (lugares && lugares.length > 0) {
+      body.lugares = lugares;
+    }
+    return this.postSintegraTotal('api/biografia', body, 'Biografia');
   }
 }
