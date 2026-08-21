@@ -604,20 +604,32 @@ export class ExternalsController {
     return this.sintegraTotalDataService.getIbamaData(body.fiscal_number);
   }
 
-  @Post('sintegra-total/ibama/embargos')
-  async getSintegraTotalIbamaEmbargos(
-    @Body() body: { fiscal_number: string },
-  ): Promise<any> {
-    return this.sintegraTotalDataService.getIbamaEmbargosData(
-      body.fiscal_number,
-    );
-  }
-
   @Post('sintegra-total/ibama/cnd')
   async getSintegraTotalIbamaCnd(
     @Body() body: { fiscal_number: string },
   ): Promise<any> {
-    return this.sintegraTotalDataService.getIbamaCndData(body.fiscal_number);
+    const fiscal_number = body?.fiscal_number?.trim();
+    if (!fiscal_number) {
+      throw new BadRequestException({
+        success: false,
+        error: 'fiscal_number é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.getIbamaCndData(fiscal_number);
+  }
+
+  @Post('sintegra-total/osint/cnpj')
+  async getSintegraTotalOsintCnpj(
+    @Body() body: { cnpj?: string },
+  ): Promise<any> {
+    const cnpj = body?.cnpj?.trim();
+    if (!cnpj) {
+      throw new BadRequestException({
+        success: false,
+        error: 'cnpj é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.getOsintCnpjData(cnpj);
   }
 
   @Post('sintegra-total/car-gov/consulta')

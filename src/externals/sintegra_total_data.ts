@@ -208,6 +208,10 @@ export class SintegraTotalDataService {
     );
   }
 
+  async getOsintCnpjData(cnpj: string): Promise<any> {
+    return this.postSintegraTotal('api/osint/cnpj', { cnpj }, 'OSINT CNPJ');
+  }
+
   async getCarGovConsultaData(codigo: string): Promise<any> {
     return this.postSintegraTotal(
       'car-gov/consulta',
