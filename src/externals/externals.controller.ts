@@ -960,6 +960,33 @@ export class ExternalsController {
     );
   }
 
+  @Get('sintegra-total/*')
+  async getSintegraTotalProxy(@Param('0') identifier: string): Promise<any> {
+    const path = identifier?.trim();
+    if (!path) {
+      throw new BadRequestException({
+        success: false,
+        error: 'path é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.proxyGet(path);
+  }
+
+  @Post('sintegra-total/*')
+  async postSintegraTotalProxy(
+    @Param('0') identifier: string,
+    @Body() body: Record<string, unknown>,
+  ): Promise<any> {
+    const path = identifier?.trim();
+    if (!path) {
+      throw new BadRequestException({
+        success: false,
+        error: 'path é obrigatório',
+      });
+    }
+    return this.sintegraTotalDataService.proxyPost(path, body ?? {});
+  }
+
   // ========== ReportUtils ==========
   @Post('report-utils/mpsp/civel')
   async getMpspCertidaoCivel(

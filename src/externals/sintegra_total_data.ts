@@ -69,9 +69,19 @@ export class SintegraTotalDataService {
     }
   }
 
+  private normalizeProxyPath(rawPath: string): string | null {
+    const normalized = rawPath.replace(/^\/+/, '').replace(/\/+$/, '');
+    if (!normalized) return null;
+    const segments = normalized.split('/');
+    if (segments.some((seg) => !seg || seg === '.' || seg === '..')) {
+      return null;
+    }
+    return normalized;
+  }
+
   private async postSintegraTotal(
     path: string,
-    body: Record<string, string | number | string[]>,
+    body: Record<string, unknown>,
     label: string,
     timeout = this.timeout,
   ): Promise<any> {
@@ -133,6 +143,46 @@ export class SintegraTotalDataService {
 
   async deleteAllUrls(): Promise<void> {
     await this.saveUrlsToFile([]);
+  }
+
+  async proxyPost(
+    path: string,
+    body: Record<string, unknown> = {},
+  ): Promise<any> {
+    const normalizedPath = this.normalizeProxyPath(path);
+    if (!normalizedPath) return 'error';
+    return this.postSintegraTotal(normalizedPath, body, `proxy ${normalizedPath}`);
+  }
+
+  async proxyGet(path: string): Promise<any> {
+    const normalizedPath = this.normalizeProxyPath(path);
+    if (!normalizedPath) return 'error';
+
+    const urls = await this.readUrlsFromFile();
+    if (urls.length === 0) {
+      console.error('SINTEGRA Total: Nenhuma URL disponível');
+      return 'error';
+    }
+
+    const url = `${this.resolveSintegraOrigin(urls[0])}/${normalizedPath}`;
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.get(url, {
+          timeout: this.timeout,
+          headers: { 'User-Agent': 'Report/1.0' },
+          validateStatus: () => true,
+        }),
+      );
+      if (response?.data !== undefined && response?.data !== null) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('SINTEGRA Total proxy GET failed:', {
+        url,
+        message: this.getErrorMessage(error),
+      });
+    }
+    return 'error';
   }
 
   async getHealth(): Promise<string> {
