@@ -107,11 +107,68 @@ export class SicorDataService {
     }
   }
 
+  private isEmptyConsultaBody(data: unknown): boolean {
+    if (data == null || data === '') return true;
+    if (typeof data === 'string' && data.trim() === '') return true;
+    if (Array.isArray(data)) return data.length === 0;
+    if (typeof data === 'object') return Object.keys(data).length === 0;
+    return false;
+  }
+
+  private isHtmlBody(data: unknown): boolean {
+    if (typeof data !== 'string') return false;
+    const trimmed = data.trim().toLowerCase();
+    return (
+      trimmed.startsWith('<!doctype') ||
+      trimmed.startsWith('<html') ||
+      trimmed.includes('<body')
+    );
+  }
+
+  private isSicorConsultaPayload(data: unknown): boolean {
+    if (data == null || typeof data !== 'object' || Array.isArray(data)) {
+      return false;
+    }
+    const rec = data as Record<string, unknown>;
+    if (rec.success === false || rec.ok === false) return false;
+    const payload =
+      rec.data != null &&
+      typeof rec.data === 'object' &&
+      !Array.isArray(rec.data)
+        ? (rec.data as Record<string, unknown>)
+        : rec;
+    return (
+      typeof payload.temOperacao === 'boolean' ||
+      Array.isArray(payload.operacoes) ||
+      Array.isArray(payload.fonte) ||
+      typeof payload.total === 'number'
+    );
+  }
+
+  private isConsultaSuccess(response: AxiosResponse): boolean {
+    if (response.status < 200 || response.status >= 300) return false;
+    const contentType = String(response.headers?.['content-type'] ?? '');
+    if (contentType.includes('text/html')) return false;
+    if (this.isHtmlBody(response.data)) return false;
+    if (this.isEmptyConsultaBody(response.data)) return true;
+    return this.isSicorConsultaPayload(response.data);
+  }
+
+  private wrapConsultaSuccess(data: unknown): Record<string, unknown> {
+    if (this.isEmptyConsultaBody(data)) {
+      return { success: true };
+    }
+    if (data != null && typeof data === 'object' && !Array.isArray(data)) {
+      return { ...(data as Record<string, unknown>), success: true };
+    }
+    return { success: true, data };
+  }
+
   async getConsulta(cpfCnpj: string): Promise<any> {
     const urls = await this.readUrlsFromFile();
     if (urls.length === 0) {
       console.error('SICOR: Nenhuma URL disponível');
-      return 'error';
+      return { success: false };
     }
 
     const baseUrl = this.resolveOrigin(urls[0]);
@@ -130,9 +187,14 @@ export class SicorDataService {
             validateStatus: () => true,
           }),
         );
-        if (response?.data !== undefined && response?.data !== null) {
-          return response.data;
+        if (this.isConsultaSuccess(response)) {
+          return this.wrapConsultaSuccess(response.data);
         }
+        console.error(`SICOR consulta attempt ${attempt} invalid response:`, {
+          url,
+          cpfCnpj,
+          status: response.status,
+        });
       } catch (error) {
         console.error(`SICOR consulta attempt ${attempt} failed:`, {
           url,
@@ -141,6 +203,6 @@ export class SicorDataService {
         });
       }
     }
-    return 'error';
+    return { success: false };
   }
 }
