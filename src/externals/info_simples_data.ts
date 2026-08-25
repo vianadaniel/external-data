@@ -8,7 +8,7 @@ configDotenv.apply(process.env);
 
 @Injectable()
 export class InfoSimplesDataService {
-  private readonly timeout = 250000; // 250 segundos
+  private readonly timeout = 600000; // 10 minutos
 
   constructor(private readonly httpService: HttpService) {}
 

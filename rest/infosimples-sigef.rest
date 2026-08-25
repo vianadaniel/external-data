@@ -1,0 +1,24 @@
+### InfoSimples — SIGEF (INCRA)
+@baseUrl = http://localhost:3003
+@token = lzE7GPbDnWy4QlUEl0MKY6JJlQRbl52qgFwAwmGu
+@cpf = 02704695830
+@login_cpf = 06604890660
+@login_senha = Kixqep-faxcoj-6havzo
+
+### SIGEF requerimentos — direto InfoSimples
+GET https://api.infosimples.com/api/v2/consultas/incra/sigef/requerimentos?token={{token}}&timeout=600&ignore_site_receipt=0&cpf={{cpf}}&login_cpf={{login_cpf}}&login_senha={{login_senha}}
+
+### SIGEF parcelas — direto InfoSimples
+GET https://api.infosimples.com/api/v2/consultas/incra/sigef/parcelas?token={{token}}&timeout=600&ignore_site_receipt=0&cpf={{cpf}}&login_cpf={{login_cpf}}&login_senha={{login_senha}}
+
+### SIGEF requerimentos — via external-data
+POST {{baseUrl}}/externals/infosimples/incra/sigef/requerimentos?timeout=600&ignore_site_receipt=0&cpf={{cpf}}&login_cpf={{login_cpf}}&login_senha={{login_senha}}
+Content-Type: application/json
+
+{}
+
+### SIGEF parcelas — via external-data
+POST {{baseUrl}}/externals/infosimples/incra/sigef/parcelas?timeout=600&ignore_site_receipt=0&cpf={{cpf}}&login_cpf={{login_cpf}}&login_senha={{login_senha}}
+Content-Type: application/json
+
+{}
