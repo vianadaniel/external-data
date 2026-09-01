@@ -165,20 +165,26 @@ export class BigDataService implements OnModuleInit {
     data_set: string,
     car_number?: string,
     uf?: string,
+    limit?: number,
   ): Promise<any> {
     const startTime = Date.now();
     try {
       const tokenData = await this.ensureTokenFile();
 
+      const body: Record<string, unknown> = {
+        q: car_number
+          ? `carnumber{${car_number}}`
+          : `doc{${fiscal_id_number}}` + (uf ? `,uf{${uf}}` : ''),
+        Datasets: `${data_set}`,
+      };
+      if (limit != null) {
+        body.Limit = limit;
+      }
+
       const response: AxiosResponse = await this.httpService
         .post(
           `https://plataforma.bigdatacorp.com.br/${identifier}`,
-          {
-            q: car_number
-              ? `carnumber{${car_number}}`
-              : `doc{${fiscal_id_number}}` + (uf ? `,uf{${uf}}` : ''),
-            Datasets: `${data_set}`,
-          },
+          body,
           {
             timeout: 180000, // 3 minutos
             headers: {

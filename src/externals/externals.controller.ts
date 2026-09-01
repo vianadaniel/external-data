@@ -67,6 +67,7 @@ export class ExternalsController {
       data_set: string;
       car_number?: string;
       uf?: string;
+      limit?: number;
     },
   ): Promise<any> {
     return this.bigDataService.getExternalDataBigData(
@@ -75,6 +76,7 @@ export class ExternalsController {
       body.data_set,
       body.car_number,
       body.uf,
+      body.limit,
     );
   }
 
