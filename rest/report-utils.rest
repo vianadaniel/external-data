@@ -1,0 +1,67 @@
+### Report Utils — ReceitaWS
+@baseUrl = http://localhost:3003
+@reportUtilsUrl = https://report-utils-light.mfcheck.com.br/api
+@contentType = application/json
+@cnpj = 62409878000132
+
+### GET - Consultar CNPJ — direto no report-utils
+GET {{reportUtilsUrl}}/receitaws/cnpj/{{cnpj}}
+Accept: application/json
+
+### POST - Consultar CNPJ — direto no report-utils
+POST {{reportUtilsUrl}}/receitaws/consulta
+Content-Type: {{contentType}}
+
+{
+  "cnpj": "{{cnpj}}"
+}
+
+### POST - Consultar CNPJ em lote — direto no report-utils
+POST {{reportUtilsUrl}}/receitaws/consulta-lote
+Content-Type: {{contentType}}
+
+{
+  "cnpjs": [
+    "62409878000132",
+    "02558157000162",
+    "34308289000122",
+    "55064562000190",
+    "19556462000541",
+    "63177612000174",
+    "98510910000542",
+    "01171588000109",
+    "00000000000191",
+    "33000167000101"
+  ]
+}
+
+### GET - Consultar CNPJ — via external-data
+GET {{baseUrl}}/externals/report-utils/receitaws/cnpj/{{cnpj}}
+Accept: application/json
+
+### POST - Consultar CNPJ — via external-data
+POST {{baseUrl}}/externals/report-utils/receitaws/consulta
+Content-Type: {{contentType}}
+
+{
+  "cnpj": "{{cnpj}}"
+}
+
+### POST - Consultar CNPJ em lote — via external-data
+POST {{baseUrl}}/externals/report-utils/receitaws/consulta-lote
+Content-Type: {{contentType}}
+
+{
+  "cnpjs": [
+    "62409878000132",
+    "02558157000162",
+    "34308289000122",
+    "55064562000190",
+    "19556462000541",
+    "63177612000174",
+    "98510910000542",
+    "01171588000109",
+    "00000000000191",
+    "33000167000101"
+  ]
+}

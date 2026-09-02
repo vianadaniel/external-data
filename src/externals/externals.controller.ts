@@ -1079,6 +1079,23 @@ export class ExternalsController {
     );
   }
 
+  @Get('report-utils/receitaws/cnpj/:cnpj')
+  async getReceitawsCnpj(@Param('cnpj') cnpj: string): Promise<any> {
+    return this.reportUtilsDataService.getReceitawsCnpj(cnpj);
+  }
+
+  @Post('report-utils/receitaws/consulta')
+  async getReceitawsConsulta(@Body() body: { cnpj: string }): Promise<any> {
+    return this.reportUtilsDataService.getReceitawsConsulta(body.cnpj);
+  }
+
+  @Post('report-utils/receitaws/consulta-lote')
+  async getReceitawsConsultaLote(
+    @Body() body: { cnpjs: string[] },
+  ): Promise<any> {
+    return this.reportUtilsDataService.getReceitawsConsultaLote(body.cnpjs);
+  }
+
   // ========== Claude ==========
   @Post('claude/completion-lawsuits')
   async getClaudeCompletionLawsuits(

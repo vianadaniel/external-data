@@ -256,4 +256,68 @@ export class ReportUtilsDataService {
       return 'error';
     }
   }
+
+  async getReceitawsCnpj(cnpj: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.get(`${this.baseUrl}/receitaws/cnpj/${cnpj}`, {
+          timeout: this.timeout,
+          headers: {
+            Accept: 'application/json',
+          },
+        }),
+      );
+
+      return response?.data || 'error';
+    } catch (error) {
+      console.log('Error fetching ReceitaWS CNPJ:', error);
+      return 'error';
+    }
+  }
+
+  async getReceitawsConsulta(cnpj: string): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${this.baseUrl}/receitaws/consulta`,
+          { cnpj },
+          {
+            timeout: this.timeout,
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+          },
+        ),
+      );
+
+      return response?.data || 'error';
+    } catch (error) {
+      console.log('Error fetching ReceitaWS consulta:', error);
+      return 'error';
+    }
+  }
+
+  async getReceitawsConsultaLote(cnpjs: string[]): Promise<any> {
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${this.baseUrl}/receitaws/consulta-lote`,
+          { cnpjs },
+          {
+            timeout: this.timeout,
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+          },
+        ),
+      );
+
+      return response?.data || 'error';
+    } catch (error) {
+      console.log('Error fetching ReceitaWS consulta lote:', error);
+      return 'error';
+    }
+  }
 }
