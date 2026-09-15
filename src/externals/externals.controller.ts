@@ -551,20 +551,28 @@ export class ExternalsController {
   }
 
   @Get('farm-scraper/*')
-  async getFarmScraperData(@Param('0') identifier: string): Promise<any> {
-    return this.farmScraperService.getExternalDataGet(identifier);
+  async getFarmScraperData(@Req() request: Request): Promise<any> {
+    return this.farmScraperService.proxyGet(
+      this.resolveFarmScraperPath(request),
+      request.query as Record<string, unknown>,
+    );
   }
 
   @Post('farm-scraper/*')
   async postFarmScraperData(
-    @Param('0') identifier: string,
-    @Body() body: { fiscal_number: string; birthdate?: string },
+    @Req() request: Request,
+    @Body() body: Record<string, unknown>,
   ): Promise<any> {
-    return this.farmScraperService.getExternalDataPost(
-      identifier,
-      body.fiscal_number,
-      body.birthdate,
+    return this.farmScraperService.proxyPost(
+      this.resolveFarmScraperPath(request),
+      body,
     );
+  }
+
+  private resolveFarmScraperPath(request: Request): string {
+    return (request.path || request.url.split('?')[0])
+      .replace(/^\/externals\/farm-scraper\/?/, '')
+      .replace(/^\//, '');
   }
 
   // ========== SintegraTotal ==========

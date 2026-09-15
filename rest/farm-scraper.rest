@@ -38,6 +38,22 @@ Content-Type: application/json
   "documento": "{{documento}}"
 }
 
+### Jurimais por processo — via external-data (coringa farm-scraper/*)
+POST {{baseUrl}}/externals/farm-scraper/jurimais/consulta/processo
+Content-Type: application/json
+
+{
+  "processo": "00177887220178260344"
+}
+
+### Jurimais por processo — direto no farm scraper
+POST {{farmScraperUrl}}/jurimais/consulta/processo
+Content-Type: application/json
+
+{
+  "processo": "00177887220178260344"
+}
+
 ### TJSP eproc — via external-data
 POST {{baseUrl}}/externals/farm-scraper/tjsp-eproc/consulta
 Content-Type: application/json

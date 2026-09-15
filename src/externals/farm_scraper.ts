@@ -9,14 +9,69 @@ configDotenv.apply(process.env);
 @Injectable()
 export class FarmScraperService {
   private readonly timeout = 300000; // 5 minutos
+  private readonly baseUrl =
+    process.env.FARM_SCRAPER || 'http://134.65.245.187:3000';
 
   constructor(private readonly httpService: HttpService) {}
 
-  async getExternalDataGet(identifier: string): Promise<any> {
+  private stripProxyMetadata(body: unknown): Record<string, unknown> {
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      return {};
+    }
+    const { company_id, user_id, ...rest } = body as Record<string, unknown>;
+    return rest;
+  }
+
+  private buildQueryString(query?: Record<string, unknown>): string {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(query || {})) {
+      if (key === 'company_id' || key === 'user_id') continue;
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          if (item != null && item !== '') params.append(key, String(item));
+        }
+      } else if (value != null && value !== '') {
+        params.append(key, String(value));
+      }
+    }
+    return params.toString();
+  }
+
+  async proxyGet(
+    path: string,
+    query?: Record<string, unknown>,
+  ): Promise<any> {
+    const identifier = String(path || '').replace(/^\//, '');
+    if (!identifier) return 'error';
+    const qs = this.buildQueryString(query);
+    const url = `${this.baseUrl}/${identifier}${qs ? `?${qs}` : ''}`;
     try {
       const response: AxiosResponse = await firstValueFrom(
-        this.httpService.get(
-          `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/${identifier}`,
+        this.httpService.get(url, {
+          timeout: this.timeout,
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Report/1.0',
+          },
+        }),
+      );
+      if (!response || response.data === undefined || response.data === null) {
+        return 'error';
+      }
+      return response.data;
+    } catch {
+      return 'error';
+    }
+  }
+
+  async proxyPost(path: string, body?: unknown): Promise<any> {
+    const identifier = String(path || '').replace(/^\//, '');
+    if (!identifier) return 'error';
+    try {
+      const response: AxiosResponse = await firstValueFrom(
+        this.httpService.post(
+          `${this.baseUrl}/${identifier}`,
+          this.stripProxyMetadata(body),
           {
             timeout: this.timeout,
             headers: {
@@ -26,16 +81,17 @@ export class FarmScraperService {
           },
         ),
       );
-
-      // Validação da resposta
-      if (!response || !response.data) {
+      if (!response || response.data === undefined || response.data === null) {
         return 'error';
       }
-
       return response.data;
-    } catch (error) {
+    } catch {
       return 'error';
     }
+  }
+
+  async getExternalDataGet(identifier: string): Promise<any> {
+    return this.proxyGet(identifier);
   }
 
   async getExternalDataPost(
@@ -43,33 +99,11 @@ export class FarmScraperService {
     fiscal_number: string,
     birthdate?: string,
   ): Promise<any> {
-    try {
-      const response: AxiosResponse = await firstValueFrom(
-        this.httpService.post(
-          `${process.env.FARM_SCRAPER || 'http://134.65.245.187:3000'}/${identifier}`,
-          {
-            fiscal_number,
-            birthdate,
-          },
-          {
-            timeout: this.timeout,
-            headers: {
-              'Content-Type': 'application/json',
-              'User-Agent': 'Report/1.0',
-            },
-          },
-        ),
-      );
-      console.log(response.data);
-
-      if (!response || !response.data) {
-        return 'error';
-      }
-
-      return response.data;
-    } catch (error) {
-      return 'error';
+    const body: Record<string, unknown> = { fiscal_number };
+    if (birthdate != null && birthdate !== '') {
+      body.birthdate = birthdate;
     }
+    return this.proxyPost(identifier, body);
   }
 
   async getCcirEmission(
