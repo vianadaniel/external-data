@@ -7,7 +7,7 @@ import * as path from 'path';
 
 @Injectable()
 export class SicorDataService {
-  private readonly timeout = 180000;
+  private readonly timeout = 20000; // 20 segundos — se falhar, tenta a próxima URL
   private readonly retryAttempts = 1;
   private readonly urlsFilePath: string;
   private readonly defaultUrl = 'http://100.121.86.36:3000';
