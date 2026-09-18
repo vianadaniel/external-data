@@ -87,24 +87,31 @@ export class SicorDataService {
   async getHealth(): Promise<string> {
     const urls = await this.readUrlsFromFile();
     if (urls.length === 0) return 'nenhuma url configurada';
-    const url = `${this.resolveOrigin(urls[0])}/health`;
-    try {
-      const response: AxiosResponse = await firstValueFrom(
-        this.httpService.get(url, {
-          timeout: 5000,
-          headers: { 'User-Agent': 'Report/1.0' },
-          validateStatus: () => true,
-        }),
-      );
-      return response.status >= 200 && response.status < 300
-        ? response.data
-        : response.status.toString();
-    } catch (error) {
-      if (isAxiosError(error) && error.response?.status !== undefined) {
-        return error.response.status.toString();
+
+    const errors: string[] = [];
+    for (const rawUrl of urls) {
+      const url = `${this.resolveOrigin(rawUrl)}/health`;
+      try {
+        const response: AxiosResponse = await firstValueFrom(
+          this.httpService.get(url, {
+            timeout: 5000,
+            headers: { 'User-Agent': 'Report/1.0' },
+            validateStatus: () => true,
+          }),
+        );
+        if (response.status >= 200 && response.status < 300) {
+          return response.data;
+        }
+        errors.push(`${url} -> ${response.status}`);
+      } catch (error) {
+        if (isAxiosError(error) && error.response?.status !== undefined) {
+          errors.push(`${url} -> ${error.response.status}`);
+        } else {
+          errors.push(`${url} -> ${this.getErrorMessage(error)}`);
+        }
       }
-      return this.getErrorMessage(error);
     }
+    return errors.join('; ') || 'error';
   }
 
   private isEmptyConsultaBody(data: unknown): boolean {
@@ -171,36 +178,43 @@ export class SicorDataService {
       return { success: false };
     }
 
-    const baseUrl = this.resolveOrigin(urls[0]);
-    const url = `${baseUrl}/v1/consulta`;
+    for (let i = 0; i < urls.length; i++) {
+      const url = `${this.resolveOrigin(urls[i])}/v1/consulta`;
 
-    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
-      try {
-        const response: AxiosResponse = await firstValueFrom(
-          this.httpService.get(url, {
-            params: { cpfCnpj },
-            timeout: this.timeout,
-            headers: {
-              accept: 'application/json',
-              'User-Agent': 'Report/1.0',
+      for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
+        try {
+          const response: AxiosResponse = await firstValueFrom(
+            this.httpService.get(url, {
+              params: { cpfCnpj },
+              timeout: this.timeout,
+              headers: {
+                accept: 'application/json',
+                'User-Agent': 'Report/1.0',
+              },
+              validateStatus: () => true,
+            }),
+          );
+          if (this.isConsultaSuccess(response)) {
+            return this.wrapConsultaSuccess(response.data);
+          }
+          console.error(
+            `SICOR consulta url[${i}] attempt ${attempt} invalid response:`,
+            {
+              url,
+              cpfCnpj,
+              status: response.status,
             },
-            validateStatus: () => true,
-          }),
-        );
-        if (this.isConsultaSuccess(response)) {
-          return this.wrapConsultaSuccess(response.data);
+          );
+        } catch (error) {
+          console.error(
+            `SICOR consulta url[${i}] attempt ${attempt} failed:`,
+            {
+              url,
+              cpfCnpj,
+              message: this.getErrorMessage(error),
+            },
+          );
         }
-        console.error(`SICOR consulta attempt ${attempt} invalid response:`, {
-          url,
-          cpfCnpj,
-          status: response.status,
-        });
-      } catch (error) {
-        console.error(`SICOR consulta attempt ${attempt} failed:`, {
-          url,
-          cpfCnpj,
-          message: this.getErrorMessage(error),
-        });
       }
     }
     return { success: false };

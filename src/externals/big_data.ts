@@ -171,15 +171,18 @@ export class BigDataService implements OnModuleInit {
     try {
       const tokenData = await this.ensureTokenFile();
 
+      // Limite de registros do dataset: modificador `.limit(x)` em Datasets
+      // (ex.: owners_kyc.limit(50)). O campo body `Limit` da API é outro parâmetro.
+      const datasets =
+        limit != null && Number.isFinite(limit)
+          ? `${data_set}.limit(${Math.trunc(limit)})`
+          : `${data_set}`;
       const body: Record<string, unknown> = {
         q: car_number
           ? `carnumber{${car_number}}`
           : `doc{${fiscal_id_number}}` + (uf ? `,uf{${uf}}` : ''),
-        Datasets: `${data_set}`,
+        Datasets: datasets,
       };
-      if (limit != null) {
-        body.Limit = limit;
-      }
 
       const response: AxiosResponse = await this.httpService
         .post(
