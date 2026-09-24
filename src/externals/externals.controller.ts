@@ -24,6 +24,7 @@ import { SPCService } from './spc_data';
 import { FarmScraperService } from './farm_scraper';
 import { SintegraTotalDataService } from './sintegra_total_data';
 import { SicorDataService } from './sicor_data';
+import { GmapsDataService, GmapsJobBody } from './gmaps_data';
 import { ReportUtilsDataService } from './report_utils_data';
 import { ClaudeService } from './chat_claude';
 import { OpenAIService } from './chat_ia';
@@ -49,6 +50,7 @@ export class ExternalsController {
     private readonly farmScraperService: FarmScraperService,
     private readonly sintegraTotalDataService: SintegraTotalDataService,
     private readonly sicorDataService: SicorDataService,
+    private readonly gmapsDataService: GmapsDataService,
     private readonly reportUtilsDataService: ReportUtilsDataService,
     private readonly claudeService: ClaudeService,
     private readonly openAIService: OpenAIService,
@@ -1187,6 +1189,77 @@ export class ExternalsController {
   async deleteSicorUrls(): Promise<{ message: string }> {
     await this.sicorDataService.deleteAllUrls();
     return { message: 'Links zerados com sucesso' };
+  }
+
+  // ========== Google Maps scraper ==========
+  @Get('gmaps/health')
+  async getGmapsHealth(): Promise<string> {
+    return this.gmapsDataService.getHealth();
+  }
+
+  @Post('gmaps/url')
+  async addGmapsUrl(
+    @Body() body: { url: string },
+  ): Promise<{ message: string }> {
+    await this.gmapsDataService.addUrl(body.url);
+    return { message: 'URL adicionada com sucesso' };
+  }
+
+  @Get('gmaps/url')
+  async getGmapsUrls(): Promise<{ urls: string[] }> {
+    const urls = await this.gmapsDataService.getUrls();
+    return { urls };
+  }
+
+  @Delete('gmaps/url')
+  async deleteGmapsUrls(): Promise<{ message: string }> {
+    await this.gmapsDataService.deleteAllUrls();
+    return { message: 'Links zerados com sucesso' };
+  }
+
+  @Post('gmaps/jobs')
+  async createGmapsJob(@Body() body: GmapsJobBody): Promise<any> {
+    const keywords = Array.isArray(body?.keywords)
+      ? body.keywords.map((k) => String(k).trim()).filter(Boolean)
+      : [];
+    if (
+      keywords.length === 0 ||
+      body?.lat == null ||
+      body?.lon == null ||
+      body?.max_time == null
+    ) {
+      throw new BadRequestException({
+        success: false,
+        error: 'keywords, lat, lon e max_time são obrigatórios',
+      });
+    }
+    return this.gmapsDataService.createJob({
+      ...body,
+      keywords,
+      lat: String(body.lat),
+      lon: String(body.lon),
+      max_time: Number(body.max_time),
+    });
+  }
+
+  @Get('gmaps/jobs')
+  async listGmapsJobs(): Promise<any> {
+    return this.gmapsDataService.listJobs();
+  }
+
+  @Get('gmaps/jobs/:id')
+  async getGmapsJob(@Param('id') id: string): Promise<any> {
+    return this.gmapsDataService.getJob(id);
+  }
+
+  @Get('gmaps/jobs/:id/download')
+  async downloadGmapsJob(@Param('id') id: string): Promise<any> {
+    return this.gmapsDataService.downloadJob(id);
+  }
+
+  @Delete('gmaps/jobs/:id')
+  async deleteGmapsJob(@Param('id') id: string): Promise<any> {
+    return this.gmapsDataService.deleteJob(id);
   }
 
   // ========== Sintegra URLs ==========

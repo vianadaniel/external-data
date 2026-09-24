@@ -1,0 +1,51 @@
+### Google Maps scraper via API externals (URLs em gmaps_urls.json; tenta a próxima se a primeira falhar)
+# Suba o servidor: npm run start:dev (porta em PORT, ex.: 3003)
+@baseUrl = http://localhost:3003
+
+### Health
+GET {{baseUrl}}/externals/gmaps/health
+
+### Listar URLs
+GET {{baseUrl}}/externals/gmaps/url
+
+### Adicionar / trocar URL (vai para o topo)
+POST {{baseUrl}}/externals/gmaps/url
+Content-Type: application/json
+
+{
+  "url": "http://100.100.105.72:8082"
+}
+
+### Zerar URLs
+DELETE {{baseUrl}}/externals/gmaps/url
+
+### Criar job
+POST {{baseUrl}}/externals/gmaps/jobs
+Content-Type: application/json
+
+{
+  "name": "job",
+  "keywords": ["coffee shops in Austin TX"],
+  "lang": "en",
+  "zoom": 15,
+  "lat": "30.2672",
+  "lon": "-97.7431",
+  "fast_mode": false,
+  "radius": 10000,
+  "depth": 5,
+  "email": true,
+  "max_time": 300
+}
+
+### Listar jobs
+GET {{baseUrl}}/externals/gmaps/jobs
+
+### Status do job
+@jobId = 00000000-0000-0000-0000-000000000000
+GET {{baseUrl}}/externals/gmaps/jobs/{{jobId}}
+
+### Download (CSV parseado em JSON)
+GET {{baseUrl}}/externals/gmaps/jobs/{{jobId}}/download
+
+### Apagar job
+DELETE {{baseUrl}}/externals/gmaps/jobs/{{jobId}}

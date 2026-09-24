@@ -15,6 +15,7 @@ import { SPCService } from './spc_data';
 import { FarmScraperService } from './farm_scraper';
 import { SintegraTotalDataService } from './sintegra_total_data';
 import { SicorDataService } from './sicor_data';
+import { GmapsDataService } from './gmaps_data';
 import { ReportUtilsDataService } from './report_utils_data';
 import { ClaudeService } from './chat_claude';
 import { OpenAIService } from './chat_ia';
@@ -46,6 +47,7 @@ import { LoggingInterceptor } from './logging.interceptor';
     FarmScraperService,
     SintegraTotalDataService,
     SicorDataService,
+    GmapsDataService,
     ReportUtilsDataService,
     ClaudeService,
     OpenAIService,
@@ -67,6 +69,7 @@ import { LoggingInterceptor } from './logging.interceptor';
     FarmScraperService,
     SintegraTotalDataService,
     SicorDataService,
+    GmapsDataService,
     ReportUtilsDataService,
     ClaudeService,
     OpenAIService,

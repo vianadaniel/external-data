@@ -30,6 +30,7 @@ RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/sintegra_urls.json ./sintegra_urls.json
 COPY --from=builder /app/sicor_urls.json ./sicor_urls.json
+COPY --from=builder /app/gmaps_urls.json ./gmaps_urls.json
 # node precisa gravar token.json e atualizar urls em runtime
 RUN chown -R node:node /app
 
