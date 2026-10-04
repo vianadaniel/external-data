@@ -183,7 +183,13 @@ export class GmapsDataService {
 
   async createJob(body: GmapsJobBody): Promise<any> {
     const response = await this.request('post', '/api/v1/jobs', body);
-    if (!response) return { success: false };
+    if (!response) {
+      return {
+        success: false,
+        error:
+          'Nenhum scraper Google Maps respondeu (timeout/indisponível). Verifique GET /externals/gmaps/health e as URLs em /externals/gmaps/url.',
+      };
+    }
     if (response.status >= 200 && response.status < 300) {
       return response.data;
     }
@@ -192,7 +198,13 @@ export class GmapsDataService {
 
   async listJobs(): Promise<any> {
     const response = await this.request('get', '/api/v1/jobs');
-    if (!response) return { success: false };
+    if (!response) {
+      return {
+        success: false,
+        error:
+          'Nenhum scraper Google Maps respondeu (timeout/indisponível). Verifique gmaps/health.',
+      };
+    }
     if (response.status >= 200 && response.status < 300) {
       return response.data;
     }
@@ -204,7 +216,13 @@ export class GmapsDataService {
       'get',
       `/api/v1/jobs/${encodeURIComponent(id)}`,
     );
-    if (!response) return { success: false };
+    if (!response) {
+      return {
+        success: false,
+        error:
+          'Nenhum scraper Google Maps respondeu (timeout/indisponível). Verifique gmaps/health.',
+      };
+    }
     if (response.status >= 200 && response.status < 300) {
       return response.data;
     }
@@ -216,7 +234,13 @@ export class GmapsDataService {
       'delete',
       `/api/v1/jobs/${encodeURIComponent(id)}`,
     );
-    if (!response) return { success: false };
+    if (!response) {
+      return {
+        success: false,
+        error:
+          'Nenhum scraper Google Maps respondeu (timeout/indisponível). Verifique gmaps/health.',
+      };
+    }
     if (response.status >= 200 && response.status < 300) {
       return response.data ?? { success: true };
     }
@@ -230,7 +254,13 @@ export class GmapsDataService {
       undefined,
       'text',
     );
-    if (!response) return { success: false };
+    if (!response) {
+      return {
+        success: false,
+        error:
+          'Nenhum scraper Google Maps respondeu (timeout/indisponível). Verifique gmaps/health.',
+      };
+    }
     if (response.status < 200 || response.status >= 300) {
       return { success: false, status: response.status, data: response.data };
     }
