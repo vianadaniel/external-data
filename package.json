@@ -16,6 +16,7 @@
     "lint": "eslint \"src/**/*.ts\" --fix"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^3.0.2",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.0",
@@ -31,6 +32,7 @@
     "dotenv": "^16.4.5",
     "fs-extra": "^11.2.0",
     "mongoose": "^8.0.3",
+    "nodemailer": "^10.0.15",
     "openai": "^4.55.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
@@ -46,6 +48,7 @@
     "@types/crypto-js": "^4.2.2",
     "@types/express": "^4.17.17",
     "@types/node": "^20.3.1",
+    "@types/nodemailer": "^8.0.2",
     "@types/passport-jwt": "^4.0.1",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^10.0.1",

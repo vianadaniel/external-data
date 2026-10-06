@@ -24,10 +24,12 @@ import { DdpositivoService } from './ddpositivo_data';
 import { LogsService } from './logs.service';
 import { Log, LogSchema } from './schemas/logs.schema';
 import { LoggingInterceptor } from './logging.interceptor';
+import { MailModule } from './common/mail.module';
 
 @Module({
   imports: [
     HttpModule,
+    MailModule,
     MongooseModule.forFeature([{ name: Log.name, schema: LogSchema }]),
   ],
   controllers: [ExternalsController],
