@@ -256,13 +256,17 @@ export class SintegraTotalDataService {
   async getHealth(): Promise<string> {
     const urls = await this.readUrlsFromFile();
     if (urls.length === 0) {
-      this.notifyHealthFailure(['nenhuma url configurada'], []);
+      this.notifyHealthFailure(['nenhuma url configurada'], [], []);
       return 'nenhuma url configurada';
     }
 
-    const errors: string[] = [];
+    const ok: string[] = [];
+    const failed: string[] = [];
+    let healthyBody = 'sintegra total is working';
+
     for (const rawUrl of urls) {
-      const url = `${this.resolveSintegraOrigin(rawUrl)}/health`;
+      const origin = this.resolveSintegraOrigin(rawUrl);
+      const url = `${origin}/health`;
       try {
         const response: AxiosResponse = await firstValueFrom(
           this.httpService.get(url, {
@@ -276,34 +280,45 @@ export class SintegraTotalDataService {
           response.status < 300 &&
           this.isHealthySintegraBody(response.data)
         ) {
-          return typeof response.data === 'string'
-            ? response.data
-            : 'sintegra total is working';
-        }
-        errors.push(
-          `${url} -> ${response.status} ${String(response.data ?? '').slice(0, 80)}`,
-        );
-      } catch (error) {
-        if (isAxiosError(error) && error.response?.status !== undefined) {
-          errors.push(`${url} -> ${error.response.status}`);
+          ok.push(origin);
+          if (typeof response.data === 'string') {
+            healthyBody = response.data;
+          }
         } else {
-          errors.push(`${url} -> ${this.getErrorMessage(error)}`);
+          failed.push(
+            `${origin} -> HTTP ${response.status} ${String(response.data ?? '').slice(0, 80)}`,
+          );
         }
+      } catch (error) {
+        const reason =
+          isAxiosError(error) && error.response?.status !== undefined
+            ? `HTTP ${error.response.status}`
+            : this.getErrorMessage(error);
+        failed.push(`${origin} -> ${reason}`);
       }
     }
 
-    const detail = errors.join('; ') || 'error';
-    this.notifyHealthFailure(errors.length > 0 ? errors : [detail], urls);
-    return detail;
+    if (failed.length > 0) {
+      this.notifyHealthFailure(failed, ok, urls);
+    }
+
+    if (ok.length > 0) {
+      return healthyBody;
+    }
+    return failed.join('; ') || 'error';
   }
 
-  private notifyHealthFailure(errors: string[], urls: string[]): void {
+  private notifyHealthFailure(
+    failed: string[],
+    ok: string[],
+    configured: string[],
+  ): void {
     const now = Date.now();
     if (now - this.lastHealthAlertAt < this.healthAlertCooldownMs) {
       return;
     }
     this.lastHealthAlertAt = now;
-    void this.alertEmailService.sendSintegraHealthAlert(errors, urls);
+    void this.alertEmailService.sendSintegraHealthAlert(failed, ok, configured);
   }
 
   async getInscricoesData(cpf: string, uf: string): Promise<any> {

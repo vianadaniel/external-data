@@ -78,7 +78,11 @@ export class AlertEmailService {
     }
   }
 
-  async sendSintegraHealthAlert(errors: string[], urls: string[]): Promise<void> {
+  async sendSintegraHealthAlert(
+    failed: string[],
+    ok: string[],
+    configured: string[],
+  ): Promise<void> {
     if (!this.isConfigured()) {
       this.logger.warn(
         'EMAIL_USER/EMAIL_PASSWORD não configurados; alerta Sintegra health não enviado.',
@@ -86,13 +90,18 @@ export class AlertEmailService {
       return;
     }
 
-    const detail = errors.length > 0 ? errors.join('\n') : 'nenhuma url configurada';
-    const subject = `[External Data] Sintegra Total health falhou`;
+    const failedDetail =
+      failed.length > 0 ? failed.join('\n') : 'nenhuma url configurada';
+    const subject =
+      failed.length === 1
+        ? `[External Data] Sintegra Total health falhou — ${failed[0]}`
+        : `[External Data] Sintegra Total health falhou (${failed.length} hosts)`;
     const text = [
-      'O health do Sintegra Total falhou em todos os hosts.',
+      'Uma ou mais URLs do Sintegra Total falharam no health.',
       '',
-      `URLs configuradas: ${urls.length ? urls.join(', ') : '(nenhuma)'}`,
-      `Erros: ${detail}`,
+      `URLs que falharam:\n${failedDetail}`,
+      `URLs ok: ${ok.length ? ok.join(', ') : '(nenhuma)'}`,
+      `URLs configuradas: ${configured.length ? configured.join(', ') : '(nenhuma)'}`,
       `Ambiente: ${process.env.NODE_ENV || 'unknown'}`,
       'Serviço: external-data',
     ].join('\n');
@@ -103,14 +112,15 @@ export class AlertEmailService {
         subject,
         text,
         html: [
-          '<p>O <strong>health</strong> do Sintegra Total falhou em todos os hosts (external-data).</p>',
-          `<p>URLs configuradas: <strong>${this.escapeHtml(urls.length ? urls.join(', ') : '(nenhuma)')}</strong></p>`,
-          `<p>Erros: <strong>${this.escapeHtml(detail)}</strong></p>`,
+          '<p>Uma ou mais URLs do <strong>Sintegra Total</strong> falharam no health (external-data).</p>',
+          `<p>URLs que falharam:</p><p><strong>${this.escapeHtml(failedDetail)}</strong></p>`,
+          `<p>URLs ok: <strong>${this.escapeHtml(ok.length ? ok.join(', ') : '(nenhuma)')}</strong></p>`,
+          `<p>URLs configuradas: <strong>${this.escapeHtml(configured.length ? configured.join(', ') : '(nenhuma)')}</strong></p>`,
           `<p>Ambiente: <strong>${process.env.NODE_ENV || 'unknown'}</strong></p>`,
         ].join(''),
       });
       this.logger.warn(
-        `Alerta Sintegra health enviado para ${this.getAlertRecipient()}`,
+        `Alerta Sintegra health enviado para ${this.getAlertRecipient()} (${failed.join('; ')})`,
       );
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
