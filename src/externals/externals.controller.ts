@@ -1265,10 +1265,22 @@ export class ExternalsController {
   // ========== Sintegra URLs ==========
   @Post('sintegra/url')
   async addSintegraUrl(
-    @Body() body: { url: string },
-  ): Promise<{ message: string }> {
-    await this.sintegraTotalDataService.addUrl(body.url);
-    return { message: 'URL adicionada com sucesso' };
+    @Body() body: { url?: string; urls?: string[] },
+  ): Promise<{ message: string; urls: string[] }> {
+    const urls = Array.isArray(body?.urls)
+      ? body.urls
+      : body?.url
+        ? [body.url]
+        : [];
+    if (urls.length === 0) {
+      throw new BadRequestException({
+        success: false,
+        error: 'informe urls (array) ou url',
+      });
+    }
+    await this.sintegraTotalDataService.setUrls(urls);
+    const saved = await this.sintegraTotalDataService.getUrls();
+    return { message: 'URLs atualizadas com sucesso', urls: saved };
   }
 
   @Get('sintegra/url')

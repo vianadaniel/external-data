@@ -1,4 +1,23 @@
-### Add Sintegra URL
+### Set Sintegra URLs (substitui a lista; 1 ou N)
+POST http://localhost:{{externalPort}}/externals/sintegra/url
+Content-Type: application/json
+
+{
+  "urls": [
+    "http://100.100.105.72:3003",
+    "http://100.121.86.36:3003"
+  ]
+}
+
+### Set Sintegra URL única (servidor parado)
+POST http://localhost:{{externalPort}}/externals/sintegra/url
+Content-Type: application/json
+
+{
+  "urls": ["http://100.100.105.72:3003"]
+}
+
+### Add Sintegra URL (body antigo — vira lista de 1)
 
 POST http://localhost:3001/report/sintegra/url
 Content-Type: application/json

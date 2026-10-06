@@ -7,9 +7,10 @@ import * as path from 'path';
 
 @Injectable()
 export class SintegraTotalDataService {
-  private readonly timeout = 180000; // 180 segundos
-  private readonly retryAttempts = 1;
+  /** Timeout por host — cabe no TIMEOUT_SINTEGRATOTAL (120s) do report se o 1º falhar. */
+  private readonly timeout = 90000;
   private readonly urlsFilePath: string;
+  private roundRobinIndex = 0;
 
   constructor(private readonly httpService: HttpService) {
     this.urlsFilePath = path.resolve(process.cwd(), 'sintegra_urls.json');
@@ -79,6 +80,41 @@ export class SintegraTotalDataService {
     return normalized;
   }
 
+  private rotateUrls(urls: string[]): string[] {
+    if (urls.length <= 1) return urls;
+    const start = this.roundRobinIndex % urls.length;
+    this.roundRobinIndex = (this.roundRobinIndex + 1) % urls.length;
+    return [...urls.slice(start), ...urls.slice(0, start)];
+  }
+
+  private buildRequestUrl(rawUrl: string, normalizedPath: string): string {
+    if (normalizedPath === 'inscricoes') {
+      return this.resolveInscricoesUrl(rawUrl);
+    }
+    return `${this.resolveSintegraOrigin(rawUrl)}/${normalizedPath}`;
+  }
+
+  private isHtmlBody(data: unknown): boolean {
+    if (typeof data !== 'string') return false;
+    const trimmed = data.trim().toLowerCase();
+    return (
+      trimmed.startsWith('<!doctype') ||
+      trimmed.startsWith('<html') ||
+      trimmed.includes('<body')
+    );
+  }
+
+  /** Falha de infra — tenta o próximo host. Não trata payload de negócio vazio. */
+  private isHostFailure(response?: AxiosResponse, error?: unknown): boolean {
+    if (error) return true;
+    if (!response) return true;
+    if (response.status >= 500) return true;
+    const data = response.data;
+    if (data === undefined || data === null || data === 'error') return true;
+    if (this.isHtmlBody(data)) return true;
+    return false;
+  }
+
   private async postSintegraTotal(
     path: string,
     body: Record<string, unknown>,
@@ -92,12 +128,10 @@ export class SintegraTotalDataService {
     }
 
     const normalizedPath = path.replace(/^\//, '');
-    const url =
-      normalizedPath === 'inscricoes'
-        ? this.resolveInscricoesUrl(urls[0])
-        : `${this.resolveSintegraOrigin(urls[0])}/${normalizedPath}`;
+    const ordered = this.rotateUrls(urls);
 
-    for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
+    for (let i = 0; i < ordered.length; i++) {
+      const url = this.buildRequestUrl(ordered[i], normalizedPath);
       try {
         const response: AxiosResponse = await firstValueFrom(
           this.httpService.post(url, body, {
@@ -109,11 +143,15 @@ export class SintegraTotalDataService {
             validateStatus: () => true,
           }),
         );
-        if (response?.data !== undefined && response?.data !== null) {
+        if (!this.isHostFailure(response)) {
           return response.data;
         }
+        console.error(`SINTEGRA Total ${label} url[${i}] invalid response:`, {
+          url,
+          status: response.status,
+        });
       } catch (error) {
-        console.error(`SINTEGRA Total ${label} attempt ${attempt} failed:`, {
+        console.error(`SINTEGRA Total ${label} url[${i}] failed:`, {
           url,
           message: this.getErrorMessage(error),
         });
@@ -122,19 +160,26 @@ export class SintegraTotalDataService {
     return 'error';
   }
 
-  async addUrl(url: string): Promise<void> {
-    try {
-      const urls = await this.readUrlsFromFile();
-      const normalized = this.resolveSintegraOrigin(url);
-      const filtered = urls.filter(
-        (u) => this.resolveSintegraOrigin(u) !== normalized,
-      );
-      filtered.unshift(normalized);
-      await this.saveUrlsToFile(filtered);
-    } catch (error) {
-      console.error('Error adding URL:', error);
-      throw error;
+  async addUrl(url: string | string[]): Promise<void> {
+    const incoming = Array.isArray(url) ? url : [url];
+    await this.setUrls(incoming);
+  }
+
+  async setUrls(urls: string[]): Promise<void> {
+    const seen = new Set<string>();
+    const normalized: string[] = [];
+    for (const raw of urls) {
+      if (typeof raw !== 'string' || !raw.trim()) continue;
+      const origin = this.resolveSintegraOrigin(raw.trim());
+      if (seen.has(origin)) continue;
+      seen.add(origin);
+      normalized.push(origin);
     }
+    if (normalized.length === 0) {
+      throw new Error('Nenhuma URL válida');
+    }
+    this.roundRobinIndex = 0;
+    await this.saveUrlsToFile(normalized);
   }
 
   async getUrls(): Promise<string[]> {
@@ -164,23 +209,30 @@ export class SintegraTotalDataService {
       return 'error';
     }
 
-    const url = `${this.resolveSintegraOrigin(urls[0])}/${normalizedPath}`;
-    try {
-      const response: AxiosResponse = await firstValueFrom(
-        this.httpService.get(url, {
-          timeout: this.timeout,
-          headers: { 'User-Agent': 'Report/1.0' },
-          validateStatus: () => true,
-        }),
-      );
-      if (response?.data !== undefined && response?.data !== null) {
-        return response.data;
+    const ordered = this.rotateUrls(urls);
+    for (let i = 0; i < ordered.length; i++) {
+      const url = this.buildRequestUrl(ordered[i], normalizedPath);
+      try {
+        const response: AxiosResponse = await firstValueFrom(
+          this.httpService.get(url, {
+            timeout: this.timeout,
+            headers: { 'User-Agent': 'Report/1.0' },
+            validateStatus: () => true,
+          }),
+        );
+        if (!this.isHostFailure(response)) {
+          return response.data;
+        }
+        console.error(`SINTEGRA Total proxy GET url[${i}] invalid response:`, {
+          url,
+          status: response.status,
+        });
+      } catch (error) {
+        console.error(`SINTEGRA Total proxy GET url[${i}] failed:`, {
+          url,
+          message: this.getErrorMessage(error),
+        });
       }
-    } catch (error) {
-      console.error('SINTEGRA Total proxy GET failed:', {
-        url,
-        message: this.getErrorMessage(error),
-      });
     }
     return 'error';
   }
@@ -188,24 +240,31 @@ export class SintegraTotalDataService {
   async getHealth(): Promise<string> {
     const urls = await this.readUrlsFromFile();
     if (urls.length === 0) return 'nenhuma url configurada';
-    const url = `${this.resolveSintegraOrigin(urls[0])}/health`;
-    try {
-      const response: AxiosResponse = await firstValueFrom(
-        this.httpService.get(url, {
-          timeout: 5000,
-          headers: { 'User-Agent': 'Report/1.0' },
-          validateStatus: () => true,
-        }),
-      );
-      return response.status >= 200 && response.status < 300
-        ? response.data
-        : response.status.toString();
-    } catch (error) {
-      if (isAxiosError(error) && error.response?.status !== undefined) {
-        return error.response.status.toString();
+
+    const errors: string[] = [];
+    for (const rawUrl of urls) {
+      const url = `${this.resolveSintegraOrigin(rawUrl)}/health`;
+      try {
+        const response: AxiosResponse = await firstValueFrom(
+          this.httpService.get(url, {
+            timeout: 5000,
+            headers: { 'User-Agent': 'Report/1.0' },
+            validateStatus: () => true,
+          }),
+        );
+        if (response.status >= 200 && response.status < 300) {
+          return response.data;
+        }
+        errors.push(`${url} -> ${response.status}`);
+      } catch (error) {
+        if (isAxiosError(error) && error.response?.status !== undefined) {
+          errors.push(`${url} -> ${error.response.status}`);
+        } else {
+          errors.push(`${url} -> ${this.getErrorMessage(error)}`);
+        }
       }
-      return this.getErrorMessage(error);
     }
+    return errors.join('; ') || 'error';
   }
 
   async getInscricoesData(cpf: string, uf: string): Promise<any> {
