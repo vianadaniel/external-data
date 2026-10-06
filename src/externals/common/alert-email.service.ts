@@ -77,4 +77,46 @@ export class AlertEmailService {
       this.logger.error(`Erro ao enviar email de alerta SPC backup: ${message}`);
     }
   }
+
+  async sendSintegraHealthAlert(errors: string[], urls: string[]): Promise<void> {
+    if (!this.isConfigured()) {
+      this.logger.warn(
+        'EMAIL_USER/EMAIL_PASSWORD não configurados; alerta Sintegra health não enviado.',
+      );
+      return;
+    }
+
+    const detail = errors.length > 0 ? errors.join('\n') : 'nenhuma url configurada';
+    const subject = `[External Data] Sintegra Total health falhou`;
+    const text = [
+      'O health do Sintegra Total falhou em todos os hosts.',
+      '',
+      `URLs configuradas: ${urls.length ? urls.join(', ') : '(nenhuma)'}`,
+      `Erros: ${detail}`,
+      `Ambiente: ${process.env.NODE_ENV || 'unknown'}`,
+      'Serviço: external-data',
+    ].join('\n');
+
+    try {
+      await this.mailerService.sendMail({
+        to: this.getAlertRecipient(),
+        subject,
+        text,
+        html: [
+          '<p>O <strong>health</strong> do Sintegra Total falhou em todos os hosts (external-data).</p>',
+          `<p>URLs configuradas: <strong>${this.escapeHtml(urls.length ? urls.join(', ') : '(nenhuma)')}</strong></p>`,
+          `<p>Erros: <strong>${this.escapeHtml(detail)}</strong></p>`,
+          `<p>Ambiente: <strong>${process.env.NODE_ENV || 'unknown'}</strong></p>`,
+        ].join(''),
+      });
+      this.logger.warn(
+        `Alerta Sintegra health enviado para ${this.getAlertRecipient()}`,
+      );
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.error(
+        `Erro ao enviar email de alerta Sintegra health: ${message}`,
+      );
+    }
+  }
 }

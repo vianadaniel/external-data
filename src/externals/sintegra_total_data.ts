@@ -4,6 +4,7 @@ import { AxiosResponse, isAxiosError } from 'axios';
 import { firstValueFrom } from 'rxjs';
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import { AlertEmailService } from './common/alert-email.service';
 
 @Injectable()
 export class SintegraTotalDataService {
@@ -11,8 +12,13 @@ export class SintegraTotalDataService {
   private readonly timeout = 90000;
   private readonly urlsFilePath: string;
   private roundRobinIndex = 0;
+  private lastHealthAlertAt = 0;
+  private readonly healthAlertCooldownMs = 15 * 60 * 1000;
 
-  constructor(private readonly httpService: HttpService) {
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly alertEmailService: AlertEmailService,
+  ) {
     this.urlsFilePath = path.resolve(process.cwd(), 'sintegra_urls.json');
   }
 
@@ -237,9 +243,22 @@ export class SintegraTotalDataService {
     return 'error';
   }
 
+  private isHealthySintegraBody(data: unknown): boolean {
+    const text =
+      typeof data === 'string'
+        ? data
+        : data != null && typeof data === 'object'
+          ? JSON.stringify(data)
+          : String(data ?? '');
+    return text.toLowerCase().includes('sintegra total is working');
+  }
+
   async getHealth(): Promise<string> {
     const urls = await this.readUrlsFromFile();
-    if (urls.length === 0) return 'nenhuma url configurada';
+    if (urls.length === 0) {
+      this.notifyHealthFailure(['nenhuma url configurada'], []);
+      return 'nenhuma url configurada';
+    }
 
     const errors: string[] = [];
     for (const rawUrl of urls) {
@@ -252,10 +271,18 @@ export class SintegraTotalDataService {
             validateStatus: () => true,
           }),
         );
-        if (response.status >= 200 && response.status < 300) {
-          return response.data;
+        if (
+          response.status >= 200 &&
+          response.status < 300 &&
+          this.isHealthySintegraBody(response.data)
+        ) {
+          return typeof response.data === 'string'
+            ? response.data
+            : 'sintegra total is working';
         }
-        errors.push(`${url} -> ${response.status}`);
+        errors.push(
+          `${url} -> ${response.status} ${String(response.data ?? '').slice(0, 80)}`,
+        );
       } catch (error) {
         if (isAxiosError(error) && error.response?.status !== undefined) {
           errors.push(`${url} -> ${error.response.status}`);
@@ -264,7 +291,19 @@ export class SintegraTotalDataService {
         }
       }
     }
-    return errors.join('; ') || 'error';
+
+    const detail = errors.join('; ') || 'error';
+    this.notifyHealthFailure(errors.length > 0 ? errors : [detail], urls);
+    return detail;
+  }
+
+  private notifyHealthFailure(errors: string[], urls: string[]): void {
+    const now = Date.now();
+    if (now - this.lastHealthAlertAt < this.healthAlertCooldownMs) {
+      return;
+    }
+    this.lastHealthAlertAt = now;
+    void this.alertEmailService.sendSintegraHealthAlert(errors, urls);
   }
 
   async getInscricoesData(cpf: string, uf: string): Promise<any> {
