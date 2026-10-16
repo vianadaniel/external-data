@@ -7,7 +7,7 @@ Authorization: Bearer {{ddpositivo_token}}
 Content-Type: application/json
 
 {
-  "document": "03058766866",
+  "document": "88925978334",
   "consultation": "sl-protestos-2-pf"
 }
 

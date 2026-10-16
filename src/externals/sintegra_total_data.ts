@@ -8,8 +8,8 @@ import { AlertEmailService } from './common/alert-email.service';
 
 @Injectable()
 export class SintegraTotalDataService {
-  /** Timeout por host — cabe no TIMEOUT_SINTEGRATOTAL (120s) do report se o 1º falhar. */
-  private readonly timeout = 90000;
+  /** Timeout por host. */
+  private readonly timeout = 600000;
   private readonly urlsFilePath: string;
   private roundRobinIndex = 0;
   private lastHealthAlertAt = 0;
