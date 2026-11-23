@@ -23,6 +23,11 @@ import { ChatPDFExtractor } from './chatpdf';
 import { DdpositivoService } from './ddpositivo_data';
 import { LogsService } from './logs.service';
 import { Log, LogSchema } from './schemas/logs.schema';
+import {
+  LogRestritivo,
+  LogRestritivoSchema,
+} from './schemas/log_restritivo.schema';
+import { LogRestritivoService } from './log_restritivo.service';
 import { LoggingInterceptor } from './logging.interceptor';
 import { MailModule } from './common/mail.module';
 
@@ -30,11 +35,15 @@ import { MailModule } from './common/mail.module';
   imports: [
     HttpModule,
     MailModule,
-    MongooseModule.forFeature([{ name: Log.name, schema: LogSchema }]),
+    MongooseModule.forFeature([
+      { name: Log.name, schema: LogSchema },
+      { name: LogRestritivo.name, schema: LogRestritivoSchema },
+    ]),
   ],
   controllers: [ExternalsController],
   providers: [
     LogsService,
+    LogRestritivoService,
     LoggingInterceptor,
     BigDataService,
     DirectDataService,
@@ -58,6 +67,7 @@ import { MailModule } from './common/mail.module';
   ],
   exports: [
     LogsService,
+    LogRestritivoService,
     BigDataService,
     DirectDataService,
     WindService,

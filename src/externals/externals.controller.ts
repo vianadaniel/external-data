@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  Query,
   Req,
   UseInterceptors,
 } from '@nestjs/common';
@@ -31,6 +32,7 @@ import { OpenAIService } from './chat_ia';
 import { ChatPDFExtractor } from './chatpdf';
 import { DdpositivoService } from './ddpositivo_data';
 import { LoggingInterceptor } from './logging.interceptor';
+import { LogRestritivoService } from './log_restritivo.service';
 
 @Controller('externals')
 @UseInterceptors(LoggingInterceptor)
@@ -47,6 +49,7 @@ export class ExternalsController {
     private readonly checkProService: CheckProService,
     private readonly bndesService: BndesService,
     private readonly spcService: SPCService,
+    private readonly logRestritivoService: LogRestritivoService,
     private readonly farmScraperService: FarmScraperService,
     private readonly sintegraTotalDataService: SintegraTotalDataService,
     private readonly sicorDataService: SicorDataService,
@@ -350,6 +353,25 @@ export class ExternalsController {
       body.cpf,
       body.codigoProduto,
       body.insumos,
+    );
+  }
+
+  @Get('spc/log-restritivo')
+  async getSpcLogRestritivo(
+    @Query('documento') documentoConsumidor?: string,
+    @Query('event') event?: string,
+    @Query('level') level?: string,
+    @Query('limit') limit?: string,
+    @Query('skip') skip?: string,
+  ): Promise<any> {
+    return this.logRestritivoService.findAll(
+      {
+        documentoConsumidor,
+        event: event as any,
+        level: level as any,
+      },
+      limit ? Number(limit) : 100,
+      skip ? Number(skip) : 0,
     );
   }
 
