@@ -232,33 +232,49 @@ export class SPCService {
     try {
       const primaryResult = await this.callProducao(request, primary);
 
+      // TODO: reativar fallback/backup em alguns dias
       // HTTP 200 com erro de conta/auth — tenta backup
+      // if (this.shouldRetryWithBackup(primaryResult)) {
+      //   const primaryFailReason =
+      //     this.getSpcErrorMessage(primaryResult) ||
+      //     this.getSpcCodigoRetorno(primaryResult) ||
+      //     'resposta de erro';
+      //   const backupResult = await this.tryBackup(
+      //     request,
+      //     primary,
+      //     primaryFailReason,
+      //   );
+      //   if (backupResult) {
+      //     this.notifySpcOutcome(
+      //       request,
+      //       'success',
+      //       'backup',
+      //       `OK via backup após falha principal: ${primaryFailReason}`,
+      //       this.getSpcCodigoRetorno(backupResult),
+      //     );
+      //     return backupResult;
+      //   }
+      //   this.logProducaoError(primaryResult, request, 'principal');
+      //   this.notifySpcOutcome(
+      //     request,
+      //     'error',
+      //     'none',
+      //     `Principal e backup falharam. Principal: ${primaryFailReason}`,
+      //     this.getSpcCodigoRetorno(primaryResult),
+      //   );
+      //   return null;
+      // }
       if (this.shouldRetryWithBackup(primaryResult)) {
         const primaryFailReason =
           this.getSpcErrorMessage(primaryResult) ||
           this.getSpcCodigoRetorno(primaryResult) ||
           'resposta de erro';
-        const backupResult = await this.tryBackup(
-          request,
-          primary,
-          primaryFailReason,
-        );
-        if (backupResult) {
-          this.notifySpcOutcome(
-            request,
-            'success',
-            'backup',
-            `OK via backup após falha principal: ${primaryFailReason}`,
-            this.getSpcCodigoRetorno(backupResult),
-          );
-          return backupResult;
-        }
         this.logProducaoError(primaryResult, request, 'principal');
         this.notifySpcOutcome(
           request,
           'error',
           'none',
-          `Principal e backup falharam. Principal: ${primaryFailReason}`,
+          `Falha principal (backup desligado): ${primaryFailReason}`,
           this.getSpcCodigoRetorno(primaryResult),
         );
         return null;
@@ -281,30 +297,31 @@ export class SPCService {
             'http error',
         );
 
-      if (this.shouldRetryWithBackup(error)) {
-        const backupResult = await this.tryBackup(
-          request,
-          primary,
-          catchReason,
-        );
-        if (backupResult) {
-          this.notifySpcOutcome(
-            request,
-            'success',
-            'backup',
-            `OK via backup após erro principal: ${catchReason}`,
-            this.getSpcCodigoRetorno(backupResult),
-          );
-          return backupResult;
-        }
-      }
+      // TODO: reativar fallback/backup em alguns dias
+      // if (this.shouldRetryWithBackup(error)) {
+      //   const backupResult = await this.tryBackup(
+      //     request,
+      //     primary,
+      //     catchReason,
+      //   );
+      //   if (backupResult) {
+      //     this.notifySpcOutcome(
+      //       request,
+      //       'success',
+      //       'backup',
+      //       `OK via backup após erro principal: ${catchReason}`,
+      //       this.getSpcCodigoRetorno(backupResult),
+      //     );
+      //     return backupResult;
+      //   }
+      // }
 
       this.logProducaoError(error, request, 'principal');
       this.notifySpcOutcome(
         request,
         'error',
         'none',
-        `Falha na consulta: ${catchReason}`,
+        `Falha na consulta (backup desligado): ${catchReason}`,
         this.getSpcCodigoRetorno(error),
       );
       return null;
