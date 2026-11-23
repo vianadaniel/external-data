@@ -20,7 +20,7 @@ export interface SPCResponse {
 
 @Injectable()
 export class SPCService {
-  private readonly timeout = 30000; // 30 segundos
+  private readonly timeout = 180000; // 180 segundos (3 min)
 
   private readonly producaoUrl =
     'https://servicos.spc.org.br/spcconsulta/recurso/consulta/padrao';
@@ -208,6 +208,24 @@ export class SPCService {
     }
   }
 
+  private notifySpcOutcome(
+    request: SPCRequest,
+    status: 'success' | 'error',
+    credential: 'primary' | 'backup' | 'none',
+    detail?: string,
+    codigoRetorno?: string,
+  ): void {
+    void this.alertEmailService.sendSpcOutcomeAlert({
+      status,
+      documentoConsumidor: request.documentoConsumidor,
+      tipoConsumidor: request.tipoConsumidor,
+      codigoProduto: request.codigoProduto,
+      credential,
+      detail,
+      codigoRetorno,
+    });
+  }
+
   async consultaProducao(request: SPCRequest): Promise<SPCResponse | null> {
     const primary = this.getPrimaryCredentials();
 
@@ -216,39 +234,79 @@ export class SPCService {
 
       // HTTP 200 com erro de conta/auth — tenta backup
       if (this.shouldRetryWithBackup(primaryResult)) {
+        const primaryFailReason =
+          this.getSpcErrorMessage(primaryResult) ||
+          this.getSpcCodigoRetorno(primaryResult) ||
+          'resposta de erro';
         const backupResult = await this.tryBackup(
           request,
           primary,
-          this.getSpcErrorMessage(primaryResult) ||
-            this.getSpcCodigoRetorno(primaryResult) ||
-            'resposta de erro',
+          primaryFailReason,
         );
         if (backupResult) {
+          this.notifySpcOutcome(
+            request,
+            'success',
+            'backup',
+            `OK via backup após falha principal: ${primaryFailReason}`,
+            this.getSpcCodigoRetorno(backupResult),
+          );
           return backupResult;
         }
         this.logProducaoError(primaryResult, request, 'principal');
+        this.notifySpcOutcome(
+          request,
+          'error',
+          'none',
+          `Principal e backup falharam. Principal: ${primaryFailReason}`,
+          this.getSpcCodigoRetorno(primaryResult),
+        );
         return null;
       }
 
+      this.notifySpcOutcome(
+        request,
+        'success',
+        'primary',
+        'OK com credencial principal',
+        this.getSpcCodigoRetorno(primaryResult),
+      );
       return primaryResult;
     } catch (error) {
+      const catchReason =
+        this.getSpcErrorMessage(error) ||
+        String(
+          (error as any)?.response?.status ??
+            (error as any)?.message ??
+            'http error',
+        );
+
       if (this.shouldRetryWithBackup(error)) {
         const backupResult = await this.tryBackup(
           request,
           primary,
-          this.getSpcErrorMessage(error) ||
-            String(
-              (error as any)?.response?.status ??
-                (error as any)?.message ??
-                'http error',
-            ),
+          catchReason,
         );
         if (backupResult) {
+          this.notifySpcOutcome(
+            request,
+            'success',
+            'backup',
+            `OK via backup após erro principal: ${catchReason}`,
+            this.getSpcCodigoRetorno(backupResult),
+          );
           return backupResult;
         }
       }
 
       this.logProducaoError(error, request, 'principal');
+      this.notifySpcOutcome(
+        request,
+        'error',
+        'none',
+        `Falha na consulta: ${catchReason}`,
+        this.getSpcCodigoRetorno(error),
+      );
       return null;
     }
   }

@@ -10,6 +10,17 @@ export type SpcBackupEmailContext = {
   backupUsername: string;
 };
 
+export type SpcOutcomeEmailContext = {
+  status: 'success' | 'error';
+  documentoConsumidor: string;
+  tipoConsumidor: string;
+  codigoProduto: string;
+  /** primary = usuário principal; backup = credencial de backup */
+  credential: 'primary' | 'backup' | 'none';
+  detail?: string;
+  codigoRetorno?: string;
+};
+
 @Injectable()
 export class AlertEmailService {
   private readonly logger = new Logger(AlertEmailService.name);
@@ -75,6 +86,75 @@ export class AlertEmailService {
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
       this.logger.error(`Erro ao enviar email de alerta SPC backup: ${message}`);
+    }
+  }
+
+  /**
+   * Alerta de resultado da consulta SPC (sucesso ou erro).
+   * Sucesso leva [TEMP] no subject — remover depois do período de monitoramento.
+   */
+  async sendSpcOutcomeAlert(context: SpcOutcomeEmailContext): Promise<void> {
+    if (!this.isConfigured()) {
+      this.logger.warn(
+        'EMAIL_USER/EMAIL_PASSWORD não configurados; alerta SPC outcome não enviado.',
+      );
+      return;
+    }
+
+    const isSuccess = context.status === 'success';
+    const credentialLabel =
+      context.credential === 'primary'
+        ? 'principal'
+        : context.credential === 'backup'
+          ? 'backup'
+          : 'nenhuma';
+    const subject = isSuccess
+      ? `[TEMP][External Data SPC] OK (${credentialLabel}) — ${context.documentoConsumidor}`
+      : `[External Data SPC] ERRO — ${context.documentoConsumidor}`;
+    const detail = context.detail || '(sem detalhe)';
+    const codigoRetorno = context.codigoRetorno || '-';
+    const text = [
+      isSuccess
+        ? 'Consulta SPC concluída com sucesso.'
+        : 'Consulta SPC falhou.',
+      '',
+      `Status: ${context.status}`,
+      `Documento: ${context.documentoConsumidor}`,
+      `Tipo: ${context.tipoConsumidor}`,
+      `Produto: ${context.codigoProduto}`,
+      `Credencial: ${credentialLabel}`,
+      `Codigo retorno: ${codigoRetorno}`,
+      `Detalhe: ${detail}`,
+      `Ambiente: ${process.env.NODE_ENV || 'unknown'}`,
+      'Serviço: external-data',
+    ].join('\n');
+
+    try {
+      await this.mailerService.sendMail({
+        to: this.getAlertRecipient(),
+        subject,
+        text,
+        html: [
+          isSuccess
+            ? '<p>Consulta <strong>SPC</strong> concluída com <strong>sucesso</strong> (external-data). <em>[TEMP — remover este alerta em breve]</em></p>'
+            : '<p>Consulta <strong>SPC</strong> <strong>falhou</strong> (external-data).</p>',
+          `<p>Documento: <strong>${this.escapeHtml(context.documentoConsumidor)}</strong></p>`,
+          `<p>Tipo: <strong>${this.escapeHtml(context.tipoConsumidor)}</strong></p>`,
+          `<p>Produto: <strong>${this.escapeHtml(context.codigoProduto)}</strong></p>`,
+          `<p>Credencial: <strong>${this.escapeHtml(credentialLabel)}</strong></p>`,
+          `<p>Codigo retorno: <strong>${this.escapeHtml(codigoRetorno)}</strong></p>`,
+          `<p>Detalhe: <strong>${this.escapeHtml(detail)}</strong></p>`,
+          `<p>Ambiente: <strong>${process.env.NODE_ENV || 'unknown'}</strong></p>`,
+        ].join(''),
+      });
+      this.logger.warn(
+        `Alerta SPC ${context.status} enviado para ${this.getAlertRecipient()} (${context.documentoConsumidor})`,
+      );
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.error(
+        `Erro ao enviar email de alerta SPC outcome: ${message}`,
+      );
     }
   }
 
