@@ -405,13 +405,11 @@ export class SPCService {
 
   private notifySpcOutcome(
     request: SPCRequest,
-    status: 'success' | 'error',
     credential: 'primary' | 'backup' | 'none',
     detail?: string,
     codigoRetorno?: string,
   ): void {
     void this.alertEmailService.sendSpcOutcomeAlert({
-      status,
       documentoConsumidor: request.documentoConsumidor,
       tipoConsumidor: request.tipoConsumidor,
       codigoProduto: request.codigoProduto,
@@ -457,7 +455,6 @@ export class SPCService {
         });
         this.notifySpcOutcome(
           request,
-          'error',
           'primary',
           'Resposta vazia da credencial principal (sem fallback)',
         );
@@ -488,13 +485,6 @@ export class SPCService {
             ...this.durationFields(timing),
             response: this.summarizeResponse(backupResult),
           });
-          this.notifySpcOutcome(
-            request,
-            'success',
-            'backup',
-            `OK via backup após falha principal: ${primaryFailReason}`,
-            this.getSpcCodigoRetorno(backupResult),
-          );
           return backupResult;
         }
         this.logProducaoError(primaryResult, request, 'principal');
@@ -511,7 +501,6 @@ export class SPCService {
         });
         this.notifySpcOutcome(
           request,
-          'error',
           'none',
           `Principal e backup falharam. Principal: ${primaryFailReason}`,
           this.getSpcCodigoRetorno(primaryResult),
@@ -552,13 +541,6 @@ export class SPCService {
         ...this.durationFields(timing),
         response: this.summarizeResponse(primaryResult),
       });
-      this.notifySpcOutcome(
-        request,
-        'success',
-        'primary',
-        'OK com credencial principal',
-        codigo,
-      );
       return primaryResult;
     } catch (error) {
       const catchReason =
@@ -589,13 +571,6 @@ export class SPCService {
             ...this.durationFields(timing),
             response: this.summarizeResponse(backupResult),
           });
-          this.notifySpcOutcome(
-            request,
-            'success',
-            'backup',
-            `OK via backup após erro principal: ${catchReason}`,
-            this.getSpcCodigoRetorno(backupResult),
-          );
           return backupResult;
         }
       } else {
@@ -631,7 +606,6 @@ export class SPCService {
       });
       this.notifySpcOutcome(
         request,
-        'error',
         'none',
         `Falha na consulta: ${catchReason}`,
         this.getSpcCodigoRetorno(error),

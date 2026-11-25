@@ -11,7 +11,6 @@ export type SpcBackupEmailContext = {
 };
 
 export type SpcOutcomeEmailContext = {
-  status: 'success' | 'error';
   documentoConsumidor: string;
   tipoConsumidor: string;
   codigoProduto: string;
@@ -89,10 +88,7 @@ export class AlertEmailService {
     }
   }
 
-  /**
-   * Alerta de resultado da consulta SPC (sucesso ou erro).
-   * Sucesso leva [TEMP] no subject — remover depois do período de monitoramento.
-   */
+  /** Alerta quando a consulta SPC falha. */
   async sendSpcOutcomeAlert(context: SpcOutcomeEmailContext): Promise<void> {
     if (!this.isConfigured()) {
       this.logger.warn(
@@ -101,24 +97,19 @@ export class AlertEmailService {
       return;
     }
 
-    const isSuccess = context.status === 'success';
     const credentialLabel =
       context.credential === 'primary'
         ? 'principal'
         : context.credential === 'backup'
           ? 'backup'
           : 'nenhuma';
-    const subject = isSuccess
-      ? `[TEMP][External Data SPC] OK (${credentialLabel}) — ${context.documentoConsumidor}`
-      : `[External Data SPC] ERRO — ${context.documentoConsumidor}`;
+    const subject = `[External Data SPC] ERRO — ${context.documentoConsumidor}`;
     const detail = context.detail || '(sem detalhe)';
     const codigoRetorno = context.codigoRetorno || '-';
     const text = [
-      isSuccess
-        ? 'Consulta SPC concluída com sucesso.'
-        : 'Consulta SPC falhou.',
+      'Consulta SPC falhou.',
       '',
-      `Status: ${context.status}`,
+      'Status: error',
       `Documento: ${context.documentoConsumidor}`,
       `Tipo: ${context.tipoConsumidor}`,
       `Produto: ${context.codigoProduto}`,
@@ -135,9 +126,7 @@ export class AlertEmailService {
         subject,
         text,
         html: [
-          isSuccess
-            ? '<p>Consulta <strong>SPC</strong> concluída com <strong>sucesso</strong> (external-data). <em>[TEMP — remover este alerta em breve]</em></p>'
-            : '<p>Consulta <strong>SPC</strong> <strong>falhou</strong> (external-data).</p>',
+          '<p>Consulta <strong>SPC</strong> <strong>falhou</strong> (external-data).</p>',
           `<p>Documento: <strong>${this.escapeHtml(context.documentoConsumidor)}</strong></p>`,
           `<p>Tipo: <strong>${this.escapeHtml(context.tipoConsumidor)}</strong></p>`,
           `<p>Produto: <strong>${this.escapeHtml(context.codigoProduto)}</strong></p>`,
@@ -148,7 +137,7 @@ export class AlertEmailService {
         ].join(''),
       });
       this.logger.warn(
-        `Alerta SPC ${context.status} enviado para ${this.getAlertRecipient()} (${context.documentoConsumidor})`,
+        `Alerta SPC error enviado para ${this.getAlertRecipient()} (${context.documentoConsumidor})`,
       );
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
